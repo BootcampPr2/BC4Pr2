@@ -28,6 +28,7 @@ if ((request.getParameter("inputTo") != null) && (request.getParameter("inputBod
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<script src='coding.js'></script>
 <link
 	href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"
 	rel="stylesheet" id="bootstrap-css">
@@ -78,7 +79,7 @@ if ((request.getParameter("inputTo") != null) && (request.getParameter("inputBod
 
 			<aside class="lg-side">
 			<div class="inbox-head">
-				<h3>Inbox</h3>
+				<h3>Mailbox</h3>
 				<form action="#" class="pull-right position">
 					<div class="input-append">
 						<input type="text" class="sr-input"
@@ -136,20 +137,20 @@ if ((request.getParameter("inputTo") != null) && (request.getParameter("inputBod
 						<% List<PrivateMessage> receivedMessages = DBUtils.displayIncomingMessages(loggedUser);
 						for (PrivateMessage myMessage : receivedMessages){
 							if (myMessage.getIsRead() == 1){%>
-							<tr class="unread">
+							<tr class="unread" onclick="openMessage('<%=myMessage.getSender().getUsername()%>','<%=myMessage.getMessageData()%>','<%=myMessage.getDateSubmission()%>')" id="<%=myMessage.getPrivateMessageID() %>">
 							<td class="inbox-small-cells"><input type="checkbox"
 								class="mail-checkbox mail-inbox"></td>
 							<td class="view-message  dont-show"><%=myMessage.getSender().getUsername()%></td>
-							<td class="view-message" style="white-space: pre-line"><%=myMessage.getMessageData()%></td>
+							<td class="view-message messageStyle"><%=myMessage.getMessageData()%></td>
 							<td class="view-message  text-right"><%=myMessage.getDateSubmission()%></td>
 						</tr><%
 							}else{
 								%>
-								<tr class="">
+								<tr class="readInb" onclick="openMessage('<%=myMessage.getSender().getUsername()%>','<%=myMessage.getMessageData()%>','<%=myMessage.getDateSubmission()%>')" id="<%=myMessage.getPrivateMessageID() %>">
 							<td class="inbox-small-cells"><input type="checkbox"
 								class="mail-checkbox mail-inbox"></td>
 							<td class="view-message  dont-show"><%=myMessage.getSender().getUsername()%></td>
-							<td class="view-message" style="white-space: pre-line"><%=myMessage.getMessageData()%></td>
+							<td class="view-message messageStyle"><%=myMessage.getMessageData()%></td>
 							<td class="view-message  text-right"><%=myMessage.getDateSubmission()%></td>
 						</tr><%
 							}
@@ -205,11 +206,11 @@ if ((request.getParameter("inputTo") != null) && (request.getParameter("inputBod
 						<% List<PrivateMessage> sentMessages = DBUtils.displaySentMessages(loggedUser);
 						for (PrivateMessage myMessage : sentMessages){
 							%>
-							<tr class="">
+							<tr class="readSent" id="<%=myMessage.getPrivateMessageID() %>">
 							<td class="inbox-small-cells"><input type="checkbox"
 								class="mail-checkbox mail-sent"></td>
 							<td class="view-message  dont-show"><%=myMessage.getReceiver().getUsername()%></td>
-							<td class="view-message" style="white-space: pre-line"><a href ="#"><%=myMessage.getMessageData()%></a></td>
+							<td class="view-message messageStyle"><a href ="#"><%=myMessage.getMessageData()%></a></td>
 							<td class="view-message  text-right"><%=myMessage.getDateSubmission()%></td>
 						</tr><%
 						}
@@ -240,16 +241,88 @@ if ((request.getParameter("inputTo") != null) && (request.getParameter("inputBod
 						<div class="form-group">
 							<label class="col-sm-12" for="inputBody">Message</label>
 							<div class="col-sm-12">
-								<textarea class="form-control" name="inputBody" id="inputBody" rows="10"></textarea>
+								<textarea class="form-control" name="inputBody" id="inputBody" rows="12"></textarea>
 							</div>
 						</div>
 					</form>
 				</div>
 
 			</div>
+			
+			<!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+			<div class="inbox-body inbox-readInboxMessage">
+				<div class="mail-option">
+				<div>
+					<form role="form" class="form-horizontal" action="mail.jsp" method="get">
+					<div class="btn-group hidden-phone">
+						<a href="#" class="btn mini blue" aria-expanded="false"> <i
+							class="fa fa-trash-o"></i> Delete incoming message
+						</a>
+						</div>
+					</div><br>
+						<div class="form-group">
+							<label class="col-sm-2" for="inputTo">From</label>
+							<div class="col-sm-10">
+								<input id="fromView" type="text" style="background: white;cursor: pointer" class="form-control" value="" readonly>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2" for="inputTo">Date</label>
+							<div class="col-sm-10">
+								<input id="dateView" type="text" style="background: white;cursor: pointer" class="form-control" value="" readonly>
+							</div>
+						</div>
+					
+						<div class="form-group">
+							<label class="col-sm-12" for="messageView">Message</label>
+							<div class="col-sm-12">
+								<textarea id="messageView" style="background: white;cursor: pointer" class="form-control" name="messageView" rows="12" readonly></textarea>
+							</div>
+						</div>
+					</form>
+				</div>
+
+			</div>
+			
+	
+				<!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+			<div class="inbox-body inbox-readSentMessage">
+				<div class="mail-option">
+				<div>
+					<form role="form" class="form-horizontal" action="mail.jsp" method="get">
+					<div class="btn-group hidden-phone">
+						<a href="#" class="btn mini blue" aria-expanded="false"> <i
+							class="fa fa-trash-o"></i> Delete sent message
+						</a>
+						</div>
+					</div><br>
+						<div class="form-group">
+							<label class="col-sm-2" for="inputTo">To</label>
+							<div class="col-sm-10">
+								<input type="text" style="background: white;cursor: pointer" class="form-control" value="" readonly>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2" for="inputTo">Date</label>
+							<div class="col-sm-10">
+								<input type="text" style="background: white;cursor: pointer" class="form-control" value="" readonly>
+							</div>
+						</div>
+					
+						<div class="form-group">
+							<label class="col-sm-12" for="inputBody">Message</label>
+							<div class="col-sm-12">
+								<textarea style="background: white;cursor: pointer" class="form-control" name="inputBody" id="inputBody" rows="12" readonly></textarea>
+							</div>
+						</div>
+					</form>
+				</div>
+
+			</div>
+			
 		</aside>
 		</div>
 	</div>
-	<script src='coding.js'></script>
+<script src='coding.js'></script>
 </body>
 </html>
