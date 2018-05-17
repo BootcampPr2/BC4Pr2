@@ -20,6 +20,13 @@ public class User {
 		this.isBanned = isBanned;
 		this.role = role;
 	}
+	
+	public User(String username, String password) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.role = new Role(3);
+	}
 
 	@Id
 	@Column(name = "userID")
@@ -49,7 +56,7 @@ public class User {
 		this.isBanned = isBanned;
 	}
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name="roleID", referencedColumnName="roleID")
 	public Role getRole() {
 		return role;

@@ -11,9 +11,12 @@ public class Role {
 	
 	public Role() {}
 	
+	public Role(int roleID) {
+		this.roleID = roleID;
+	}
+	
 	@Id
 	@Column(name = "roleID")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public int getRoleID() {
 		return roleID;
 	}

@@ -34,7 +34,7 @@ public abstract class DBUtils {
 				+ " where p.receiver like :receiver"
 				+ " order by p.dateSubmission DESC";
 		Query query = session.createQuery(selectIncomingMessages).setParameter("receiver", receiver);
-		List<PrivateMessage> incomingMessages = query.list();
+		List<PrivateMessage> incomingMessages = query.getResultList();
 		session.close();
 		return incomingMessages;
 	}
@@ -52,7 +52,7 @@ public abstract class DBUtils {
 				+ " where p.sender like :sender"
 				+ " order by p.dateSubmission DESC";
 		Query query = session.createQuery(selectSentMessages).setParameter("sender", sender);
-		List<PrivateMessage> sentMessages = query.list();
+		List<PrivateMessage> sentMessages = query.getResultList();
 		session.close();
 		return sentMessages;
 	}
@@ -68,7 +68,7 @@ public abstract class DBUtils {
 		Session session = sessionFactory.openSession();
 		String getUserById = "SELECT u FROM User u WHERE u.username like :username";
 		Query query = session.createQuery(getUserById).setParameter("username", username);
-		User myUser = (User)query.list().get(0);
+		User myUser = (User)query.getResultList().get(0);
 		session.close();
 		sessionFactory.close();
 		return myUser;
@@ -88,9 +88,14 @@ public abstract class DBUtils {
 		newPrivateMessage.setMessageData(messageData);
 		newPrivateMessage.setSender(sender);
 		newPrivateMessage.setReceiver(receiver);
+		System.out.println(newPrivateMessage);
 		session.beginTransaction();
+		try {
 		session.save(newPrivateMessage);
 		session.getTransaction().commit();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 		session.close();		
 	}
 
@@ -123,10 +128,13 @@ public abstract class DBUtils {
 		session.close();
 	}
 
-	public static void main(String[] args) {	
+	public static void main(String[] args) {
+
 		User sender = getUserByUsername("user1");
-		User receiver = getUserByUsername("admin");
+		User receiver = getUserByUsername("user1");
 		
+		String messageData = "se fonazei enas skilos";
+		composeNewPrivateMessage(sender,receiver,messageData);
 
 		//manager.update();
 		//update.delete();
