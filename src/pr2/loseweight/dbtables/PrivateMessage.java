@@ -42,7 +42,7 @@ public class PrivateMessage {
 		this.isRead = isRead;
 	}
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn (name = "senderID", referencedColumnName = "userID")
 	public User getSender() {
 		return sender;
@@ -51,7 +51,7 @@ public class PrivateMessage {
 		this.sender = sender;
 	}
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn (name = "receiverID", referencedColumnName = "userID")
 	public User getReceiver() {
 		return receiver;

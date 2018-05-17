@@ -85,6 +85,8 @@ public abstract class DBUtils {
 		}
 		Session session = sessionFactory.openSession();
 		PrivateMessage newPrivateMessage = new PrivateMessage();
+		messageData = messageData.replaceAll("[\r\n]", "&nbsp;<br>");
+		messageData = messageData.replaceAll(" ", "&nbsp;");
 		newPrivateMessage.setMessageData(messageData);
 		newPrivateMessage.setSender(sender);
 		newPrivateMessage.setReceiver(receiver);
@@ -129,12 +131,12 @@ public abstract class DBUtils {
 	}
 
 	public static void main(String[] args) {
-
+		
 		User sender = getUserByUsername("user1");
 		User receiver = getUserByUsername("user1");
 		
-		String messageData = "se fonazei enas skilos";
-		composeNewPrivateMessage(sender,receiver,messageData);
+		/*String messageData = "se fonazei enas skilos";
+		composeNewPrivateMessage(sender,receiver,messageData);*/
 
 		//manager.update();
 		//update.delete();
@@ -165,4 +167,3 @@ public abstract class DBUtils {
 		
 	}
 }
-

@@ -365,7 +365,7 @@ ul {
 }
 
 .view-message.messageStyle {
-    white-space: nowrap; 
+    white-space: nowrap;
     width: 100px; 
     overflow: hidden;
     text-overflow: ellipsis; 

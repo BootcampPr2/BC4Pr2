@@ -18,6 +18,7 @@ public class Bmi {
 	private double emr;
 	private Timestamp dateTimePosted;
 	private MetaRate metarate;
+	private User user;
 	
 	public Bmi () {} // default constructor
 	
@@ -29,6 +30,8 @@ public class Bmi {
 		this.bmi = calculateBMI();
 	}
 
+	@Id
+	@Column(name = "bmiID")
 	public int getBmiID() {
 		return bmiID;
 	}
@@ -114,9 +117,19 @@ public class Bmi {
 	public MetaRate getMetarate() {
 		return metarate;
 	}
-
+	
 	public void setMetarate(MetaRate metarate) {
 		this.metarate = metarate;
+	}
+	
+	@ManyToOne
+	@JoinColumn(name="userID", referencedColumnName="userID")
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
 	public double calculateBMI() {
