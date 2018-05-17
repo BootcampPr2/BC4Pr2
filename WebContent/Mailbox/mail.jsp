@@ -4,12 +4,17 @@
 	<%@ page import="pr2.loseweight.utils.*"%>
 	<%@ page import="java.util.List" %>
 	<%@ page import="pr2.loseweight.dbtables.*" %>
-<jsp:useBean id="loggedUser" class="pr2.loseweight.dbtables.User" scope="request" />
+	<%@ page import="java.sql.Timestamp" %>
+
 <jsp:useBean id="receiver" class="pr2.loseweight.dbtables.User" scope="request" />
 <jsp:useBean id="messageToBeSent" class = "pr2.loseweight.dbtables.PrivateMessage" scope="request"/>
 
 <%
-session.setAttribute("loggedUser", "admin");
+session.setAttribute("loggedUser", "user1");
+%>
+
+<jsp:useBean id="loggedUser" class="pr2.loseweight.dbtables.User" scope="request" />
+<%
 loggedUser = DBUtils.getUserByUsername(session.getAttribute("loggedUser").toString());
 if ((request.getParameter("inputTo") != null) && (request.getParameter("inputBody") != null)){
 	try{
@@ -133,25 +138,41 @@ if ((request.getParameter("inputTo") != null) && (request.getParameter("inputBod
 				</div>
 
 				<table class="table table-inbox table-hover">
+					
 					<tbody>
+					<tr class="readInb" style="font-weight:bold;background-color:#009999;color:white">
+					<td></td>
+					<td>ID</td>
+					<td>USERNAME</td>
+					<td>MESSAGE</td>
+					<td class="view-message  text-right">DATE & TIME</td>
+					</tr>
 						<% List<PrivateMessage> receivedMessages = DBUtils.displayIncomingMessages(loggedUser);
-						for (PrivateMessage myMessage : receivedMessages){
-							if (myMessage.getIsRead() == 1){%>
-							<tr class="unread" onclick="openMessage('<%=myMessage.getSender().getUsername()%>','<%=myMessage.getMessageData()%>','<%=myMessage.getDateSubmission()%>')" id="<%=myMessage.getPrivateMessageID() %>">
-							<td class="inbox-small-cells"><input type="checkbox"
-								class="mail-checkbox mail-inbox"></td>
-							<td class="view-message  dont-show"><%=myMessage.getSender().getUsername()%></td>
-							<td class="view-message messageStyle"><%=myMessage.getMessageData()%></td>
-							<td class="view-message  text-right"><%=myMessage.getDateSubmission()%></td>
+						PrivateMessage myMessage;
+						for (int i=0;i<receivedMessages.size();i++){
+							myMessage = receivedMessages.get(i);
+							String user = myMessage.getSender().getUsername();
+							String message = myMessage.getMessageData();
+							//message = message.replace("\n","<br>");
+							//out.println(message);
+							Timestamp date = myMessage.getDateSubmission();
+							if (myMessage.getIsRead() == 0){%>
+							<tr class="unread">
+							<td class="inbox-small-cells"><input type="checkbox" class="mail-checkbox mail-inbox"></td>
+								<td class="view-message  dont-show" onclick="openInboxMessage('<%=user %>','<%=message%>','<%=date %>')"><%=myMessage.getPrivateMessageID()%></td>
+								<td class="view-message  dont-show" onclick="openInboxMessage('<%=user %>','<%=message %>','<%=date %>')"><%=user%></td>
+								<td class="view-message messageStyle" onclick="openInboxMessage('<%=user %>','<%=message %>','<%=date %>')"><%=message%></td>
+								<td class="view-message  text-right" onclick="openInboxMessage('<%=user %>','<%=message %>','<%=date %>')"><%=date%></td>
 						</tr><%
 							}else{
 								%>
-								<tr class="readInb" onclick="openMessage('<%=myMessage.getSender().getUsername()%>','<%=myMessage.getMessageData()%>','<%=myMessage.getDateSubmission()%>')" id="<%=myMessage.getPrivateMessageID() %>">
+								<tr class="readInb" onclick="openInboxMessage('<%=user %>','<%=message %>','<%=date %>')">
 							<td class="inbox-small-cells"><input type="checkbox"
 								class="mail-checkbox mail-inbox"></td>
-							<td class="view-message  dont-show"><%=myMessage.getSender().getUsername()%></td>
-							<td class="view-message messageStyle"><%=myMessage.getMessageData()%></td>
-							<td class="view-message  text-right"><%=myMessage.getDateSubmission()%></td>
+							<td class="view-message  dont-show" onclick="openInboxMessage('<%=user %>','<%=message %>','<%=date %>')"><%=myMessage.getPrivateMessageID()%></td>
+							<td class="view-message  dont-show" onclick="openInboxMessage('<%=user %>','<%=message %>','<%=date %>')"><%=user %></td>
+							<td class="view-message messageStyle" onclick="openInboxMessage('<%=user %>','<%=message %>','<%=date %>')"><%=message %></td>
+							<td class="view-message  text-right" onclick="openInboxMessage('<%=user %>','<%=message %>','<%=date %>')"><%=date %></td>
 						</tr><%
 							}
 						}
@@ -203,15 +224,26 @@ if ((request.getParameter("inputTo") != null) && (request.getParameter("inputBod
 				</div>
 				<table class="table table-inbox table-hover">
 					<tbody>
+					<tr class="readInb" style="font-weight:bold;background-color:#009999;color:white">
+					<td></td>
+					<td>ID</td>
+					<td>USERNAME</td>
+					<td>MESSAGE</td>
+					<td class="view-message  text-right">DATE & TIME</td>
+					</tr>
 						<% List<PrivateMessage> sentMessages = DBUtils.displaySentMessages(loggedUser);
-						for (PrivateMessage myMessage : sentMessages){
-							%>
-							<tr class="readSent" id="<%=myMessage.getPrivateMessageID() %>">
+						for (int i=0;i<sentMessages.size();i++){
+							myMessage = sentMessages.get(i);
+							String user = myMessage.getReceiver().getUsername();
+							String message = myMessage.getMessageData();
+							Timestamp date = myMessage.getDateSubmission();%>
+							<tr class="readSent" onclick="openSentMessage('<%=user %>','<%=message %>','<%=date %>')">
 							<td class="inbox-small-cells"><input type="checkbox"
 								class="mail-checkbox mail-sent"></td>
-							<td class="view-message  dont-show"><%=myMessage.getReceiver().getUsername()%></td>
-							<td class="view-message messageStyle"><a href ="#"><%=myMessage.getMessageData()%></a></td>
-							<td class="view-message  text-right"><%=myMessage.getDateSubmission()%></td>
+							<td class="view-message 1 dont-show"><%=myMessage.getPrivateMessageID()%></td>
+							<td class="view-message 1 dont-show"><%=user %></td>
+							<td class="view-message 1 messageStyle"><%=message %></td>
+							<td class="view-message 1 text-right"><%=date %></td>
 						</tr><%
 						}
 						%>
@@ -276,7 +308,7 @@ if ((request.getParameter("inputTo") != null) && (request.getParameter("inputBod
 						<div class="form-group">
 							<label class="col-sm-12" for="messageView">Message</label>
 							<div class="col-sm-12">
-								<textarea id="messageView" style="background: white;cursor: pointer" class="form-control" name="messageView" rows="12" readonly></textarea>
+								<textarea id="messageView" style="background: white;cursor: pointer;white-space: pre-line" class="form-control" name="messageView" rows="12" readonly></textarea>
 							</div>
 						</div>
 					</form>
@@ -299,20 +331,20 @@ if ((request.getParameter("inputTo") != null) && (request.getParameter("inputBod
 						<div class="form-group">
 							<label class="col-sm-2" for="inputTo">To</label>
 							<div class="col-sm-10">
-								<input type="text" style="background: white;cursor: pointer" class="form-control" value="" readonly>
+								<input id="toView" type="text" style="background: white;cursor: pointer" class="form-control" value="" readonly>
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="col-sm-2" for="inputTo">Date</label>
 							<div class="col-sm-10">
-								<input type="text" style="background: white;cursor: pointer" class="form-control" value="" readonly>
+								<input id="dateView1" type="text" style="background: white;cursor: pointer" class="form-control" value="" readonly>
 							</div>
 						</div>
 					
 						<div class="form-group">
 							<label class="col-sm-12" for="inputBody">Message</label>
 							<div class="col-sm-12">
-								<textarea style="background: white;cursor: pointer" class="form-control" name="inputBody" id="inputBody" rows="12" readonly></textarea>
+								<textarea id="messageView1" style="background: white;cursor: pointer;white-space: pre-line" class="form-control" name="inputBody" rows="12" readonly></textarea>
 							</div>
 						</div>
 					</form>
