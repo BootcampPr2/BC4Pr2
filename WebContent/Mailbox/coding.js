@@ -64,18 +64,19 @@ $('.sr-input').on('click',() => {
 //	}
 //}
 
-function openInboxMessage(myUser,myMessage,myDate) {
+function openInboxMessage(myUser,myMessage,myDate,id) {
 	$('#fromView').val(myUser);
 	myMessage = myMessage.replace(/<br\s*\/?>/mg,"\n");
 	$('#messageView').val(myMessage);
 	$('#dateView').val(myDate);
+	$('#inid').val(id);
 
 }
 
-function openSentMessage(myUser,myMessage,myDate) {
+function openSentMessage(myUser,myMessage,myDate,id) {
 	$('#toView').val(myUser);
 	myMessage = myMessage.replace(/<br\s*\/?>/mg,"\n");
 	$('#messageView1').val(myMessage);
 	$('#dateView1').val(myDate);
-
+	$('#inid1').val(id);
 }

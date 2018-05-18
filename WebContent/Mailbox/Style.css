@@ -371,3 +371,7 @@ ul {
     text-overflow: ellipsis; 
 }
 
+body {
+	background="../Login_Create/background.png"
+}
+
