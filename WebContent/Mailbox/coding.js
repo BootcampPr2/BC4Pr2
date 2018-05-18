@@ -57,11 +57,11 @@ $('.sr-input').on('click',() => {
 });
 
 //function findUser(list){
-//	for (var i=0; i<list.length();i++){
-//		if (document.getElementById("search") == list(i)){
-//			
-//		}
-//	}
+//for (var i=0; i<list.length();i++){
+//if (document.getElementById("search") == list(i)){
+
+//}
+//}
 //}
 
 function openInboxMessage(myUser,myMessage,myDate,id) {
@@ -70,7 +70,11 @@ function openInboxMessage(myUser,myMessage,myDate,id) {
 	$('#messageView').val(myMessage);
 	$('#dateView').val(myDate);
 	$('#inid').val(id);
-
+	$('#' + id).removeClass("unread");
+	$('#' + id).addClass("readInb");
+	var counter = parseInt($('#counter').text()) - 1;
+	console.log(counter);
+	$('#counter').text(counter);
 }
 
 function openSentMessage(myUser,myMessage,myDate,id) {
@@ -78,5 +82,5 @@ function openSentMessage(myUser,myMessage,myDate,id) {
 	myMessage = myMessage.replace(/<br\s*\/?>/mg,"\n");
 	$('#messageView1').val(myMessage);
 	$('#dateView1').val(myDate);
-	$('#inid1').val(id);
+	$('#senid').val(id);
 }
