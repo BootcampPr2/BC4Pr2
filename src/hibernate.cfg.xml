@@ -14,6 +14,8 @@
     <mapping class="pr2.loseweight.dbtables.Role" />
     <mapping class="pr2.loseweight.dbtables.User" />
     <mapping class="pr2.loseweight.dbtables.PrivateMessage" />
+    <mapping class="pr2.loseweight.dbtables.Bmi" />
+    <mapping class="pr2.loseweight.dbtables.MetaRate" />
      
   </session-factory>
 </hibernate-configuration>

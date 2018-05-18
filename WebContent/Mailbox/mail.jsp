@@ -168,7 +168,7 @@ if ((request.getParameter("inputTo") != null) && (request.getParameter("inputBod
 				<table class="table table-inbox table-hover">
 					
 					<tbody>
-					<tr class="readInb" style="font-weight:bold;background-color:#009999;color:white">
+					<tr class="readInb" style="font-weight:bold;background-color:#00A8B3;color:white">
 					<td></td>
 					<td>ID</td>
 					<td>USERNAME</td>
@@ -243,7 +243,7 @@ if ((request.getParameter("inputTo") != null) && (request.getParameter("inputBod
 				</div>
 				<table class="table table-inbox table-hover">
 					<tbody>
-					<tr class="readInb" style="font-weight:bold;background-color:#009999;color:white">
+					<tr class="readInb" style="font-weight:bold;background-color:#00A8B3;color:white">
 					<td></td>
 					<td>ID</td>
 					<td>USERNAME</td>
