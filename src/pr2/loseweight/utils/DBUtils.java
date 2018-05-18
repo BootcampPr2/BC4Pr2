@@ -131,12 +131,12 @@ public abstract class DBUtils {
 	}
 
 	public static void main(String[] args) {
-		
+
 		User sender = getUserByUsername("user1");
 		User receiver = getUserByUsername("user1");
 		
-		/*String messageData = "se fonazei enas skilos";
-		composeNewPrivateMessage(sender,receiver,messageData);*/
+		String messageData = "se fonazei enas skilos";
+		composeNewPrivateMessage(sender,receiver,messageData);
 
 		//manager.update();
 		//update.delete();

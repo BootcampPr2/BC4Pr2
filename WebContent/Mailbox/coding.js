@@ -35,15 +35,41 @@ $('.view-message').on('click',() => {
 	$('.inbox-body.inbox-compose').hide();
 	$('.inbox-body.inbox-readSentMessage').hide();
 	$('.inbox-body.inbox-readInboxMessage').show();
-	
+
 });
+
+$('.view-message.1').on('click',() => {
+	$('.inbox-body.inbox-incoming').hide();
+	$('.inbox-body.inbox-sent').hide();    
+	$('.inbox-body.inbox-compose').hide();
+	$('.inbox-body.inbox-readSentMessage').show();
+	$('.inbox-body.inbox-readInboxMessage').hide();
+
+});
+
+$('.sr-input').on('click',() => {
+	$('.inbox-body.inbox-incoming').hide();
+	$('.inbox-body.inbox-sent').hide();    
+	$('.inbox-body.inbox-compose').hide();
+	$('.inbox-body.inbox-readSentMessage').show();
+	$('.inbox-body.inbox-readInboxMessage').hide();
+
+});
+
+//function findUser(list){
+//	for (var i=0; i<list.length();i++){
+//		if (document.getElementById("search") == list(i)){
+//			
+//		}
+//	}
+//}
 
 function openInboxMessage(myUser,myMessage,myDate) {
 	$('#fromView').val(myUser);
 	myMessage = myMessage.replace(/<br\s*\/?>/mg,"\n");
 	$('#messageView').val(myMessage);
 	$('#dateView').val(myDate);
-	
+
 }
 
 function openSentMessage(myUser,myMessage,myDate) {
@@ -51,5 +77,5 @@ function openSentMessage(myUser,myMessage,myDate) {
 	myMessage = myMessage.replace(/<br\s*\/?>/mg,"\n");
 	$('#messageView1').val(myMessage);
 	$('#dateView1').val(myDate);
-	
+
 }

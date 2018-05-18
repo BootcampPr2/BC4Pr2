@@ -1,34 +1,52 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%
-	request.setCharacterEncoding("UTF-8");
-%>
-<%@ page import="pr2.loseweight.utils.*"%>
-<%@ page import="java.util.List"%>
-<%@ page import="pr2.loseweight.dbtables.*"%>
-<%@ page import="java.sql.Timestamp"%>
-<jsp:useBean id="loggedUser" class="pr2.loseweight.dbtables.User"
-	scope="request" />
-<jsp:useBean id="receiver" class="pr2.loseweight.dbtables.User"
-	scope="request" />
-<jsp:useBean id="messageToBeSent"
-	class="pr2.loseweight.dbtables.PrivateMessage" scope="request" />
+<% request.setCharacterEncoding("UTF-8"); %>
+	<%@ page import="pr2.loseweight.utils.*"%>
+	<%@ page import="java.util.List, java.util.ArrayList" %>
+	<%@ page import="pr2.loseweight.dbtables.*" %>
+	<%@ page import="java.sql.Timestamp" %>
 
-<%
-	session.setAttribute("loggedUser", "user2");
-	loggedUser = DBUtils.getUserByUsername(session.getAttribute("loggedUser").toString());
-	if ((request.getParameter("inputTo") != null) && (request.getParameter("inputBody") != null)) {
-		try {
-			receiver = DBUtils.getUserByUsername(request.getParameter("inputTo").toString());
-			messageToBeSent.setSender(loggedUser);
-			messageToBeSent.setReceiver(receiver);
-			messageToBeSent.setMessageData(request.getParameter("inputBody").toString());
-			DBUtils.composeNewPrivateMessage(messageToBeSent.getSender(), messageToBeSent.getReceiver(),
-					messageToBeSent.getMessageData());
-		} catch (Exception e) {
-			e.printStackTrace();
+<%!
+public static String trimMessage(String myMessage){
+	final int limit = 20;
+	String newMessage;
+	if (!myMessage.contains("<br>")){
+		if (myMessage.length() <= limit)
+			return myMessage;
+		else
+			return myMessage.substring(0,limit) + "...";
+	}else{
+		int brFoundOn = myMessage.indexOf("<br>");
+		if (brFoundOn > limit){
+			return myMessage.substring(0,limit) + "...";
+		}else{
+			return myMessage.substring(0, brFoundOn) + "...";
 		}
 	}
+}
+%>
+
+<jsp:useBean id="receiver" class="pr2.loseweight.dbtables.User" scope="request" />
+<jsp:useBean id="messageToBeSent" class = "pr2.loseweight.dbtables.PrivateMessage" scope="request"/>
+
+<%
+session.setAttribute("loggedUser", "user1");
+%>
+
+<jsp:useBean id="loggedUser" class="pr2.loseweight.dbtables.User" scope="request" />
+<%
+loggedUser = DBUtils.getUserByUsername(session.getAttribute("loggedUser").toString());
+if ((request.getParameter("inputTo") != null) && (request.getParameter("inputBody") != null)){
+	try{
+	receiver = DBUtils.getUserByUsername(request.getParameter("inputTo").toString());
+	messageToBeSent.setSender(loggedUser);
+	messageToBeSent.setReceiver(receiver);
+	messageToBeSent.setMessageData(request.getParameter("inputBody").toString());
+	DBUtils.composeNewPrivateMessage(messageToBeSent.getSender(), messageToBeSent.getReceiver(), messageToBeSent.getMessageData());
+	}catch(Exception e){
+		e.printStackTrace();
+	}
+}
 %>
 
 
@@ -70,15 +88,17 @@
 					class="btn btn-compose"> <i class="fa fa-edit"></i>New Message
 				</a>
 			</div>
+
 			<ul class="inbox-nav inbox-divider">
-				<li><a href="#inbox" id="IM"><i class="fa fa-inbox"></i> <%
- 	List<PrivateMessage> receivedMessages = DBUtils.displayIncomingMessages(loggedUser);
- 	int countUnread = 0;
- 	for (PrivateMessage myMessage : receivedMessages) {
- 		if (myMessage.getIsRead() == 0)
- 			countUnread++;
- 	}
- %> Incoming Messages <span class="label label-danger pull-right"><%=countUnread%></span></a>
+				<li><a href="#inbox" id="IM"><i class="fa fa-inbox"></i>
+				<% List<PrivateMessage> receivedMessages = DBUtils.displayIncomingMessages(loggedUser);
+				int countUnread = 0;
+				for (PrivateMessage myMessage : receivedMessages){
+					if (myMessage.getIsRead() == 0){
+						countUnread++;
+					}
+				}
+				%>	Incoming Messages <span class="label label-danger pull-right"><%=countUnread %></span></a> 
 				</li>
 				<li><a href="#sent" id="SM"><i class="fa fa-external-link"></i>
 						Sent Message</a></li>
@@ -92,9 +112,10 @@
 			<aside class="lg-side">
 			<div class="inbox-head">
 				<h3>Mailbox</h3>
+				<%List<User> userList = (ArrayList)DBUserUtils.retrieveAllUsers();%>
 				<form action="#" class="pull-right position">
 					<div class="input-append">
-						<input type="text" class="sr-input"
+						<input type="text" class="sr-input" id="search" onkeyup="findUser(<%=userList %>)"
 							placeholder="Search Mail by Username">
 						<button class="btn sr-btn" type="button">
 							<i class="fa fa-search"></i>
@@ -114,20 +135,14 @@
 					</div>
 
 					<script>
-						$("#checkAll")
-								.click(
-										function() {
-											$(".mail-checkbox.mail-inbox")
-													.prop(
-															'checked',
-															$(this).prop(
-																	'checked'));
-										});
+						$("#checkAll").click(function() {
+						$(".mail-checkbox.mail-inbox").prop('checked',$(this).prop('checked'));
+						});
 					</script>
 
 					<div class="btn-group">
 						<a data-original-title="Refresh" data-placement="top"
-							data-toggle="dropdown" href="#" class="btn mini tooltips"> <i
+							data-toggle="dropdown" href="mail.jsp" class="btn mini tooltips"> <i
 							class=" fa fa-refresh"></i>
 						</a>
 					</div>
@@ -149,57 +164,44 @@
                                  </li>
                              </ul> -->
 				</div>
-				<table class="table table-inbox table-hover">
 
+				<table class="table table-inbox table-hover">
+					
 					<tbody>
-						<tr class="readInb"
-							style="font-weight: bold; background-color: #00A8B3; color: white">
-							<td></td>
-							<td>ID</td>
-							<td>USERNAME</td>
-							<td>MESSAGE</td>
-							<td class="view-message  text-right">DATE & TIME</td>
-						</tr>
-						<%
-							PrivateMessage myMessage;
-							for (int i = 0; i < receivedMessages.size(); i++) {
-								myMessage = receivedMessages.get(i);
-								String user = myMessage.getSender().getUsername();
-								String message = myMessage.getMessageData();
-								Timestamp date = myMessage.getDateSubmission();
-								if (myMessage.getIsRead() == 0) {
-						%>
-						<tr class="unread">
+					<tr class="readInb" style="font-weight:bold;background-color:#009999;color:white">
+					<td></td>
+					<td>ID</td>
+					<td>USERNAME</td>
+					<td>MESSAGE</td>
+					<td class="view-message  text-right">DATE & TIME</td>
+					</tr>
+						<% 
+						PrivateMessage myMessage;
+						for (int i=0;i<receivedMessages.size();i++){
+							myMessage = receivedMessages.get(i);
+							String user = myMessage.getSender().getUsername();
+							String message = myMessage.getMessageData();
+							Timestamp date = myMessage.getDateSubmission();
+							if (myMessage.getIsRead() == 0){%>
+							<tr class="unread">
+							<td class="inbox-small-cells"><input type="checkbox" class="mail-checkbox mail-inbox"></td>
+								<td class="view-message  dont-show" onclick="openInboxMessage('<%=user %>','<%=message%>','<%=date %>')"><%=myMessage.getPrivateMessageID()%></td>
+								<td class="view-message  dont-show" onclick="openInboxMessage('<%=user %>','<%=message %>','<%=date %>')"><%=user%></td>
+								<td class="view-message messageStyle" onclick="openInboxMessage('<%=user %>','<%=message %>','<%=date %>')"><%=trimMessage(message) %></td>
+								<td class="view-message  text-right" onclick="openInboxMessage('<%=user %>','<%=message %>','<%=date %>')"><%=date%></td>
+						</tr><%
+							}else{
+								%>
+								<tr class="readInb" onclick="openInboxMessage('<%=user %>','<%=message %>','<%=date %>')">
 							<td class="inbox-small-cells"><input type="checkbox"
 								class="mail-checkbox mail-inbox"></td>
-							<td class="view-message  dont-show"
-								onclick="openInboxMessage('<%=user%>','<%=message%>','<%=date%>')"><%=myMessage.getPrivateMessageID()%></td>
-							<td class="view-message  dont-show"
-								onclick="openInboxMessage('<%=user%>','<%=message%>','<%=date%>')"><%=user%></td>
-							<td class="view-message messageStyle"
-								onclick="openInboxMessage('<%=user%>','<%=message%>','<%=date%>')"><%=message%></td>
-							<td class="view-message  text-right"
-								onclick="openInboxMessage('<%=user%>','<%=message%>','<%=date%>')"><%=date%></td>
-						</tr>
-						<%
-							} else {
-						%>
-						<tr class="readInb"
-							onclick="openInboxMessage('<%=user%>','<%=message%>','<%=date%>')">
-							<td class="inbox-small-cells"><input type="checkbox"
-								class="mail-checkbox mail-inbox"></td>
-							<td class="view-message  dont-show"
-								onclick="openInboxMessage('<%=user%>','<%=message%>','<%=date%>')"><%=myMessage.getPrivateMessageID()%></td>
-							<td class="view-message  dont-show"
-								onclick="openInboxMessage('<%=user%>','<%=message%>','<%=date%>')"><%=user%></td>
-							<td class="view-message messageStyle"
-								onclick="openInboxMessage('<%=user%>','<%=message%>','<%=date%>')"><%=message%></td>
-							<td class="view-message  text-right"
-								onclick="openInboxMessage('<%=user%>','<%=message%>','<%=date%>')"><%=date%></td>
-						</tr>
-						<%
+							<td class="view-message  dont-show" onclick="openInboxMessage('<%=user %>','<%=message %>','<%=date %>')"><%=myMessage.getPrivateMessageID()%></td>
+							<td class="view-message  dont-show" onclick="openInboxMessage('<%=user %>','<%=message %>','<%=date %>')"><%=user %></td>
+							<td class="view-message messageStyle" onclick="openInboxMessage('<%=user %>','<%=message %>','<%=date %>')"><%=trimMessage(message) %></td>
+							<td class="view-message  text-right" onclick="openInboxMessage('<%=user %>','<%=message %>','<%=date %>')"><%=date %></td>
+						</tr><%
 							}
-							}
+						}
 						%>
 
 					</tbody>
@@ -218,21 +220,10 @@
 					</div>
 
 					<script>
-						$("#checkAll_Sent")
-								.click(
-										function() {
-											$(".mail-checkbox.mail-sent").prop(
-													'checked',
-													$(this).prop('checked'));
-										});
+						$("#checkAll_Sent").click(function() {
+						$(".mail-checkbox.mail-sent").prop('checked',$(this).prop('checked'));
+						});
 					</script>
-
-					<div class="btn-group">
-						<a data-original-title="Refresh" data-placement="top"
-							data-toggle="dropdown" href="#" class="btn mini tooltips"> <i
-							class=" fa fa-refresh"></i>
-						</a>
-					</div>
 
 					<div class="btn-group hidden-phone">
 						<a href="#" class="btn mini blue" aria-expanded="false"> <i
@@ -249,163 +240,140 @@
                                      <a class="np-btn" href="#"><i class="fa fa-angle-right pagination-right"></i></a>
                                  </li>
                              </ul> -->
-					<table class="table table-inbox table-hover">
-						<tbody>
-							<tr class="readInb"
-								style="font-weight: bold; background-color: #00A8B3; color: white">
-								<td></td>
-								<td>ID</td>
-								<td>USERNAME</td>
-								<td>MESSAGE</td>
-								<td class="view-message  text-right">DATE & TIME</td>
-							</tr>
-							<%
-								List<PrivateMessage> sentMessages = DBUtils.displaySentMessages(loggedUser);
-								for (int i = 0; i < sentMessages.size(); i++) {
-									myMessage = sentMessages.get(i);
-									String user = myMessage.getReceiver().getUsername();
-									String message = myMessage.getMessageData();
-									Timestamp date = myMessage.getDateSubmission();
-							%>
-							<tr class="readSent"
-								onclick="openSentMessage('<%=user%>','<%=message%>','<%=date%>')">
-								<td class="inbox-small-cells"><input type="checkbox"
-									class="mail-checkbox mail-sent"></td>
-								<td class="view-message dont-show"><%=myMessage.getPrivateMessageID()%></td>
-								<td class="view-message dont-show"><%=user%></td>
-								<td class="view-message messageStyle"><%=message%></td>
-								<td class="view-message text-right"><%=date%></td>
-							</tr>
-							<%
-								}
-							%>
-
-						</tbody>
-					</table>
 				</div>
+				<table class="table table-inbox table-hover">
+					<tbody>
+					<tr class="readInb" style="font-weight:bold;background-color:#009999;color:white">
+					<td></td>
+					<td>ID</td>
+					<td>USERNAME</td>
+					<td>MESSAGE</td>
+					<td class="view-message  text-right">DATE & TIME</td>
+					</tr>
+						<% List<PrivateMessage> sentMessages = DBUtils.displaySentMessages(loggedUser);
+						for (int i=0;i<sentMessages.size();i++){
+							myMessage = sentMessages.get(i);
+							String user = myMessage.getReceiver().getUsername();
+							String message = myMessage.getMessageData();
+							Timestamp date = myMessage.getDateSubmission();%>
+							<tr class="readSent" onclick="openSentMessage('<%=user %>','<%=message %>','<%=date %>')">
+							<td class="inbox-small-cells"><input type="checkbox"
+								class="mail-checkbox mail-sent"></td>
+							<td class="view-message 1 dont-show"><%=myMessage.getPrivateMessageID()%></td>
+							<td class="view-message 1 dont-show"><%=user %></td>
+							<td class="view-message 1 messageStyle"><%=trimMessage(message) %></td>
+							<td class="view-message 1 text-right"><%=date %></td>
+						</tr><%
+						}
+						%>
+
+					</tbody>
+				</table>
 			</div>
-			<!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+<!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
 			<div class="inbox-body inbox-compose">
-				<div class="mail-option"></div>
+				<div class="mail-option">
+
+
+				</div>
 
 				<div>
-					<form role="form" class="form-horizontal" action="mail.jsp"
-						method="get">
-						<div>
-							<button type="submit" class="btn btn-primary">
-								Send message&nbsp;<i class="fa fa-arrow-circle-right fa-lg"></i>
-							</button>
-						</div>
-						<br>
+					<form role="form" class="form-horizontal" action="mail.jsp" method="get">
+					<div>
+						<button type="submit" class="btn btn-primary">Send message&nbsp;<i class="fa fa-arrow-circle-right fa-lg"></i></button>
+					</div><br>
 						<div class="form-group">
 							<label class="col-sm-2" for="inputTo">To</label>
 							<div class="col-sm-10">
-								<input type="text" class="form-control" name="inputTo"
-									id="inputTo" placeholder="type receiver's username">
+								<input type="text" class="form-control" name="inputTo" id="inputTo"
+									placeholder="type receiver's username">
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="col-sm-12" for="inputBody">Message</label>
 							<div class="col-sm-12">
-								<textarea class="form-control" name="inputBody" id="inputBody"
-									rows="12"></textarea>
+								<textarea class="form-control" name="inputBody" id="inputBody" rows="12"></textarea>
 							</div>
 						</div>
 					</form>
 				</div>
 
 			</div>
-
+			
 			<!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
 			<div class="inbox-body inbox-readInboxMessage">
 				<div class="mail-option">
-					<div>
-						<form role="form" class="form-horizontal" action="mail.jsp"
-							method="get">
-							<div class="btn-group hidden-phone">
-								<a href="#" class="btn mini blue" aria-expanded="false"> <i
-									class="fa fa-trash-o"></i> Delete incoming message
-								</a>
+				<div>
+					<form role="form" class="form-horizontal" action="mail.jsp" method="get">
+					<div class="btn-group hidden-phone">
+						<a href="#" class="btn mini blue" aria-expanded="false"> <i
+							class="fa fa-trash-o"></i> Delete incoming message
+						</a>
+						</div>
+					</div><br>
+						<div class="form-group">
+							<label class="col-sm-2" for="inputTo">From</label>
+							<div class="col-sm-10">
+								<input id="fromView" type="text" style="background: white;cursor: pointer" class="form-control" value="" readonly>
 							</div>
-					</div>
-					<br>
-					<div class="form-group">
-						<label class="col-sm-2" for="inputTo">From</label>
-						<div class="col-sm-10">
-							<input id="fromView" type="text"
-								style="background: white; cursor: pointer" class="form-control"
-								value="" readonly>
 						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-sm-2" for="inputTo">Date</label>
-						<div class="col-sm-10">
-							<input id="dateView" type="text"
-								style="background: white; cursor: pointer" class="form-control"
-								value="" readonly>
+						<div class="form-group">
+							<label class="col-sm-2" for="inputTo">Date</label>
+							<div class="col-sm-10">
+								<input id="dateView" type="text" style="background: white;cursor: pointer" class="form-control" value="" readonly>
+							</div>
 						</div>
-					</div>
-
-					<div class="form-group">
-						<label class="col-sm-12" for="messageView">Message</label>
-						<div class="col-sm-12">
-							<textarea id="messageView"
-								style="background: white; cursor: pointer; white-space: pre-line"
-								class="form-control" name="messageView" rows="12" readonly></textarea>
+					
+						<div class="form-group">
+							<label class="col-sm-12" for="messageView">Message</label>
+							<div class="col-sm-12">
+								<textarea id="messageView" style="background: white;cursor: pointer;white-space: pre-line" class="form-control" name="messageView" rows="12" readonly></textarea>
+							</div>
 						</div>
-					</div>
 					</form>
 				</div>
 
 			</div>
-
-
-			<!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+			
+	
+				<!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
 			<div class="inbox-body inbox-readSentMessage">
 				<div class="mail-option">
-					<div>
-						<form role="form" class="form-horizontal" action="mail.jsp"
-							method="get">
-							<div class="btn-group hidden-phone">
-								<a href="#" class="btn mini blue" aria-expanded="false"> <i
-									class="fa fa-trash-o"></i> Delete sent message
-								</a>
+				<div>
+					<form role="form" class="form-horizontal" action="mail.jsp" method="get">
+					<div class="btn-group hidden-phone">
+						<a href="#" class="btn mini blue" aria-expanded="false"> <i
+							class="fa fa-trash-o"></i> Delete sent message
+						</a>
+						</div>
+					</div><br>
+						<div class="form-group">
+							<label class="col-sm-2" for="inputTo">To</label>
+							<div class="col-sm-10">
+								<input id="toView" type="text" style="background: white;cursor: pointer" class="form-control" value="" readonly>
 							</div>
-					</div>
-					<br>
-					<div class="form-group">
-						<label class="col-sm-2" for="inputTo">To</label>
-						<div class="col-sm-10">
-							<input id="toView" type="text"
-								style="background: white; cursor: pointer" class="form-control"
-								value="" readonly>
 						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-sm-2" for="inputTo">Date</label>
-						<div class="col-sm-10">
-							<input id="dateView1" type="text"
-								style="background: white; cursor: pointer" class="form-control"
-								value="" readonly>
+						<div class="form-group">
+							<label class="col-sm-2" for="inputTo">Date</label>
+							<div class="col-sm-10">
+								<input id="dateView1" type="text" style="background: white;cursor: pointer" class="form-control" value="" readonly>
+							</div>
 						</div>
-					</div>
-
-					<div class="form-group">
-						<label class="col-sm-12" for="inputBody">Message</label>
-						<div class="col-sm-12">
-							<textarea id="messageView1"
-								style="background: white; cursor: pointer; white-space: pre-line"
-								class="form-control" name="inputBody" rows="12" readonly></textarea>
+					
+						<div class="form-group">
+							<label class="col-sm-12" for="inputBody">Message</label>
+							<div class="col-sm-12">
+								<textarea id="messageView1" style="background: white;cursor: pointer;white-space: pre-line" class="form-control" name="inputBody" rows="12" readonly></textarea>
+							</div>
 						</div>
-					</div>
 					</form>
 				</div>
 
 			</div>
-
-			</aside>
+			
+		</aside>
 		</div>
 	</div>
-	<script src='coding.js'></script>
+<script src='coding.js'></script>
 </body>
 </html>

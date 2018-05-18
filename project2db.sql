@@ -36,9 +36,12 @@ CREATE TABLE `bmi` (
   `emr` double NOT NULL,
   `dateTimePosted` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `metaID` int(11) NOT NULL,
+  `userID` int(11) NOT NULL,
   PRIMARY KEY (`bmiID`),
   KEY `FK_bmi_meta_idx` (`metaID`),
-  CONSTRAINT `FK_bmi_meta` FOREIGN KEY (`metaID`) REFERENCES `metabolic_rate` (`metaID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `FK_bmi_user_idx` (`userID`),
+  CONSTRAINT `FK_bmi_meta` FOREIGN KEY (`metaID`) REFERENCES `metabolic_rate` (`metaID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_bmi_user` FOREIGN KEY (`userID`) REFERENCES `user` (`userID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -48,7 +51,7 @@ CREATE TABLE `bmi` (
 
 LOCK TABLES `bmi` WRITE;
 /*!40000 ALTER TABLE `bmi` DISABLE KEYS */;
-INSERT INTO `bmi` VALUES (1,75,1.75,33,'M',24.49,'Optimal',1744.1,0,'2018-05-12 17:34:16',1),(2,77,1.64,29,'F',28.63,'Overweight',1553.1,0,'2018-05-12 17:34:16',1),(3,85,1.75,30,'F',27.76,'Overweight',1645,0,'2018-05-12 17:34:16',1),(4,75,1.75,33,'M',24.49,'Optimal',1744.1,0,'2018-05-12 17:34:16',1),(5,64,1.64,29,'F',23.8,'Optimal',1565.6,0,'2018-05-12 17:34:16',1),(6,70,1.75,33,'M',22.86,'Optimal',1675.6,0,'2018-05-12 17:34:16',1);
+INSERT INTO `bmi` VALUES (1,75,1.75,33,'M',24.49,'Optimal',1744.1,0,'2018-05-18 06:53:18',1,1),(2,77,1.64,29,'F',28.63,'Overweight',1553.1,0,'2018-05-18 06:53:18',1,7),(3,85,1.75,30,'F',27.76,'Overweight',1645,0,'2018-05-18 06:53:18',1,7),(4,75,1.75,33,'M',24.49,'Optimal',1744.1,0,'2018-05-18 06:53:18',1,1),(5,64,1.64,29,'F',23.8,'Optimal',1565.6,0,'2018-05-18 06:53:18',1,7),(6,70,1.75,33,'M',22.86,'Optimal',1675.6,0,'2018-05-18 06:53:18',1,1);
 /*!40000 ALTER TABLE `bmi` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -96,7 +99,7 @@ CREATE TABLE `private_message` (
   KEY `receiverID` (`receiverID`),
   CONSTRAINT `private_message_ibfk_1` FOREIGN KEY (`senderID`) REFERENCES `user` (`userID`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `private_message_ibfk_2` FOREIGN KEY (`receiverID`) REFERENCES `user` (`userID`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -105,7 +108,7 @@ CREATE TABLE `private_message` (
 
 LOCK TABLES `private_message` WRITE;
 /*!40000 ALTER TABLE `private_message` DISABLE KEYS */;
-INSERT INTO `private_message` VALUES (1,'2018-05-14 11:24:14','τεστ',0,1,1),(2,'2018-05-14 11:33:56','Τεστ τεστ',0,7,1),(3,'2018-05-14 12:32:13','Τεστ τεστ τεστ',1,7,1),(4,'2018-05-14 12:32:13','Τεστ\r\nτεστ',1,7,1),(5,'2018-05-14 12:26:53','Είσαι καραγκιόζης\r\n\r\nκαι βλάκας',0,1,7);
+INSERT INTO `private_message` VALUES (6,'2018-05-18 06:50:14','skjf&nbsp;<br>&nbsp;<br>sdf&nbsp;<br>&nbsp;<br>sdf&nbsp;<br>&nbsp;<br>s&nbsp;<br>&nbsp;<br>fs',0,7,1),(7,'2018-05-18 06:50:21','dfsdkhfb&nbsp;<br>&nbsp;<br>sdf&nbsp;<br>&nbsp;<br>sfs&nbsp;<br>&nbsp;<br>f',0,7,7),(8,'2018-05-18 06:51:09','fdfsdfsdf',0,7,7);
 /*!40000 ALTER TABLE `private_message` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -206,7 +209,7 @@ CREATE TABLE `user` (
   PRIMARY KEY (`userID`),
   KEY `roleID` (`roleID`),
   CONSTRAINT `user_ibfk_2` FOREIGN KEY (`roleID`) REFERENCES `role` (`roleID`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -215,36 +218,8 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'admin','aDmI3$',0,1),(7,'user1','123',0,3);
+INSERT INTO `user` VALUES (1,'admin','aDmI3$',0,1),(7,'user1','123',0,3),(8,'user2','123',0,2);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `users_bmis`
---
-
-DROP TABLE IF EXISTS `users_bmis`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `users_bmis` (
-  `id` int(11) NOT NULL,
-  `userID` int(11) NOT NULL,
-  `bmiID` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK_usersbmis_user_idx` (`userID`),
-  KEY `FK_usersbmis_bmi_idx` (`bmiID`),
-  CONSTRAINT `FK_usersbmis_bmi` FOREIGN KEY (`bmiID`) REFERENCES `bmi` (`bmiID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_usersbmis_user` FOREIGN KEY (`userID`) REFERENCES `user` (`userID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `users_bmis`
---
-
-LOCK TABLES `users_bmis` WRITE;
-/*!40000 ALTER TABLE `users_bmis` DISABLE KEYS */;
-/*!40000 ALTER TABLE `users_bmis` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -256,4 +231,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-05-14 16:20:13
+-- Dump completed on 2018-05-18  9:55:35
