@@ -19,7 +19,22 @@ import pr2.loseweight.dbtables.User;
 public abstract class DBUtils {
 	public static SessionFactory sessionFactory;
 	
-
+	public static void setRead(int privateMessageID) {
+		SessionFactory sessionFactory = null;
+		StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
+		try {
+			sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+		} catch(Exception ex) {
+			StandardServiceRegistryBuilder.destroy(registry);
+		}
+		Session session = sessionFactory.openSession();
+		PrivateMessage myMessage = session.get(PrivateMessage.class, privateMessageID);
+		session.beginTransaction();
+		myMessage.setIsRead(1);
+		session.update(myMessage);
+		session.getTransaction().commit();
+		session.close();
+	}
 	
 	public static List<PrivateMessage> displayIncomingMessages(User receiver) {
 		SessionFactory sessionFactory = null;
@@ -132,11 +147,7 @@ public abstract class DBUtils {
 
 	public static void main(String[] args) {
 
-		User sender = getUserByUsername("user1");
-		User receiver = getUserByUsername("user1");
-		
-		String messageData = "se fonazei enas skilos";
-		composeNewPrivateMessage(sender,receiver,messageData);
+		setRead(9);
 
 		//manager.update();
 		//update.delete();
