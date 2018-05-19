@@ -72,24 +72,6 @@ public abstract class DBUtils {
 		return sentMessages;
 	}
 	
-	public static User getUserByUsername(String username) {
-		SessionFactory sessionFactory = null;
-		StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
-		try {
-			sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
-		} catch(Exception ex) {
-			StandardServiceRegistryBuilder.destroy(registry);
-		}
-		Session session = sessionFactory.openSession();
-		String getUserById = "SELECT u FROM User u WHERE u.username like :username";
-		Query query = session.createQuery(getUserById).setParameter("username", username);
-		User myUser = (User)query.getResultList().get(0);
-		session.close();
-		sessionFactory.close();
-		return myUser;
-	}
-	
-
 	public static void composeNewPrivateMessage(User sender, User receiver, String messageData) {
 		SessionFactory sessionFactory = null;
 		StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
@@ -147,7 +129,7 @@ public abstract class DBUtils {
 
 	public static void main(String[] args) {
 
-		setRead(8);
+		setRead(16);
 
 		//manager.update();
 		//update.delete();

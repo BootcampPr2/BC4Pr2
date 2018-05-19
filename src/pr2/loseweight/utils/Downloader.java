@@ -63,7 +63,7 @@ public class Downloader {
 	} // end writeMessageToFile()
 	
 	public static void main (String[] args) {
-		User myUser = DBUtils.getUserByUsername("user1");
+		User myUser = DBUserUtils.getUserByUsername("user1");
 		List<PrivateMessage> incoming = DBUtils.displayIncomingMessages(myUser);
 		List<PrivateMessage> sent = DBUtils.displaySentMessages(myUser);
 		writeMessageToFile(incoming,sent);

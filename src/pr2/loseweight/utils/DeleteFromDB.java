@@ -15,7 +15,7 @@ import org.hibernate.query.Query;
 // Button "delete incoming/sent messages" in mail.jsp
 public abstract class DeleteFromDB {
 	public static void deleteSelectedMessages(String[] listOfIdsString) {
-		List<Integer> listOfIdsInt= new ArrayList<Integer>();
+		List<Integer> listOfIdsInt = new ArrayList<Integer>();
 		for (int i=0;i<listOfIdsString.length;i++) {
 			listOfIdsInt.add(Integer.parseInt(listOfIdsString[i]));
 		}
@@ -36,8 +36,8 @@ public abstract class DeleteFromDB {
 	} // end of DeleteFromDB()
 	
 	public static void main (String[] args) {
-		String[] list = new String[] {"6","7"};
-		DeleteFromDB.deleteSelectedMessages(list);
+		/*List<String> list = Arrays.asList("3","4");
+		DeleteFromDB.deleteSelectedMessages(list);*/
 		
 	}
 }

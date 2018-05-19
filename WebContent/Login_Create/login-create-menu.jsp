@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-    <%@ page import = "java.util.ArrayList" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -34,7 +33,7 @@
 					<div class="panel-body">
 						<div class="row">
 							<div class="col-lg-12">
-								<form id="login-form" action="https://phpoll.com/login/process" method="post" role="form" style="display: block;">
+								<form id="login-form" action="logincheck.jsp" method="post" role="form" style="display: block;">
 									<div class="form-group">
 										<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
 									</div>
@@ -68,18 +67,6 @@
 										</div>
 									</div>
 								</form>
-								<% ArrayList <String> list = new ArrayList();
-								
-								list.add("user1");
-								list.add("maria");
-								
-								for (int i=0;i<list.size();i++){
-									if (request.getParameter("username0")==list.get(i)){
-										
-									}
-								}
-								
-								%>
 								<form id="register-form" action="https://phpoll.com/register/process" method="post" role="form" style="display: none;">
 									<div class="form-group">
 										<input type="text" name="username0" id="username0" tabindex="1" class="form-control" placeholder="Username" value="">

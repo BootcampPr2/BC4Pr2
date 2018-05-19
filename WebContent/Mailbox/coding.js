@@ -74,6 +74,16 @@ function openInboxMessage(myUser,myMessage,myDate,id) {
 	$('#' + id).addClass("readInb");
 	var counter = parseInt($('#counter').text()) - 1;
 	$('#counter').text(counter);
+	
+	// set message as read
+	var dataToBeSent  = {
+			messageID : id
+	};
+	$.ajax({
+		url : 'setread.jsp',
+		data : dataToBeSent, 
+		type : 'POST',
+	});
 }
 
 function openSentMessage(myUser,myMessage,myDate,id) {
@@ -82,16 +92,4 @@ function openSentMessage(myUser,myMessage,myDate,id) {
 	$('#messageView1').val(myMessage);
 	$('#dateView1').val(myDate);
 	$('#senid').val(id);
-}
-
-function setRead() {
-	var dataToBeSent  = {
-			messageID : $(".openInboxMessage").attr('id')
-	};
-	console.log(dataToBeSent);
-	$.ajax({
-		url : 'setread.jsp',
-		data : dataToBeSent, 
-		type : 'POST',
-	});
 }
