@@ -1,5 +1,6 @@
 package pr2.loseweight.utils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -13,7 +14,11 @@ import org.hibernate.query.Query;
 // Method that takes a list of IDs and deletes the Private Messages with those IDs from the DB
 // Button "delete incoming/sent messages" in mail.jsp
 public abstract class DeleteFromDB {
-	public static void deleteSelectedMessages(List<Integer> ListOfIds) {
+	public static void deleteSelectedMessages(String[] listOfIdsString) {
+		List<Integer> listOfIdsInt= new ArrayList<Integer>();
+		for (int i=0;i<listOfIdsString.length;i++) {
+			listOfIdsInt.add(Integer.parseInt(listOfIdsString[i]));
+		}
 		SessionFactory sessionFactory = null;
 		StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
 		try {
@@ -23,7 +28,7 @@ public abstract class DeleteFromDB {
 		}
 		Session session = sessionFactory.openSession();
 		Query q = session.createQuery("DELETE FROM PrivateMessage WHERE privateMessageID IN (:list)");
-		q.setParameter("list", ListOfIds);
+		q.setParameter("list", listOfIdsInt);
 		session.beginTransaction();
 		q.executeUpdate();
 		session.getTransaction().commit();
@@ -31,7 +36,7 @@ public abstract class DeleteFromDB {
 	} // end of DeleteFromDB()
 	
 	public static void main (String[] args) {
-		List<Integer> list = Arrays.asList(5,7,8);
+		String[] list = new String[] {"6","7"};
 		DeleteFromDB.deleteSelectedMessages(list);
 		
 	}

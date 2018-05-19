@@ -147,7 +147,7 @@ public abstract class DBUtils {
 
 	public static void main(String[] args) {
 
-		setRead(16);
+		setRead(8);
 
 		//manager.update();
 		//update.delete();

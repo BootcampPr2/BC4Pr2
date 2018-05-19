@@ -215,8 +215,8 @@
 										int id = myMessage.getPrivateMessageID();
 										if (myMessage.getIsRead() == 0) {
 								%>
-								<tr class="unread" id="<%=id%>"
-									onclick="openInboxMessage('<%=user%>','<%=message%>','<%=date%>', <%=id%>)">
+								<tr class="unread openInboxMessage" id="<%=id%>"
+									onclick="openInboxMessage('<%=user%>','<%=message%>','<%=date%>', <%=id%>);setRead()">
 									<td class="inbox-small-cells"><input type="checkbox"
 										class="mail-checkbox mail-inbox" name="CI" value="<%=id%>"></td>
 									<td class="view-message  dont-show"><%=user%></td>
