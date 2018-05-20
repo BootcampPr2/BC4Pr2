@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 	request.setCharacterEncoding("UTF-8");
 %>
@@ -27,11 +26,10 @@
 		}
 	}%>
 
-<jsp:useBean id="receiver" class="pr2.loseweight.dbtables.User"
-	scope="request" />
+<jsp:useBean id="receiver" class="pr2.loseweight.dbtables.User" scope="request" />
 <jsp:useBean id="messageToBeSent" class="pr2.loseweight.dbtables.PrivateMessage" scope="request" />
 <jsp:useBean id="loggedUser" class="pr2.loseweight.dbtables.User" scope="request" />
-<%
+<% session.setAttribute("loggedUserUsername","user1");
 	loggedUser = DBUserUtils.getUserByUsername(session.getAttribute("loggedUserUsername").toString());
 	if ((request.getParameter("inputTo") != null) && (request.getParameter("inputBody") != null)) {
 		try {
@@ -71,27 +69,24 @@
 <html>
 <head>
 
-<link
-	href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"
-	rel="stylesheet" id="bootstrap-css">
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <link rel="stylesheet" type="text/css" href="Style.css">
-<script
-	src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Mailbox</title>
 </head>
 <body>
+	<!-- <div id="background">
+		<img src="../Login_Create/background.png" class="stretch" alt="" />
+	</div> -->
 	<div class="container">
-		<link rel='stylesheet prefetch'
-			href='http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'>
+		<link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'>
 		<div class="mail-box">
 			<aside class="sm-side">
 			<div class="user-head">
-				<a class="inbox-avatar" href="javascript:;"> <img width="64"
-					height="60"
-					src="http://bootsnipp.com/img/avatars/ebeb306fd7ec11ab68cbcaa34282158bd80361a7.jpg">
+				<a class="inbox-avatar" href="javascript:;"> <img width="64" height="60" src="http://bootsnipp.com/img/avatars/ebeb306fd7ec11ab68cbcaa34282158bd80361a7.jpg">
 				</a>
 				<div class="user-name">
 					<h5><%=loggedUser.getUsername()%></h5>
@@ -102,13 +97,12 @@
 			</div>
 
 			<div class="inbox-body">
-				<a href="#newMessage" id="NM" data-toggle="modal" title="Compose"
-					class="btn btn-compose"> <i class="fa fa-edit"></i>New Message
+				<a href="#newMessage" id="NM" data-toggle="modal" title="Compose" class="btn btn-compose"> <i class="fa fa-edit"></i>New Message
 				</a>
 			</div>
 			<%
 				// get all received messages
-				List<PrivateMessage> receivedMessages = DBUtils.displayIncomingMessages(loggedUser); 
+				List<PrivateMessage> receivedMessages = DBUtils.displayIncomingMessages(loggedUser);
 				int countUnread = 0;
 				for (PrivateMessage myMessage : receivedMessages) {
 					if (myMessage.getIsRead() == 0) {
@@ -117,12 +111,15 @@
 				}
 			%>
 			<ul class="inbox-nav inbox-divider">
-				<li><a href="#inbox" id="IM"><i class="fa fa-inbox"></i>Incoming
-						Messages <span id="counter" class="label label-danger pull-right"><%=countUnread%></span></a></li>
-				<li><a href="#sent" id="SM"><i class="fa fa-external-link"></i>
-						Sent Message</a></li>
-				<li><a href="#" onClick="download()"><i
-						class="glyphicon glyphicon-save"></i> Download all messages</a></li>
+				<li><a href="#inbox" id="IM"><i class="fa fa-inbox"></i>Incoming Messages <span id="counter" class="label label-danger pull-right"><%=countUnread%></span></a></li>
+				<li><a href="#sent" id="SM"><i class="fa fa-external-link"></i> Sent Message</a></li>
+				<li style="text-align:center">
+					<form method="post" action="messages.txt">
+						<button type="submit" class="btn btn-link"><i class="glyphicon glyphicon-save"></i> Download all messages</button> 
+						<input type="hidden" name="username" value="<%=session.getAttribute("loggedUserUsername").toString()%>" />
+					</form>
+				</li>
+				
 			</ul>
 			</aside>
 
@@ -147,9 +144,7 @@
 				</div>
 				<form action="#" class="pull-right position">
 					<div class="input-append">
-						<input type="text" class="sr-input" id="search"
-							onkeyup="findUser(<%=userList%>)"
-							placeholder="Search Mail by Username">
+						<input type="text" class="sr-input" id="search" onkeyup="findUser(<%=userList%>)" placeholder="Search Mail by Username">
 						<button class="btn sr-btn" type="button">
 							<i class="fa fa-search"></i>
 						</button>
@@ -162,8 +157,7 @@
 					<form action="mail.jsp" method="post">
 						<div style="margin-bottom: 10px">
 							<div class="chk-all">
-								<input type="checkbox" id="checkAll"
-									class="mail-checkbox mail-group-checkbox">
+								<input type="checkbox" id="checkAll" class="mail-checkbox mail-group-checkbox">
 								<div class="btn-group">
 									<a href="#" class="btn mini all">All</a>
 								</div>
@@ -176,9 +170,7 @@
 						</script>
 
 							<div class="btn-group">
-								<a data-original-title="Refresh" data-placement="top"
-									data-toggle="dropdown" href="mail.jsp"
-									class="btn mini tooltips"> <i class=" fa fa-refresh"></i>
+								<a data-original-title="Refresh" data-placement="top" data-toggle="dropdown" href="mail.jsp" class="btn mini tooltips"> <i class=" fa fa-refresh"></i>
 								</a>
 							</div>
 
@@ -191,8 +183,7 @@
 						<table class="table table-inbox table-hover">
 
 							<tbody>
-								<tr class="readInb"
-									style="font-weight: bold; background-color: #00A8B3; color: white">
+								<tr class="readInb" style="font-weight: bold; background-color: #00A8B3; color: white">
 									<td></td>
 									<td>USERNAME</td>
 									<td>MESSAGE</td>
@@ -240,8 +231,7 @@
 					<form action="mail.jsp" methos="post">
 						<div style="margin-bottom: 10px">
 							<div class="chk-all">
-								<input type="checkbox" id="checkAll_Sent"
-									class="mail-checkbox mail-group-checkbox">
+								<input type="checkbox" id="checkAll_Sent" class="mail-checkbox mail-group-checkbox">
 								<div class="btn-group">
 									<a href="#" class="btn mini all">All</a>
 								</div>
@@ -261,8 +251,7 @@
 						</div>
 						<table class="table table-inbox table-hover">
 							<tbody>
-								<tr class="readInb"
-									style="font-weight: bold; background-color: #00A8B3; color: white">
+								<tr class="readInb" style="font-weight: bold; background-color: #00A8B3; color: white">
 									<td></td>
 									<td>USERNAME</td>
 									<td>MESSAGE</td>
@@ -295,8 +284,7 @@
 			<!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
 			<div class="inbox-body inbox-compose">
 				<div class="mail-option">
-					<form role="form" class="form-horizontal" action="mail.jsp"
-						method="post">
+					<form role="form" class="form-horizontal" action="mail.jsp" method="post">
 						<div>
 							<button type="submit" class="btn btn-primary">
 								Send message&nbsp;<i class="fa fa-arrow-circle-right fa-lg"></i>
@@ -306,15 +294,13 @@
 						<div class="form-group">
 							<label class="col-sm-2" for="inputTo">To</label>
 							<div class="col-sm-10">
-								<input type="text" class="form-control" name="inputTo"
-									id="inputTo" placeholder="type receiver's username">
+								<input type="text" class="form-control" name="inputTo" id="inputTo" placeholder="type receiver's username">
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="col-sm-12" for="inputBody">Message</label>
 							<div class="col-sm-12">
-								<textarea class="form-control" name="inputBody" id="inputBody"
-									rows="12"></textarea>
+								<textarea class="form-control" name="inputBody" id="inputBody" rows="12"></textarea>
 							</div>
 						</div>
 					</form>
@@ -336,23 +322,19 @@
 						<div class="form-group">
 							<label class="col-sm-2" for="inputTo">From</label>
 							<div class="col-sm-10">
-								<input id="fromView" type="text" class="form-control" value=""
-									style="background: white; cursor: pointer" readonly>
+								<input id="fromView" type="text" class="form-control" value="" style="background: white; cursor: pointer" readonly>
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="col-sm-2" for="inputTo">Date</label>
 							<div class="col-sm-10">
-								<input id="dateView" type="text" class="form-control" value=""
-									style="background: white; cursor: pointer" readonly>
+								<input id="dateView" type="text" class="form-control" value="" style="background: white; cursor: pointer" readonly>
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="col-sm-12" for="messageView">Message</label>
 							<div class="col-sm-12">
-								<textarea id="messageView" value="" class="form-control"
-									style="background: white; cursor: pointer; white-space: pre-line"
-									rows="12" readonly></textarea>
+								<textarea id="messageView" value="" class="form-control" style="background: white; cursor: pointer; white-space: pre-line" rows="12" readonly></textarea>
 							</div>
 						</div>
 					</form>
@@ -375,23 +357,19 @@
 						<div class="form-group">
 							<label class="col-sm-2" for="inputTo">To</label>
 							<div class="col-sm-10">
-								<input id="toView" type="text" class="form-control" value=""
-									style="background: white; cursor: pointer" readonly>
+								<input id="toView" type="text" class="form-control" value="" style="background: white; cursor: pointer" readonly>
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="col-sm-2" for="inputTo">Date</label>
 							<div class="col-sm-10">
-								<input id="dateView1" type="text" class="form-control" value=""
-									style="background: white; cursor: pointer" readonly>
+								<input id="dateView1" type="text" class="form-control" value="" style="background: white; cursor: pointer" readonly>
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="col-sm-12" for="inputBody">Message</label>
 							<div class="col-sm-12">
-								<textarea id="messageView1" class="form-control" value=""
-									style="background: white; cursor: pointer; white-space: pre-line"
-									rows="12" readonly></textarea>
+								<textarea id="messageView1" class="form-control" value="" style="background: white; cursor: pointer; white-space: pre-line" rows="12" readonly></textarea>
 							</div>
 						</div>
 					</form>
