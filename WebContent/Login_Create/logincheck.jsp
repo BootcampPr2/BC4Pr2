@@ -1,6 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ page import="pr2.loseweight.utils.DBUserUtils" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="pr2.loseweight.utils.DBUserUtils"%>
 <%
 boolean loginSuccessful = DBUserUtils.login(request.getParameter("username"), request.getParameter("password"));
 %>
@@ -13,16 +12,20 @@ boolean loginSuccessful = DBUserUtils.login(request.getParameter("username"), re
 </head>
 <body>
 
-<%
+	<%
 if (loginSuccessful){
 	session.setAttribute("loggedUserUsername",request.getParameter("username"));
 	response.sendRedirect("../Mailbox/mail.jsp");
 }
 else{
 %>
-	<p>Invalid Username or Password</p>
-	<jsp:include page="login-create-menu.jsp"></jsp:include>  
-<%
+	<p>
+		<script type="text/javascript">
+			alert("Invalid Username or Password");
+		</script>
+	</p>
+	<jsp:include page="login-create-menu.jsp"></jsp:include>
+	<%
 }
 
 %>

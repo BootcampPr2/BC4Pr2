@@ -1,8 +1,9 @@
 package pr2.loseweight.dbtables;
 
 import java.sql.Timestamp;
-
 import javax.persistence.*;
+
+import pr2.loseweight.utils.*;
 
 @Entity
 @Table(name = "bmi")
@@ -28,6 +29,19 @@ public class Bmi {
 		this.age = age;
 		this.gender = gender;
 		this.bmi = calculateBMI();
+	}
+	
+	public Bmi(double weight, double height, int age, String gender, MetaRate metarate, User user) {
+		this.weight = weight;
+		this.height = height;
+		this.age = age;
+		this.gender = gender;
+		this.metarate = metarate;
+		this.user = user;
+		this.bmi = calculateBMI();
+		this.classification = calculateClassification();
+		this.bmr = calculateBMR();	
+		this.emr = calculateEMR();
 	}
 
 	@Id
@@ -133,20 +147,52 @@ public class Bmi {
 	}
 	
 	public double calculateBMI() {
-		return (double)(this.weight/(this.height * this.height));
+		double bmi = this.weight/(this.height * this.height);
+		return Math.round(bmi * 100.0) / 100.0;
+	}
+	
+	public String calculateClassification() {
+		String classification;
+		if (this.bmi<18.5) {
+			classification  = "Underweight";
+		} else if (this.bmi<25) {
+			classification  = "Optimal";
+		} else if (this.bmi<30){
+			classification  = "Overweight";
+		} else {
+			classification  = "Obese";
+		}
+		return classification; 
 	}
 	
 	public double calculateBMR() {
-		return 0;
+		double bmr;
+		if (this.gender == "F") {
+			bmr = 655+(9.6*this.weight)+(1.8*100*this.height)-(4.7*this.age);
+		}else {
+			bmr = 66+(13.7*this.weight)+(5*100*this.height)-(6.8*this.age);
+		}
+		return Math.round(bmr * 100.0) / 100.0;
 	}
 	
 	public double calculateEMR() {
-		return 0;
+		double emr = this.bmr * metarate.getModifier();
+		return Math.round(emr * 100.0) / 100.0;
 	}
 	
+
+	@Override
+	public String toString() {
+		return "Bmi [bmiID=" + bmiID + ", weight=" + weight + ", height=" + height + ", age=" + age + ", gender="
+				+ gender + ", bmi=" + bmi + ", classification=" + classification + ", bmr=" + bmr + ", emr=" + emr
+				+ ", dateTimePosted=" + dateTimePosted + ", metarate=" + metarate.toString() + ", user=" + user.toString() + "]";
+	}
+
 	public static void main(String[] args) {
-		MetaRate myMetaRate = MetaRate.getMetaRateByDescription("Sedentary");
-		Bmi newBMI = new Bmi(70,1.75,50,"F",myMetaRate);
+//		MetaRate myMetaRate = MetaRate.getMetaRateByDescription("Sedentary");
+//		Bmi newBMI = new Bmi(70,1.75,50,"F",myMetaRate);
+		
+		DBUserUtils.registerUser ("kriki", "1234", 72.8, 1.64, 29, "F", 3);
 		
 	}
 }

@@ -18,7 +18,6 @@ public class MetaRate {
 	
 	public MetaRate() {} // default constructor
 	
-	
 	@Id
 	@Column(name = "metaID")
 	public int getMetaID() {
@@ -40,6 +39,11 @@ public class MetaRate {
 		this.modifier = modifier;
 	}
 	
+	@Override
+	public String toString() {
+		return "MetaRate [metaID=" + metaID + ", description=" + description + ", modifier=" + modifier + "]";
+	}
+
 	public static MetaRate getMetaRateByDescription(String description) {
 		SessionFactory sessionFactory = null;
 		StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();

@@ -12,8 +12,8 @@ import org.hibernate.query.Query;
 import pr2.loseweight.dbtables.*;
 
 public abstract class DBUserUtils {
-	
-	public static void registerUser(User newUser, Bmi userBMI) {
+
+	public static void registerUser (String username, String password, double weight, double height, int age, String gender, int exerciseID) {
 		SessionFactory sessionFactory = null;
 		StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
 		try {
@@ -22,13 +22,18 @@ public abstract class DBUserUtils {
 			StandardServiceRegistryBuilder.destroy(registry);
 		}
 		Session session = sessionFactory.openSession();
+		MetaRate myMetaRate = session.get(MetaRate.class, exerciseID);
+		System.out.println(myMetaRate);
+		User user = new User (username, password);
+		Bmi bmi = new Bmi (weight, height, age, gender, myMetaRate, user);
+		System.out.println(bmi);
 		session.beginTransaction();
-		session.save(newUser);
-		session.save(userBMI);
+		session.save(user);
+		session.save(bmi);
 		session.getTransaction().commit();
-		session.close();
-	} // end registerUser()
-	
+		session.close();		
+	} //end registerUser()
+
 	// Validate login
 	public static boolean login(String username, String password) {
 		SessionFactory sessionFactory = null;
@@ -39,7 +44,7 @@ public abstract class DBUserUtils {
 			StandardServiceRegistryBuilder.destroy(registry);
 		}
 		Session session = sessionFactory.openSession();
-		
+
 		User myUser = getUserByUsername(username);
 		if (myUser == null)
 			return false;
@@ -49,7 +54,7 @@ public abstract class DBUserUtils {
 			else return false;
 		}
 	}
-	
+
 	public static User getUserByUsername(String username) {
 		SessionFactory sessionFactory = null;
 		StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
@@ -71,8 +76,8 @@ public abstract class DBUserUtils {
 		sessionFactory.close();
 		return myUser;
 	}
-	
-	
+
+
 	public static List<User> retrieveAllUsers(){
 		SessionFactory sessionFactory = null;
 		StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
@@ -87,5 +92,8 @@ public abstract class DBUserUtils {
 		return query.getResultList();
 	}
 	
+	public static void main(String[] args) {
+		registerUser ("maria", "123", 72.8, 1.64, 29, "F", 1);
+	}
 	
 } // end of class

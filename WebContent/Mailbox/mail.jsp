@@ -29,7 +29,7 @@
 <jsp:useBean id="receiver" class="pr2.loseweight.dbtables.User" scope="request" />
 <jsp:useBean id="messageToBeSent" class="pr2.loseweight.dbtables.PrivateMessage" scope="request" />
 <jsp:useBean id="loggedUser" class="pr2.loseweight.dbtables.User" scope="request" />
-<% session.setAttribute("loggedUserUsername","user1");
+<% 
 	loggedUser = DBUserUtils.getUserByUsername(session.getAttribute("loggedUserUsername").toString());
 	if ((request.getParameter("inputTo") != null) && (request.getParameter("inputBody") != null)) {
 		try {

@@ -43,7 +43,6 @@ public class ServletDisplayMessages extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setHeader("Content-Disposition","attachment; filename=allmymessages.txt");
-		// TODO Auto-generated method stub
 		//doGet(request, response);
 		response.setContentType("text/plain;charset=UTF-8");
 		String username = request.getParameter("username");
