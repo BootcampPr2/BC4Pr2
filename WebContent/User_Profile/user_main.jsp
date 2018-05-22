@@ -7,7 +7,7 @@
 <%@ page import="pr2.loseweight.dbtables.*"%>
 <%@ page import="java.sql.Timestamp"%>
 
-<% session.setAttribute("loggedUserUsername","user1");
+<%
 User loggedUser = DBUserUtils.getUserByUsername(session.getAttribute("loggedUserUsername").toString());
 int role = loggedUser.getRole().getRoleID();
 session.setAttribute("roleID", role);
@@ -58,7 +58,7 @@ window.onload = givePermission;
 
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
-			<li><a href="login-create-menu.jsp"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
+			<li><a href="../Login_Create/login-create-menu.jsp"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
 		</ul>
 	</div>
 	</nav>

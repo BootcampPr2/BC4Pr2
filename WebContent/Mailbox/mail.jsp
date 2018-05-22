@@ -24,7 +24,8 @@
 				return myMessage.substring(0, brFoundOn) + "...";
 			}
 		}
-	}%>
+	}
+%>
 
 <jsp:useBean id="receiver" class="pr2.loseweight.dbtables.User" scope="request" />
 <jsp:useBean id="messageToBeSent" class="pr2.loseweight.dbtables.PrivateMessage" scope="request" />
@@ -44,7 +45,7 @@
 		}
 	}
 
-	if (request.getParameter("CI") != null) {
+/* 	if (request.getParameter("CI") != null) {
 		String[] checkedIds = request.getParameterValues("CI");
 		DeleteFromDB.deleteSelectedMessages(checkedIds);
 	}
@@ -61,7 +62,7 @@
 	if (request.getParameter("senid") != null) {
 		String[] checkedIds = request.getParameterValues("senid");
 		DeleteFromDB.deleteSelectedMessages(checkedIds);
-	}
+	} */
 %>
 
 
@@ -73,6 +74,7 @@
 <link rel="stylesheet" type="text/css" href="Style.css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script  type="text/javascript" src='coding.js'></script>
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Mailbox</title>
@@ -111,8 +113,8 @@
 				}
 			%>
 			<ul class="inbox-nav inbox-divider">
-				<li><a href="#inbox" id="IM"><i class="fa fa-inbox"></i>Incoming Messages <span id="counter" class="label label-danger pull-right"><%=countUnread%></span></a></li>
-				<li><a href="#sent" id="SM"><i class="fa fa-external-link"></i> Sent Message</a></li>
+				<li><a href="#inbox" id="IM" onclick="getIncoming()"><i class="fa fa-inbox"></i>Incoming Messages <span id="counter" class="label label-danger pull-right"><%=countUnread%></span></a></li>
+				<li><a href="#sent" id="SM" onclick="getSent()"><i class="fa fa-external-link"></i>Sent Message</a></li>
 				<li style="text-align:center">
 					<form method="post" action="messages.txt">
 						<button type="submit" class="btn btn-link"><i class="glyphicon glyphicon-save"></i> Download all messages</button> 
@@ -170,57 +172,17 @@
 						</script>
 
 							<div class="btn-group">
-								<a data-original-title="Refresh" data-placement="top" data-toggle="dropdown" href="mail.jsp" class="btn mini tooltips"> <i class=" fa fa-refresh"></i>
+								<a onclick="getIncoming()" data-original-title="Refresh" data-placement="top" data-toggle="dropdown" href="#" class="btn mini tooltips"> <i class=" fa fa-refresh"></i>
 								</a>
 							</div>
 
 							<div class="btn-group hidden-phone">
-								<button type=submit class="btn btn-danger">
+								<button name="deleteReceived" type="button" class="btn btn-danger" onclick="deleteSelectedMessages(this)">
 									<i class="fa fa-trash-o"></i> Delete selected messages
 								</button>
 							</div>
 						</div>
-						<table class="table table-inbox table-hover">
-
-							<tbody>
-								<tr class="readInb" style="font-weight: bold; background-color: #00A8B3; color: white">
-									<td></td>
-									<td>USERNAME</td>
-									<td>MESSAGE</td>
-									<td class="view-message text-right">DATE & TIME</td>
-								</tr>
-								<%
-									PrivateMessage myMessage;
-									for (int i = 0; i < receivedMessages.size(); i++) {
-										myMessage = receivedMessages.get(i);
-										String user = myMessage.getSender().getUsername();
-										String message = myMessage.getMessageData();
-										Timestamp date = myMessage.getDateSubmission();
-										int id = myMessage.getPrivateMessageID();
-										if (myMessage.getIsRead() == 0) {
-								%>
-								<tr class="unread" id="<%=id%>">
-									<td class="inbox-small-cells"><input type="checkbox" class="mail-checkbox mail-inbox" name="CI" value="<%=id%>"></td>
-									<td class="view-message  dont-show" onclick="openInboxMessage('<%=user%>','<%=message%>','<%=date%>', <%=id%>)"><%=user%></td>
-									<td class="view-message messageStyle" onclick="openInboxMessage('<%=user%>','<%=message%>','<%=date%>', <%=id%>)"><%=trimMessage(message)%></td>
-									<td class="view-message  text-right" onclick="openInboxMessage('<%=user%>','<%=message%>','<%=date%>', <%=id%>)"><%=date%></td>
-								</tr>
-								<%
-									} else {
-								%>
-								<tr class="readInb">
-									<td class="inbox-small-cells"><input type="checkbox" class="mail-checkbox mail-inbox" name="CI" value="<%=id%>"></td>
-									<td class="view-message  dont-show" onclick="openInboxMessage('<%=user%>','<%=message%>','<%=date%>', <%=id%>)"><%=user%></td>
-									<td class="view-message messageStyle" onclick="openInboxMessage('<%=user%>','<%=message%>','<%=date%>', <%=id%>)"><%=trimMessage(message)%></td>
-									<td class="view-message  text-right" onclick="openInboxMessage('<%=user%>','<%=message%>','<%=date%>', <%=id%>)"><%=date%></td>
-								</tr>
-								<%
-									}
-									}
-								%>
-
-							</tbody>
-						</table>
+						<div id="incomingMessages"><!-- Incoming messages will appear here --></div>
 					</form>
 				</div>
 			</div>
@@ -244,40 +206,12 @@
 						</script>
 
 							<div class="btn-group hidden-phone">
-								<button type="submit" class="btn btn-danger">
+								<button name="deleteSent" type="button" class="btn btn-danger" onclick="deleteSelectedMessages(this)">
 									<i class="fa fa-trash-o"></i> Delete selected messages
 								</button>
 							</div>
 						</div>
-						<table class="table table-inbox table-hover">
-							<tbody>
-								<tr class="readInb" style="font-weight: bold; background-color: #00A8B3; color: white">
-									<td></td>
-									<td>USERNAME</td>
-									<td>MESSAGE</td>
-									<td class="view-message  text-right">DATE & TIME</td>
-								</tr>
-								<%
-									List<PrivateMessage> sentMessages = DBUtils.displaySentMessages(loggedUser);
-									for (int i = 0; i < sentMessages.size(); i++) {
-										myMessage = sentMessages.get(i);
-										String user = myMessage.getReceiver().getUsername();
-										String message = myMessage.getMessageData();
-										Timestamp date = myMessage.getDateSubmission();
-										int id = myMessage.getPrivateMessageID();
-								%>
-								<tr class="readSent">
-									<td class="inbox-small-cells"><input type="checkbox" class="mail-checkbox mail-sent" name="CS" value="<%=id%>"></td>
-									<td class="view-message 1 dont-show" onclick="openSentMessage('<%=user%>','<%=message%>','<%=date%>', <%=id%>)"><%=user%></td>
-									<td class="view-message 1 messageStyle" onclick="openSentMessage('<%=user%>','<%=message%>','<%=date%>', <%=id%>)"><%=trimMessage(message)%></td>
-									<td class="view-message 1 text-right" onclick="openSentMessage('<%=user%>','<%=message%>','<%=date%>', <%=id%>)"><%=date%></td>
-								</tr>
-								<%
-									}
-								%>
-
-							</tbody>
-						</table>
+						<div id="sentMessages"><!-- Sent messages will appear here --></div>
 					</form>
 				</div>
 			</div>
@@ -379,6 +313,5 @@
 			</aside>
 		</div>
 	</div>
-	<script src='coding.js'></script>
 </body>
 </html>
