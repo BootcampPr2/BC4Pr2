@@ -138,8 +138,8 @@ body { height: 100% }
 }
 
 #pswd_info {
-	width: 150%;
-    display:none;
+	width: 200%;
+    display: none;
 }
 
 input:out-of-range {

@@ -15,25 +15,6 @@
 <link href="Style.css" rel="stylesheet" type="text/css">
 <title>Home</title>
 
-<%
-	if (request.getParameter("username0")!=null && request.getParameter("password0")!=null && Double.parseDouble(request.getParameter("weight"))!=0 && Double.parseDouble(request.getParameter("height"))!=0 && Integer.parseInt(request.getParameter("age"))!=0 && request.getParameter("RG")!= null && Integer.parseInt(request.getParameter("RE"))!=0) {
-		String username = request.getParameter("username0");
-		String password = request.getParameter("password0");
-		double weight = Double.parseDouble(request.getParameter("weight"));
-		double height = Double.parseDouble(request.getParameter("height"));
-		int age = Integer.parseInt(request.getParameter("age"));
-		String gender = request.getParameter("RG");
-		int exercise = Integer.parseInt(request.getParameter("RE"));
-		System.out.println (username);
-		System.out.println (password);
-		System.out.println (weight);
-		System.out.println (height);
-		System.out.println (age);
-		System.out.println (gender);
-		System.out.println (exercise);
-		DBUserUtils.registerUser (username, password, weight, height, age, gender, exercise);
-	}
-%>
 </head>
 <body>
 	<div id="background">
@@ -46,10 +27,10 @@
 					<div class="panel-heading">
 						<div class="row">
 							<div class="col-xs-6">
-								<a href="#" class="active" id="login-form-link">Login</a>
+								<a href="#login" class="active" id="login-form-link">Login</a>
 							</div>
 							<div class="col-xs-6">
-								<a href="#" id="register-form-link">Register</a>
+								<a href="#register" id="register-form-link">Register</a>
 							</div>
 						</div>
 						<hr>
@@ -68,18 +49,26 @@
 									<div class="form-group">
 										<div class="row">
 											<div class="col-sm-6 col-sm-offset-3">
-												<input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login" value="Log In">
+												<input type="submit" name="login-submit" id="login-submit" tabindex="3" class="form-control btn btn-login" value="Log In">
 											</div>
 										</div>
 									</div>
 								</form>
-								
-	
-								<form id="register-form" action="login-create-menu.jsp" method="post" role="form" style="display: none;">
-									<div class="form-group">
-										<input type="text" name="username0" id="username0" tabindex="1" class="form-control" placeholder="Username" required>
+<% 
+String userName =  (String)request.getAttribute("username0");
+if (request.getParameter("username0") == null){
+	request.setAttribute("username0","");
+}else{
+	request.setAttribute("username0", request.getParameter("username0"));
+}%>
+								<form id="register-form" action="registercheck.jsp" method="post" role="form" style="display: none;">
+									<input class="form-control" id="errorLog" name="errorLog" value="<%=request.getParameter("errorLog") %>" style="display:none;visibility:hidden" disabled></input>
+									<div class="form-group">									
+										USERNAME:
+										<input type="text" name="username0" id="username0" tabindex="1" class="form-control" placeholder="Username" value= "<%=request.getAttribute("username0") %>" required>
 									</div>
 									<div class="form-group">
+										PASSWORD:
 										<input type="password" name="password0" id="password0" tabindex="2" class="form-control" placeholder="Password" required>
 									</div>
 
@@ -93,7 +82,7 @@
 														<li id="capital" class="invalid">At least <strong>one capital letter</strong></li>
 														<li id="number" class="invalid">At least <strong>one number</strong></li>
 														<li id="length" class="invalid">Be at least <strong>8 characters</strong></li>
-														<li id="space" class="invalid">At least one of <strong>[~!@#$%^&*-=.;']</strong></li>
+														<li id="space" class="invalid">At least one of <strong>[~!@#$%^&*=.;']</strong></li>
 													</ul>
 												</div>
 											</div>
@@ -101,23 +90,26 @@
 									</div>
 
 									<div class="form-group">
-										<input type="number" step="0.1" min="20" max="600" name="weight" id="weight" tabindex="2" class="form-control" placeholder="Weight in kg" required>
+										WEIGHT:
+										<input type="number" step="0.1" min="20" max="600" name="weight" id="weight" tabindex="3" class="form-control" value= "<%= request.getParameter("weight") %>"placeholder="Weight in kg" required>
 									</div>
 									<div class="form-group">
-										<input type="number" step="0.01" min="0.50" max="2.50" name="height" id="height" tabindex="2" class="form-control" placeholder="Height in meters" required>
+										HEIGHT:
+										<input type="number" step="0.01" min="0.50" max="2.50" name="height" id="height" tabindex="4" class="form-control" value= "<%= request.getParameter("height") %>"placeholder="Height in meters" required>
 									</div>
 									<div class="form-group">
-										<input type="number" step="1" min="10" max="80" name="age" id="age" tabindex="2" class="form-control" placeholder="Age in years" required>
+										AGE:
+										<input type="number" step="1" min="10" max="80" name="age" id="age" tabindex="5" class="form-control" value= "<%= request.getParameter("age") %>"placeholder="Age in years" required>
 									</div>
 									<div class="form-group">
-										<select class="form-control" name="RG" required>
+										GENDER: <select class="form-control" name="RG" tabindex="6" required>
 											<option value="" disabled selected hidden>Gender</option>
 											<option value="M">Male</option>
 											<option value="F">Female</option>
 										</select>
 									</div>
 									<div class="form-group">
-										<select class="form-control" name="RE" required>
+										EXERCISE: <select class="form-control" tabindex="7" name="RE" required>
 											<option value="" disabled selected hidden>Exercise</option>
 											<option value="1">Sedentary</option>
 											<option value="2">Lightly active</option>
@@ -129,7 +121,7 @@
 									<div class="form-group">
 										<div class="row">
 											<div class="col-sm-6 col-sm-offset-3">
-												<input type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-register" value="Create account">
+												<input type="submit" name="register-submit" id="register-submit" tabindex="8" class="form-control btn btn-register" value="Create account">
 											</div>
 										</div>
 									</div>

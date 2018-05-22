@@ -64,8 +64,13 @@ $(document).ready(function(){
 	
 });
 
-$(document).ready(function(){
-	$('#username0').keyup(function() {
-		var username = $('#username0').val();	
-	});
-});
+function changeVisibility() {
+//	if (request.getParameter("username0") != null || request.getParameter("username0") != "") {
+	document.getElementById("errorLog").style.visibility= "visible"
+	document.getElementById("errorLog").style.display = "block";
+	$('login-form-link').removeClass('active');
+    $('register-form-link').addClass('active');
+	document.getElementById("register-form").style.display = "block";
+	document.getElementById("login-form").style.display = "none";
+//	}
+}
