@@ -1,5 +1,4 @@
 <%@ page import="pr2.loseweight.utils.DeleteFromDB" %>
-<%@ page import="org.json.simple.JSONObject" %>
 <%
 String checkedIdsString = request.getParameter("checked");
 checkedIdsString = checkedIdsString.replace("\"","");

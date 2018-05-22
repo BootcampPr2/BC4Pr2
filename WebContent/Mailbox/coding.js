@@ -185,3 +185,45 @@ function deleteSelectedMessages(e){
 	
 }
 
+function deleteOpenedMessage(e){
+	if (e.name == "deleteIncomingMessage"){
+		
+		$.ajax({
+			url : 'ajax-deletemessages.jsp',
+			data :{ 
+				checked: JSON.stringify($('#inid').val())
+			},
+			type : 'POST',
+		});
+		
+		getIncoming();
+		$('.inbox-body.inbox-incoming').show();
+		$('.inbox-body.inbox-sent').hide();    
+		$('.inbox-body.inbox-compose').hide();
+		$('.inbox-body.inbox-readSentMessage').hide();
+		$('.inbox-body.inbox-readInboxMessage').hide();
+	}else{
+		$.ajax({
+			url : 'ajax-deletemessages.jsp',
+			data :{ 
+				checked: JSON.stringify($('#senid').val())
+			},
+			type : 'POST',
+		});
+		
+		getSent();
+		$.ajax({
+			url: "ajax-getcounter.jsp",
+			success: 
+				function(result){
+				$("#counter").html(result);
+			}
+		}
+		);
+		$('.inbox-body.inbox-incoming').hide();
+		$('.inbox-body.inbox-sent').show();    
+		$('.inbox-body.inbox-compose').hide();
+		$('.inbox-body.inbox-readSentMessage').hide();
+		$('.inbox-body.inbox-readInboxMessage').hide();	}
+}
+

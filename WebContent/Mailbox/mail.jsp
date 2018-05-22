@@ -95,7 +95,7 @@
 				</div>
 			</div>
 			<div class="inbox-body">
-				<a href="#"><i class="glyphicon glyphicon-arrow-left"></i>&nbsp;Go back</a>
+				<a href="../User_Profile/user_main.jsp"><i class="glyphicon glyphicon-arrow-left"></i>&nbsp;Go back</a>
 			</div>
 
 			<div class="inbox-body">
@@ -247,8 +247,8 @@
 					<form class="form-horizontal" action="mail.jsp" method="post">
 						<div class="form-group">
 							<div class="col-sm-10">
-								<button type="submit" class="btn btn-danger">
-									<i class="fa fa-trash-o"></i> Delete incoming message
+								<button name="deleteIncomingMessage" type="button" class="btn btn-danger" onclick="deleteOpenedMessage(this)">
+									<i class="fa fa-trash-o"></i> Delete message
 								</button>
 								<input id="inid" name="inid" style="visibility: hidden;" />
 							</div>
@@ -282,8 +282,8 @@
 					<form class="form-horizontal" action="mail.jsp" method="post">
 						<div class="form-group">
 							<div class="col-sm-10">
-								<button type="submit" class="btn btn-danger">
-									<i class="fa fa-trash-o"></i> Delete incoming message
+								<button name="deleteSentMessage"  type="button" class="btn btn-danger" onclick="deleteOpenedMessage(this)">
+									<i class="fa fa-trash-o"></i> Delete message
 								</button>
 								<input id="senid" name="senid" style="visibility: hidden;" />
 							</div>
