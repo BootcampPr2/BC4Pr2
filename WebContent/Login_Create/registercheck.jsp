@@ -45,7 +45,7 @@
 			if (password.matches(pattern)) {
 				DBUserUtils.registerUser(username, password, weight, height, age, gender, exercise);
 				session.setAttribute("loggedUserUsername",request.getParameter("username0"));
-				response.sendRedirect("../Mailbox/mail.jsp");
+				response.sendRedirect("../User_Profile/user_main.jsp");
 			}else {
 				%>
 	<jsp:include page="login-create-menu.jsp" flush="true">

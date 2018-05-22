@@ -15,7 +15,7 @@ boolean loginSuccessful = DBUserUtils.login(request.getParameter("username"), re
 	<%
 if (loginSuccessful){
 	session.setAttribute("loggedUserUsername", request.getParameter("username"));
-	response.sendRedirect("../Mailbox/mail.jsp");
+	response.sendRedirect("../User_Profile/user_main.jsp");
 }
 else{
 %>

@@ -76,6 +76,30 @@ public abstract class DBUserUtils {
 		sessionFactory.close();
 		return myUser;
 	}
+	
+	
+	public static Bmi getUserBmiByUsername(String username) {
+		SessionFactory sessionFactory = null;
+		StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
+		try {
+			sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+		} catch(Exception ex) {
+			StandardServiceRegistryBuilder.destroy(registry);
+		}
+		Session session = sessionFactory.openSession();
+		User user = getUserByUsername(username);
+		String getUserBmi = "SELECT b FROM Bmi b WHERE b.user like :user";
+		Query query = session.createQuery(getUserBmi).setParameter("user", user);
+		List<Bmi> bmiRetrieved = query.getResultList();
+		Bmi bmi;
+		if (bmiRetrieved.size() != 0)
+			bmi = bmiRetrieved.get(0);
+		else
+			bmi = null;
+		session.close();
+		sessionFactory.close();
+		return bmi;
+	}
 
 
 	public static List<User> retrieveAllUsers(){

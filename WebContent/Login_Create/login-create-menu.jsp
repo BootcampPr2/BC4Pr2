@@ -110,12 +110,12 @@ if (request.getParameter("username0") == null){
 									</div>
 									<div class="form-group">
 										EXERCISE: <select class="form-control" tabindex="7" name="RE" required>
-											<option value="" disabled selected hidden>Exercise</option>
-											<option value="1">Sedentary</option>
-											<option value="2">Lightly active</option>
-											<option value="3">Moderately active</option>
-											<option value="4">Very active</option>
-											<option value="5">Extremely active</option>
+											<option value="" disabled selected hidden>Activity level</option>
+											<option value="1">Sedentary (Little or no exercise)</option>
+											<option value="2">Lightly active (light exercise or sports 1-3 days per week)</option>
+											<option value="3">Moderately active (moderate exercise or sports 3-5 days per week)</option>
+											<option value="4">Very active (hard exercise or sports 6-7 days per week)</option>
+											<option value="5">Extremely active (very hard exercise or sports and a physical job or 2x training)</option>
 										</select>
 									</div>
 									<div class="form-group">

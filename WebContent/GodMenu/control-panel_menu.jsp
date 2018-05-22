@@ -1,4 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+	request.setCharacterEncoding("UTF-8");
+%>
+<%@ page import="pr2.loseweight.utils.*"%>
+<%@ page import="java.util.List, java.util.ArrayList"%>
+<%@ page import="pr2.loseweight.dbtables.*"%>
+<%@ page import="java.sql.Timestamp"%>
+<% 
+User loggedUser = DBUserUtils.getUserByUsername(session.getAttribute("loggedUserUsername").toString()); %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -11,13 +21,13 @@
 </head>
 <body>
 	<div id="background">
-		<img src="../Login_Create/background.png" class="stretch" alt="" />
+		<img src="../Images/background.png" class="stretch" alt="" />
 	</div>
 	<link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'>
 	<div class="container text-left">
 		<table id="goBack">
 			<tr>
-				<td style="padding-bottom: 5px"><a href="control-panel_menu.jsp" class="btn btn-primary" role="button"><i class="glyphicon glyphicon-arrow-left"></i>&nbsp;Go back</a></td>
+				<td style="padding-bottom: 5px"><a href="../User_Profile/user_main.jsp" class="btn btn-primary" role="button"><i class="glyphicon glyphicon-arrow-left"></i>&nbsp;Go back</a></td>
 			</tr>
 		</table>
 		<div id="welcome_tag">

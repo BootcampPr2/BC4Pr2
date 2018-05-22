@@ -93,7 +93,7 @@
 				</div>
 			</div>
 			<div class="inbox-body">
-				<a href="#">Go back</a>
+				<a href="#"><i class="glyphicon glyphicon-arrow-left"></i>&nbsp;Go back</a>
 			</div>
 
 			<div class="inbox-body">
@@ -228,7 +228,7 @@
 			<!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
 			<div class="inbox-body inbox-sent">
 				<div class="mail-option">
-					<form action="mail.jsp" methos="post">
+					<form action="mail.jsp" method="post">
 						<div style="margin-bottom: 10px">
 							<div class="chk-all">
 								<input type="checkbox" id="checkAll_Sent" class="mail-checkbox mail-group-checkbox">
