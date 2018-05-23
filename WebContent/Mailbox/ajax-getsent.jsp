@@ -65,7 +65,7 @@ User loggedUser = DBUserUtils.getUserByUsername(session.getAttribute("loggedUser
 if (sentMessages.size()==0){
 	
 %>
-	<h2 style="text-align: center">You have sent no messages yet!</h2>
+	<h3 style="text-align: center">You have sent no messages yet!</h3>
 <%
 }
 %>
