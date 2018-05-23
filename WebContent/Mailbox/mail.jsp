@@ -72,8 +72,8 @@
 
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <link rel="stylesheet" type="text/css" href="Style.css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 <script  type="text/javascript" src='coding.js'></script>
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -144,14 +144,19 @@
 						}
 					%>
 				</div>
-				<form action="#" class="pull-right position">
+				<div class="pull-right position">
 					<div class="input-append">
-						<input type="text" class="sr-input" id="search" onkeyup="findUser(<%=userList%>)" placeholder="Search Mail by Username">
-						<button class="btn sr-btn" type="button">
-							<i class="fa fa-search"></i>
-						</button>
+						<table>
+						<tr>
+							<td>
+								<button class="btn sr-btn" type="button" data-toggle="tooltip" data-placement="bottom" title="Hint: You can simply start typing the name of the user!">
+									<i class="fa fa-search"></i>
+								</button>
+							</td>
+						<td><input type="text" class="sr-input" id="search" onclick="getFiltered()" onkeyup="getFiltered()" placeholder="Filter Mail by Username"></td>
+						</table>
 					</div>
-				</form>
+				</div>
 			</div>
 			<!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
 			<div class="inbox-body inbox-incoming">
@@ -212,6 +217,39 @@
 							</div>
 						</div>
 						<div id="sentMessages"><!-- Sent messages will appear here --></div>
+					</form>
+				</div>
+			</div>
+			<!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+			<div class="inbox-body filtered-messages">
+				<div class="mail-option">
+					<form action="mail.jsp" method="post">
+						<div style="margin-bottom: 10px">
+							<div class="chk-all">
+								<input type="checkbox" id="checkAllFiltered" class="mail-checkbox mail-group-checkbox">
+								<div class="btn-group">
+									<a href="#" class="btn mini all">All</a>
+								</div>
+							</div>
+
+							<script>
+						$("#checkAllFiltered").click(function() {
+						$(".mail-checkbox.mail-filtered").prop('checked',$(this).prop('checked'));
+						});
+						</script>
+
+							<div class="btn-group">
+								<a onclick="getIncoming()" data-original-title="Refresh" data-placement="top" data-toggle="dropdown" href="#" class="btn mini tooltips"> <i class=" fa fa-refresh"></i>
+								</a>
+							</div>
+
+							<div class="btn-group hidden-phone">
+								<button name="deleteFiltered" type="button" class="btn btn-danger" onclick="deleteSelectedMessages(this)">
+									<i class="fa fa-trash-o"></i> Delete selected messages
+								</button>
+							</div>
+						</div>
+						<div id="filteredByUser"><!-- All filtered messages will go here--></div>
 					</form>
 				</div>
 			</div>
@@ -309,7 +347,6 @@
 					</form>
 				</div>
 			</div>
-
 			</aside>
 		</div>
 	</div>

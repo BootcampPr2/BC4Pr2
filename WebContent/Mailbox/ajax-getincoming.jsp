@@ -47,30 +47,24 @@ User loggedUser = DBUserUtils.getUserByUsername(session.getAttribute("loggedUser
 				if (myMessage.getIsRead() == 0) {
 		%>
 					<tr class="unread" id="<%=id%>">
-						<td class="inbox-small-cells"><input type="checkbox"
-							class="mail-checkbox mail-inbox" name="CI" value="<%=id%>"></td>
-						<td class="view-message  dont-show"
-							onclick="openInboxMessage('<%=user%>','<%=message%>','<%=date%>', <%=id%>, 0)"><%=user%></td>
-						<td class="view-message messageStyle"
-							onclick="openInboxMessage('<%=user%>','<%=message%>','<%=date%>', <%=id%>, 0)"><%=trimMessage(message)%></td>
-						<td class="view-message  text-right"
-							onclick="openInboxMessage('<%=user%>','<%=message%>','<%=date%>', <%=id%>, 0)"><%=date%></td>
-					</tr>
 		<%
 				}else{
 		%>
 					<tr class="readInb">
+		<%
+				}
+		%>			
 						<td class="inbox-small-cells"><input type="checkbox"
 							class="mail-checkbox mail-inbox" name="CI" value="<%=id%>"></td>
 						<td class="view-message  dont-show"
-							onclick="openInboxMessage('<%=user%>','<%=message%>','<%=date%>', <%=id%>, 1)"><%=user%></td>
+							onclick="openInboxMessage('<%=user%>','<%=message%>','<%=date%>', <%=id%>, <%=myMessage.getIsRead()%>)"><%=user%></td>
 						<td class="view-message messageStyle"
-							onclick="openInboxMessage('<%=user%>','<%=message%>','<%=date%>', <%=id%>, 1)"><%=trimMessage(message)%></td>
+							onclick="openInboxMessage('<%=user%>','<%=message%>','<%=date%>', <%=id%>, <%=myMessage.getIsRead()%>)"><%=trimMessage(message)%></td>
 						<td class="view-message  text-right"
-							onclick="openInboxMessage('<%=user%>','<%=message%>','<%=date%>', <%=id%>, 1)"><%=date%></td>
+							onclick="openInboxMessage('<%=user%>','<%=message%>','<%=date%>', <%=id%>, <%=myMessage.getIsRead()%>)"><%=date%></td>
 					</tr>
+
 		<%
-				}
 			}
 		%>
 	</tbody>
@@ -79,7 +73,7 @@ User loggedUser = DBUserUtils.getUserByUsername(session.getAttribute("loggedUser
 if (receivedMessages.size()==0){
 	
 %>
-	<h2 style="text-align: center">You have received no messages yet!</h2>
+	<h3 style="text-align: center">You have received no messages yet!</h3>
 <%
 }
 %>

@@ -1,15 +1,18 @@
 $('document').ready(function(){
+	getIncoming();
 	$('.inbox-body.inbox-sent').hide();
 	$('.inbox-body.inbox-compose').hide();
 	$('.inbox-body.inbox-readInboxMessage').hide();
 	$('.inbox-body.inbox-readSentMessage').hide();
-	getIncoming();
+	$('.inbox-body.filtered-messages').hide();
+	
 
 	$('#NM').click(function(){
 		$('.inbox-body.inbox-incoming').hide();
 		$('.inbox-body.inbox-sent').hide();
 		$('.inbox-body.inbox-readInboxMessage').hide();
 		$('.inbox-body.inbox-readSentMessage').hide();
+		$('.inbox-body.filtered-messages').hide();
 		$('.inbox-body.inbox-compose').show();   
 	});
 
@@ -18,6 +21,7 @@ $('document').ready(function(){
 		$('.inbox-body.inbox-compose').hide();
 		$('.inbox-body.inbox-readInboxMessage').hide();
 		$('.inbox-body.inbox-readSentMessage').hide();
+		$('.inbox-body.filtered-messages').hide();
 		$('.inbox-body.inbox-incoming').show();
 	});
 
@@ -26,62 +30,20 @@ $('document').ready(function(){
 		$('.inbox-body.inbox-compose').hide();
 		$('.inbox-body.inbox-readInboxMessage').hide();
 		$('.inbox-body.inbox-readSentMessage').hide();
+		$('.inbox-body.filtered-messages').hide();
 		$('.inbox-body.inbox-sent').show();                      		
 	});
-
-	$('.sr-input').click(function(){
-		$('.inbox-body.inbox-incoming').hide();
-		$('.inbox-body.inbox-sent').hide();    
-		$('.inbox-body.inbox-compose').hide();
-		$('.inbox-body.inbox-readSentMessage').show();
-		$('.inbox-body.inbox-readInboxMessage').hide();
-
-
-	});
-
-	//function findUser(list){
-	//for (var i=0; i<list.length();i++){
-	//if (document.getElementById("search") == list(i)){
-
-	//}
-	//}
-	//}
+	
+	$('[data-toggle="tooltip"]').tooltip(); 
 
 });
 
-/*$('.view-message').click(function(){
-	$('.inbox-body.inbox-incoming').hide();
-	$('.inbox-body.inbox-sent').hide();    
-	$('.inbox-body.inbox-compose').hide();
-	$('.inbox-body.inbox-readSentMessage').hide();
-	$('.inbox-body.inbox-readInboxMessage').show();
-	console.log("kati");
-});*/
-
-/*$('.view-message.1').click(function(){
-	$('.inbox-body.inbox-incoming').hide();
-	$('.inbox-body.inbox-sent').hide();    
-	$('.inbox-body.inbox-compose').hide();
-	$('.inbox-body.inbox-readSentMessage').show();
-	$('.inbox-body.inbox-readInboxMessage').hide();
-
-});*/
-
 function openInboxMessage(myUser,myMessage,myDate,id,isRead) {
-	$('.inbox-body.inbox-incoming').hide();
-	$('.inbox-body.inbox-sent').hide();    
-	$('.inbox-body.inbox-compose').hide();
-	$('.inbox-body.inbox-readSentMessage').hide();
-	$('.inbox-body.inbox-readInboxMessage').show();
-
 	$('#fromView').val(myUser);
 	myMessage = myMessage.replace(/<br\s*\/?>/mg,"\n");
 	$('#messageView').val(myMessage);
 	$('#dateView').val(myDate);
 	$('#inid').val(id);
-	/*$('#' + id).removeClass("unread");
-	$('#' + id).addClass("readInb");
-	 */
 
 	if (isRead == 0){
 		var counter = parseInt($('#counter').text()) - 1;
@@ -93,11 +55,34 @@ function openInboxMessage(myUser,myMessage,myDate,id,isRead) {
 			messageID : id
 	};
 	$.ajax({
-		url : 'setread.jsp',
+		url : 'ajax-setread.jsp',
 		data : dataToBeSent, 
 		type : 'POST',
 	});
+	
+	$('.inbox-body.inbox-incoming').hide();
+	$('.inbox-body.inbox-sent').hide();    
+	$('.inbox-body.inbox-compose').hide();
+	$('.inbox-body.inbox-readSentMessage').hide();
+	$('.inbox-body.filtered-messages').hide();
+	$('.inbox-body.inbox-readInboxMessage').show();
+
 }
+
+function openSentMessage(myUser,myMessage,myDate,id) {
+	$('#toView').val(myUser);
+	myMessage = myMessage.replace(/<br\s*\/?>/mg,"\n");
+	$('#messageView1').val(myMessage);
+	$('#dateView1').val(myDate);
+	$('#senid').val(id);
+	
+	$('.inbox-body.inbox-incoming').hide();
+	$('.inbox-body.inbox-sent').hide();    
+	$('.inbox-body.inbox-compose').hide();
+	$('.inbox-body.inbox-readSentMessage').show();
+	$('.inbox-body.inbox-readInboxMessage').hide();
+	$('.inbox-body.filtered-messages').hide();
+};
 
 function getSent(){
 	$.ajax({
@@ -120,35 +105,42 @@ function getIncoming(){
 	}
 	);
 
+	updateCounter();
+}
+
+function getFiltered(){
 	$.ajax({
-		url: "ajax-getcounter.jsp",
+		url: "ajax-searchmail.jsp",
+		data:{filterTerm: $('#search').val()},
 		success: 
 			function(result){
-			$("#counter").html(result);
+			$("#filteredByUser").html(result);
 		}
 	}
 	);
+	
+	updateCounter();
+	
+	$('.inbox-body.inbox-incoming').hide();
+	$('.inbox-body.inbox-compose').hide();
+	$('.inbox-body.inbox-readInboxMessage').hide();
+	$('.inbox-body.inbox-readSentMessage').hide();
+	$('.inbox-body.filtered-messages').show();
+	$('.inbox-body.inbox-sent').hide();   
 }
 
-function openSentMessage(myUser,myMessage,myDate,id) {
-	$('.inbox-body.inbox-incoming').hide();
-	$('.inbox-body.inbox-sent').hide();    
-	$('.inbox-body.inbox-compose').hide();
-	$('.inbox-body.inbox-readSentMessage').show();
-	$('.inbox-body.inbox-readInboxMessage').hide();
-
-	$('#toView').val(myUser);
-	myMessage = myMessage.replace(/<br\s*\/?>/mg,"\n");
-	$('#messageView1').val(myMessage);
-	$('#dateView1').val(myDate);
-	$('#senid').val(id);
-};
 
 function deleteSelectedMessages(e){
 	var allChecked = [];
-	
+
 	if (e.name == "deleteReceived"){
 		$('input[name=CI]').each(function(){
+			if($(this).prop('checked')){
+				allChecked.push($(this).val())
+			}
+		})
+	}else if(e.name == "deleteFiltered"){
+		$('input[name=CF]').each(function(){
 			if($(this).prop('checked')){
 				allChecked.push($(this).val())
 			}
@@ -160,7 +152,7 @@ function deleteSelectedMessages(e){
 			}
 		})
 	}
-	
+
 	$.ajax({
 		url : 'ajax-deletemessages.jsp',
 		data :{ 
@@ -168,10 +160,10 @@ function deleteSelectedMessages(e){
 		},
 		type : 'POST',
 	});
-	
+
 	if (e.name == "deleteReceived")
 		getIncoming();
-	else{
+	else if (e.name == "deleteSent"){
 		getSent();
 		$.ajax({
 			url: "ajax-getcounter.jsp",
@@ -181,13 +173,16 @@ function deleteSelectedMessages(e){
 			}
 		}
 		);
+	}else{
+		updateCounter();
+		getFiltered();
 	}
-	
+
 }
 
 function deleteOpenedMessage(e){
 	if (e.name == "deleteIncomingMessage"){
-		
+
 		$.ajax({
 			url : 'ajax-deletemessages.jsp',
 			data :{ 
@@ -195,13 +190,14 @@ function deleteOpenedMessage(e){
 			},
 			type : 'POST',
 		});
-		
+
 		getIncoming();
 		$('.inbox-body.inbox-incoming').show();
 		$('.inbox-body.inbox-sent').hide();    
 		$('.inbox-body.inbox-compose').hide();
 		$('.inbox-body.inbox-readSentMessage').hide();
 		$('.inbox-body.inbox-readInboxMessage').hide();
+		$('.inbox-body.filtered-messages').hide();
 	}else{
 		$.ajax({
 			url : 'ajax-deletemessages.jsp',
@@ -210,20 +206,26 @@ function deleteOpenedMessage(e){
 			},
 			type : 'POST',
 		});
-		
+
 		getSent();
-		$.ajax({
-			url: "ajax-getcounter.jsp",
-			success: 
-				function(result){
-				$("#counter").html(result);
-			}
-		}
-		);
+		updateCounter();
+		
 		$('.inbox-body.inbox-incoming').hide();
 		$('.inbox-body.inbox-sent').show();    
 		$('.inbox-body.inbox-compose').hide();
 		$('.inbox-body.inbox-readSentMessage').hide();
-		$('.inbox-body.inbox-readInboxMessage').hide();	}
+		$('.inbox-body.inbox-readInboxMessage').hide();
+		$('.inbox-body.filtered-messages').hide();
+	}
 }
 
+function updateCounter(){
+	$.ajax({
+		url: "ajax-getcounter.jsp",
+		success: 
+			function(result){
+			$("#counter").html(result);
+		}
+	}
+	);
+}
