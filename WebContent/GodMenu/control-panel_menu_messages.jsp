@@ -1,12 +1,18 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+	request.setCharacterEncoding("UTF-8");
+%>
 <%@ page import="pr2.loseweight.utils.*"%>
 <%@ page import="java.util.List, java.util.ArrayList"%>
 <%@ page import="pr2.loseweight.dbtables.*"%>
 <%@ page import="java.sql.Timestamp"%>
+<%
+	User loggedUser = DBUserUtils.getUserByUsername(session.getAttribute("loggedUserUsername").toString());
+%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <%!public static String trimMessage(String myMessage) {
 		final int limit = 60;
 		myMessage = myMessage.replace("&nbsp;", " ");
@@ -31,12 +37,6 @@
 		DeleteFromDB.deleteSelectedMessages(checkedIds);
 	}
 %>
-<jsp:useBean id="messageToBeSent" class="pr2.loseweight.dbtables.PrivateMessage" scope="request" />
-<jsp:useBean id="loggedUser" class="pr2.loseweight.dbtables.User" scope="request" />
-<%
-	session.setAttribute("loggedUserUsername", "admin"); //AFAIREITAI
-	loggedUser = DBUserUtils.getUserByUsername(session.getAttribute("loggedUserUsername").toString());
-%>
 <title>All messages</title>
 <meta charset="utf-8">
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -48,6 +48,11 @@
 <scrip src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"> </script> <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
 <body>
+
+	<div id="background">
+		<img src="../Images/background.png" class="stretch" alt="" />
+	</div>
+
 	<link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'>
 	<br>
 	<form action="control-panel_menu_messages.jsp" method="post">
@@ -79,7 +84,7 @@
 			</div>
 			<br>
 			<table class="table">
-				<thead class="thead-dark">
+				<thead class="thead-dark" style="background: #4B4446;color: white">
 					<tr>
 						<th scope="col">&nbsp;</th>
 						<th scope="col">From</th>
@@ -88,7 +93,7 @@
 						<th scope="col">Date</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody style="background: white">
 					<%
 						List<PrivateMessage> allMessages = DBAdminUtils.displayAllPrivateMessages();
 						PrivateMessage myMessage;

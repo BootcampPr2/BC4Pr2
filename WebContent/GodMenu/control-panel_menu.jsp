@@ -7,7 +7,8 @@
 <%@ page import="pr2.loseweight.dbtables.*"%>
 <%@ page import="java.sql.Timestamp"%>
 <% 
-User loggedUser = DBUserUtils.getUserByUsername(session.getAttribute("loggedUserUsername").toString()); %>
+	User loggedUser = DBUserUtils.getUserByUsername(session.getAttribute("loggedUserUsername").toString()); 
+%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -20,17 +21,35 @@ User loggedUser = DBUserUtils.getUserByUsername(session.getAttribute("loggedUser
 <title>Control Panel</title>
 </head>
 <body>
+
+	<!-- ............................NAVBAR MENU............................  -->
+	<nav class="navbar navbar-default navbar-static-top">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="#"><%=loggedUser.getUsername()%></a>
+		</div>
+		<ul class="nav navbar-nav">
+			<li><a href="../User_Profile/user_main.jsp">MY PROFILE</a></li>
+			<li><a href="../User_Profile/user_update.jsp">UPDATE PROFILE INFORMATION</a></li>
+			<li><a href="../User_Profile/bmi_history.jsp">VIEW HISTORY</a></li>
+			<li><a href="../Mailbox/mail.jsp">MAILBOX</a></li>
+			<li class="active"><a href="../GodMenu/control-panel_menu.jsp">CONTROL PANEL</a></li>
+
+		</ul>
+		<ul class="nav navbar-nav navbar-right">
+			<li><a href="../Login_Create/login-create-menu.jsp"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
+		</ul>
+	</div>
+	</nav>
+	
+	
+	<!-- ............................CONTROL PANEL MENU............................  -->
 	<div id="background">
 		<img src="../Images/background.png" class="stretch" alt="" />
 	</div>
 	<link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'>
 	<div class="container text-left">
-		<table id="goBack">
-			<tr>
-				<td style="padding-bottom: 5px"><a href="../User_Profile/user_main.jsp" class="btn btn-primary" role="button"><i class="glyphicon glyphicon-arrow-left"></i>&nbsp;Go back</a></td>
-			</tr>
-		</table>
-		<div id="welcome_tag">
+		<div id="welcome_tag" style="background: #4B4446;color: white">
 			<h3>
 				WELCOME TO THE CONTROL PANEL MENU
 				<h3>

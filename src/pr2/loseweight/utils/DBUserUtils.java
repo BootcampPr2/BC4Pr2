@@ -23,10 +23,8 @@ public abstract class DBUserUtils {
 		}
 		Session session = sessionFactory.openSession();
 		MetaRate myMetaRate = session.get(MetaRate.class, exerciseID);
-		System.out.println(myMetaRate);
 		User user = new User (username, password);
 		Bmi bmi = new Bmi (weight, height, age, gender, myMetaRate, user);
-		System.out.println(bmi);
 		session.beginTransaction();
 		session.save(user);
 		session.save(bmi);
@@ -34,6 +32,39 @@ public abstract class DBUserUtils {
 		session.close();		
 	} //end registerUser()
 
+	public static void updatePassword (User user, String password) {
+		SessionFactory sessionFactory = null;
+		StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
+		try {
+			sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+		} catch(Exception ex) {
+			StandardServiceRegistryBuilder.destroy(registry);
+		}
+		Session session = sessionFactory.openSession();
+		user.setPassword(password);
+		session.beginTransaction();
+		session.update(user);
+		session.getTransaction().commit();
+		session.close();		
+	} //end updatePassword()
+	
+	public static void updateUser (User user, double weight, double height, int age, String gender, int exerciseID) {
+		SessionFactory sessionFactory = null;
+		StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
+		try {
+			sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+		} catch(Exception ex) {
+			StandardServiceRegistryBuilder.destroy(registry);
+		}
+		Session session = sessionFactory.openSession();
+		MetaRate metaRate = session.get(MetaRate.class, exerciseID);
+		Bmi bmi = new Bmi (weight, height, age, gender, metaRate, user);
+		session.beginTransaction();
+		session.save(bmi);
+		session.getTransaction().commit();
+		session.close();		
+	} //end updateUser()
+	
 	// Validate login
 	public static boolean login(String username, String password) {
 		SessionFactory sessionFactory = null;
@@ -88,7 +119,7 @@ public abstract class DBUserUtils {
 		}
 		Session session = sessionFactory.openSession();
 		User user = getUserByUsername(username);
-		String getUserBmi = "SELECT b FROM Bmi b WHERE b.user like :user";
+		String getUserBmi = "SELECT b FROM Bmi b WHERE b.user like :user order by dateTimePosted DESC" ;
 		Query query = session.createQuery(getUserBmi).setParameter("user", user);
 		List<Bmi> bmiRetrieved = query.getResultList();
 		Bmi bmi;
@@ -101,7 +132,29 @@ public abstract class DBUserUtils {
 		return bmi;
 	}
 
-
+	public static List<Bmi> bmiHistory(User user) {
+		SessionFactory sessionFactory = null;
+		StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
+		try {
+			sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+		} catch(Exception ex) {
+			StandardServiceRegistryBuilder.destroy(registry);
+		}
+		Session session = sessionFactory.openSession();
+		String getBmiByUserId = "SELECT b FROM Bmi b WHERE b.user like :user order by dateTimePosted DESC";
+		Query query = session.createQuery(getBmiByUserId).setParameter("user", user);
+		List<Bmi> bmiRetrieved = query.getResultList();
+		if (bmiRetrieved.size() != 0) {
+			session.close();
+			sessionFactory.close();
+			return bmiRetrieved;
+		}else {
+			session.close();
+			sessionFactory.close();
+			return null;
+		}
+	}
+	
 	public static List<User> retrieveAllUsers(){
 		SessionFactory sessionFactory = null;
 		StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();

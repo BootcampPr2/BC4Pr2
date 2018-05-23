@@ -32,12 +32,33 @@ public abstract class DeleteFromDB {
 		session.beginTransaction();
 		q.executeUpdate();
 		session.getTransaction().commit();
+		session.close();
+	} // end deleteSelectedMessages()
+
+	public static void deleteSelectedBmis(String[] listOfIdsString) {
+		List<Integer> listOfIdsInt = new ArrayList<Integer>();
+		for (int i=0;i<listOfIdsString.length;i++) {
+			listOfIdsInt.add(Integer.parseInt(listOfIdsString[i]));
+		}
+		SessionFactory sessionFactory = null;
+		StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
+		try {
+			sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+		} catch(Exception ex) {
+			StandardServiceRegistryBuilder.destroy(registry);
+		}
+		Session session = sessionFactory.openSession();
+		Query q = session.createQuery("DELETE FROM Bmi WHERE bmiID IN (:list)");
+		q.setParameter("list", listOfIdsInt);
+		session.beginTransaction();
+		q.executeUpdate();
+		session.getTransaction().commit();
 		session.close();			
 	} // end of DeleteFromDB()
-	
+
 	public static void main (String[] args) {
 		/*List<String> list = Arrays.asList("3","4");
 		DeleteFromDB.deleteSelectedMessages(list);*/
-		
+
 	}
 }

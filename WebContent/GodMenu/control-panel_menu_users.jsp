@@ -1,4 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+	request.setCharacterEncoding("UTF-8");
+%>
+<%@ page import="pr2.loseweight.utils.*"%>
+<%@ page import="java.util.List, java.util.ArrayList"%>
+<%@ page import="pr2.loseweight.dbtables.*"%>
+<%@ page import="java.sql.Timestamp"%>
+<%	session.setAttribute("loggedUserUsername","admin");
+	User loggedUser = DBUserUtils.getUserByUsername(session.getAttribute("loggedUserUsername").toString());
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -7,8 +17,8 @@
 <meta charset="utf-8">
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <link rel="stylesheet" type="text/css" href="Style.css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 
 <!-- <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 <scrip src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
@@ -17,6 +27,11 @@
 <body>
 	<link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'>
 	<br>
+
+	<div id="background">
+		<img src="../Images/background.png" class="stretch" alt="" />
+	</div>
+
 	<div class="container text-left">
 		<table>
 			<tr>
@@ -37,7 +52,7 @@
 
 		<div class="mail-option">
 			<div class="chk-all">
-				<input type="checkbox" onClick="toggle(this)" class="mail-checkbox mail-group-checkbox">
+				<input type="checkbox" id="checkAll" class="mail-checkbox mail-group-checkbox">
 				<div class="btn-group">
 					<a href="#" class="btn mini all">&nbsp;Select All</a>
 				</div>
@@ -45,27 +60,33 @@
 		</div>
 		<br>
 		<table class="table">
-			<thead class="thead-dark">
+			<thead class="thead-dark" style="background: #4B4446; color: white">
 				<tr>
 					<th scope="col">&nbsp;</th>
-					<th scope="col">#</th>
 					<th scope="col">Username</th>
 					<th scope="col">Role</th>
+					<th scope="col">Banned</th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody style="background: white">
+				<% List<User> allUsers = (ArrayList) DBUserUtils.retrieveAllUsers();
+			if (allUsers.size() != 0){	
+			for (int i=0;i<allUsers.size();i++){
+					%>
 				<tr>
-					<td scope="row"><input type="checkbox" name="foo" value="bar1"></td>
-					<td>1</td>
-					<td>user1</td>
-					<td>Admin</td>
+					<td scope="row"><input class="selectMessages" type="checkbox" name="SU" value="bar1"></td>
+					<td><%=allUsers.get(i).getUsername() %></td>
+					<td><%=allUsers.get(i).getRole().getRoleName() %></td>
+					<% if (allUsers.get(i).getIsBanned() == 0){ %>
+					<td>NO</td>
+					<% }else { %>
+					<td>YES</td>
 				</tr>
-				<tr>
-					<td scope="row"><input type="checkbox" name="foo" value="bar1"></td>
-					<td>2</td>
-					<td>user2</td>
-					<td>Standard user</td>
-				</tr>
+				<%
+					}
+					}
+			}
+			%>
 			</tbody>
 		</table>
 

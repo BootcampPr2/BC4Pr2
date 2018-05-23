@@ -43,21 +43,4 @@ public class MetaRate {
 	public String toString() {
 		return "MetaRate [metaID=" + metaID + ", description=" + description + ", modifier=" + modifier + "]";
 	}
-
-	public static MetaRate getMetaRateByDescription(String description) {
-		SessionFactory sessionFactory = null;
-		StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
-		try {
-			sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
-		} catch(Exception ex) {
-			StandardServiceRegistryBuilder.destroy(registry);
-		}
-		Session session = sessionFactory.openSession();
-		String getUserById = "SELECT m FROM MetaRate m WHERE m.description like :description";
-		Query query = session.createQuery(getUserById).setParameter("description", description);
-		MetaRate myMetaRate = (MetaRate)query.getResultList().get(0);
-		session.close();
-		sessionFactory.close();		
-		return myMetaRate;
-	}
 }
