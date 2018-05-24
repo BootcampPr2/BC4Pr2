@@ -26,11 +26,10 @@
 		}
 	}
 %>
-
 <jsp:useBean id="receiver" class="pr2.loseweight.dbtables.User" scope="request" />
 <jsp:useBean id="messageToBeSent" class="pr2.loseweight.dbtables.PrivateMessage" scope="request" />
 <jsp:useBean id="loggedUser" class="pr2.loseweight.dbtables.User" scope="request" />
-<% 
+<%
 	loggedUser = DBUserUtils.getUserByUsername(session.getAttribute("loggedUserUsername").toString());
 	if ((request.getParameter("inputTo") != null) && (request.getParameter("inputBody") != null)) {
 		try {
@@ -44,25 +43,6 @@
 			e.printStackTrace();
 		}
 	}
-
-/* 	if (request.getParameter("CI") != null) {
-		String[] checkedIds = request.getParameterValues("CI");
-		DeleteFromDB.deleteSelectedMessages(checkedIds);
-	}
-
-	if (request.getParameter("CS") != null) {
-		String[] checkedIds = request.getParameterValues("CS");
-		DeleteFromDB.deleteSelectedMessages(checkedIds);
-	}
-
-	if (request.getParameter("inid") != null) {
-		String[] checkedIds = request.getParameterValues("inid");
-		DeleteFromDB.deleteSelectedMessages(checkedIds);
-	}
-	if (request.getParameter("senid") != null) {
-		String[] checkedIds = request.getParameterValues("senid");
-		DeleteFromDB.deleteSelectedMessages(checkedIds);
-	} */
 %>
 
 
@@ -79,11 +59,33 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Mailbox</title>
 </head>
-<body>
-	<!-- <div id="background">
-		<img src="../Login_Create/background.png" class="stretch" alt="" />
-	</div> -->
-	<div class="container">
+<body onload="visibility('<%=loggedUser.getRole().getRoleName() %>')">
+	<div id="background">
+		<img src="../Images/background.png" class="stretch" alt="" />
+	</div>
+	
+		<!-- ............................NAVBAR MENU............................  -->
+	<nav class="navbar navbar-default navbar-static-top">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="#"><%=loggedUser.getUsername()%></a>
+		</div>
+		<ul class="nav navbar-nav">
+			<li><a href="../User_Profile/user_main.jsp">MY PROFILE</a></li>
+			<li><a href="../User_Profile/user_update.jsp">UPDATE PROFILE INFORMATION</a></li>
+			<li><a href="../User_Profile/bmi_history.jsp">VIEW HISTORY</a></li>
+			<li class="active"><a href="../Mailbox/mail.jsp">MAILBOX</a></li>
+			<li id="godAdmin" style="display: block;"><a href="../GodMenu/control-panel_menu.jsp">CONTROL PANEL</a></li>
+
+		</ul>
+		<ul class="nav navbar-nav navbar-right">
+			<li><a href="../Login_Create/login-create-menu.jsp"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
+		</ul>
+	</div>
+	</nav>
+
+	<!-- ............................INBOX MESSAGES............................  -->
+	<div class="container" id="background1">
 		<link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'>
 		<div class="mail-box">
 			<aside class="sm-side">
@@ -93,9 +95,6 @@
 				<div class="user-name">
 					<h5><%=loggedUser.getUsername()%></h5>
 				</div>
-			</div>
-			<div class="inbox-body">
-				<a href="../User_Profile/user_main.jsp"><i class="glyphicon glyphicon-arrow-left"></i>&nbsp;Go back</a>
 			</div>
 
 			<div class="inbox-body">

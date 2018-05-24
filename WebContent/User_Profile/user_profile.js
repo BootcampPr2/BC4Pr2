@@ -1,15 +1,3 @@
-$(function() {
-	$('#profile-image1').on('click', function() {
-		$('#profile-image-upload').click();
-	});
-});
-
-function visibility(roleName){
-	if (roleName == "STANDARD_USER"){
-		document.getElementById("godAdmin").style.display = "none";
-	}
-}
-
 $(document).ready(function(){
 	$('input[type=password]').keyup(function() {
 		var pswd = $(this).val();
@@ -51,8 +39,32 @@ $(document).ready(function(){
 		
 	});
 	
+	var clas = $("#classification").val();
+	if (clas == "Underweight"){				
+		$('#underweight').addClass('category');
+	}else if (clas == "Optimal"){
+		$('#optimal').addClass('category');
+	}else if (clas == "Overweight"){
+		$('#overweight').addClass('category');
+	}else{
+		$('#obese').addClass('category');
+	}
+	
 });
 
 $("#checkAll").click(function() {
 	$(".tickbox").prop('checked',$(this).prop('checked'));
 });
+
+$(function() {
+	$('#profile-image1').on('click', function() {
+		$('#profile-image-upload').click();
+	});
+});
+
+function visibility(roleName){
+	if (roleName == "STANDARD_USER"){
+		document.getElementById("godAdmin").style.display = "none";
+	}
+}
+          

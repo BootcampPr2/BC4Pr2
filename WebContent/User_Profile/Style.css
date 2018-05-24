@@ -114,3 +114,8 @@ input.hidden {
 #modifyView {
 	margin-top: -10%;
 }
+
+.category {
+	color: green;
+	font-weight: bold;
+}

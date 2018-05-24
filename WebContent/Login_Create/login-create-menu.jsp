@@ -5,6 +5,12 @@
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="pr2.loseweight.utils.*"%>
 <%@ page import="pr2.loseweight.dbtables.*"%>
+<% 
+if (session.getAttribute("loggedUserUsername") == null || session.getAttribute("loggedUserUsername").equals("")) {
+} else {
+session.invalidate();
+}
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>

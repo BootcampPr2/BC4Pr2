@@ -229,3 +229,9 @@ function updateCounter(){
 	}
 	);
 }
+
+function visibility(roleName){
+	if (roleName == "STANDARD_USER"){
+		document.getElementById("godAdmin").style.display = "none";
+	}
+}

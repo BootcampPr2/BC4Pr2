@@ -6,7 +6,7 @@
 <%@ page import="java.util.List, java.util.ArrayList"%>
 <%@ page import="pr2.loseweight.dbtables.*"%>
 <%@ page import="java.sql.Timestamp"%>
-<%	session.setAttribute("loggedUserUsername","admin");
+<%
 	User loggedUser = DBUserUtils.getUserByUsername(session.getAttribute("loggedUserUsername").toString());
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -24,7 +24,7 @@
 <scrip src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> -->
 </head>
-<body>
+<body onClick="visibilityCheck('<%=loggedUser.getRole().getRoleName() %>')">
 	<link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'>
 	<br>
 
@@ -40,8 +40,8 @@
 				<br>
 			</tr>
 			<tr>
-				<td style="padding-right: 5px"><a href="#" class="btn btn-success" role="button"><i class="fa fa-graduation-cap"></i>&nbsp;Assign/Unassign an admin</a></td>
-				<td style="padding-right: 5px"><a href="#" class="btn btn-warning" role="button"><i class="glyphicon glyphicon-ban-circle"></i>&nbsp;Ban user</a></td>
+				<td style="padding-right: 5px; display:block" id="onlyGod"><a href="#" class="btn btn-success" role="button"><i class="fa fa-graduation-cap"></i>&nbsp;Assign/Unassign an admin</a></td>
+				<td style="padding-right: 5px"><a href="#" class="btn btn-warning" role="button"><i class="glyphicon glyphicon-ban-circle"></i>&nbsp;Ban/Unban user</a></td>
 				<td><a href="#" class="btn btn-danger" role="button"><i class="fa fa-remove"></i>&nbsp;Delete user</a></td>
 			</tr>
 		</table>

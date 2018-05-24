@@ -7,7 +7,7 @@
 <%@ page import="pr2.loseweight.dbtables.*"%>
 <%@ page import="java.sql.Timestamp"%>
 
-<%
+<% 
 User loggedUser = DBUserUtils.getUserByUsername(session.getAttribute("loggedUserUsername").toString());
 Bmi bmi = DBUserUtils.getUserBmiByUsername(session.getAttribute("loggedUserUsername").toString());
 %>
@@ -59,14 +59,14 @@ Bmi bmi = DBUserUtils.getUserBmiByUsername(session.getAttribute("loggedUserUsern
 			<div class="col-md-7 ">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h4>BMI Profile for Username</h4>
+						<h4>BMI Profile for <%=loggedUser.getUsername() %></h4>
 					</div>
 					<div class="panel-body">
 						<div class="box box-info">
 							<div class="box-body">
 								<div class="col-sm-6">
 									<div id="userImg" align="center">
-										<img alt="User Pic" src="https://i2.wp.com/beebom.com/wp-content/uploads/2016/01/Reverse-Image-Search-Engines-Apps-And-Its-Uses-2016.jpg?resize=640%2C426" class="img-circle img-responsive">
+										<img alt="User Pic" src="https://i2.wp.com/beebom.com/wp-content/uploads/2016/01/Reverse-Image-Search-Engines-Apps-And-Its-Uses-2016.jpg?resize=640%2C426" class="img-rounded img-responsive">
 										<input id="profile-image-upload" class="hidden" type="file">
 										<div style="color: #999;"></div>
 										<!--Upload Image Js And Css-->
@@ -103,7 +103,17 @@ Bmi bmi = DBUserUtils.getUserBmiByUsername(session.getAttribute("loggedUserUsern
 								<div class="clearfix"></div>
 								<div class="bot-border"></div>
 								<div class="col-sm-5 col-xs-6 tital ">Classification:</div>
-								<div class="col-sm-7"><%=bmi.getClassification() %></div>
+								<div class="col-sm-7">
+								<input type="hidden" id="classification" value="<%=bmi.getClassification() %>" />
+								<table style="text-align: center;">
+								<tr>
+									<td id="underweight">Underweight&nbsp;</td>
+									<td id="optimal">&nbsp;Optimal&nbsp;</td>
+									<td id="overweight">&nbsp;Overweight&nbsp;</td>
+									<td id="obese">&nbsp;Obese</td>
+								</tr>
+								</table>
+								</div>
 								<div class="clearfix"></div>
 								<div class="bot-border"></div>
 								<div class="col-sm-5 col-xs-6 tital ">BMR:</div>

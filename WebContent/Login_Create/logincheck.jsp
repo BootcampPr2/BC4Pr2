@@ -21,15 +21,15 @@
 				session.setAttribute("loggedUserUsername", request.getParameter("username"));
 				response.sendRedirect("../User_Profile/user_main.jsp");
 			} else {
-				%> 
-				<p>
-				<script type="text/javascript">
-					alert("Your account is banned.");
-				</script>
-				</p>
-				<jsp:include page="login-create-menu.jsp"></jsp:include>
-					<%
-			}
+	%>
+	<p>
+		<script type="text/javascript">
+			alert("Your account is banned.");
+		</script>
+	</p>
+	<jsp:include page="login-create-menu.jsp"></jsp:include>
+	<%
+		}
 		} else {
 	%>
 	<p>

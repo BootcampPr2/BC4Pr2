@@ -6,7 +6,7 @@
 <%@ page import="java.util.List, java.util.ArrayList"%>
 <%@ page import="pr2.loseweight.dbtables.*"%>
 <%@ page import="java.sql.Timestamp"%>
-<%
+<% 
 	User loggedUser = DBUserUtils.getUserByUsername(session.getAttribute("loggedUserUsername").toString());
 	Bmi bmi = DBUserUtils.getUserBmiByUsername(session.getAttribute("loggedUserUsername").toString());
 	
@@ -26,10 +26,6 @@
 
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-
-<!-- <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-<scrip src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> -->
 
 <script src='user_profile.js'></script>
 </head>
@@ -61,7 +57,6 @@
 	</div>
 	</nav>
 
-
 	<!-- ............................BMI HISTORY............................  -->
 	<form action="bmi_history.jsp" method="post" id="modifyView">
 		<div class="container text-left">
@@ -81,7 +76,7 @@
 			</div>
 			<br>
 			<table class="table">
-				<thead class="thead-dark" style="background: #4B4446; color: white">
+				<thead class="thead-dark" style="background: #F5F5F5; color: black">
 					<tr>
 						<th scope="col">&nbsp;</th>
 						<th scope="col">Date</th>
@@ -105,7 +100,7 @@
 					<tr>
 						<td scope="row"><input type="checkbox" class="tickbox" name="checked" value="<%=bmiList.get(i).getBmiID() %>"></td>
 						<td><%=bmiList.get(i).getDateTimePosted() %></td>
-						<td><%=bmiList.get(i).getBmi() %></td>
+						<td><%=bmiList.get(i).getWeight() %></td>
 						<td><%=bmiList.get(i).getHeight() %></td>
 						<td><%=bmiList.get(i).getAge() %></td>
 						<td><%=bmiList.get(i).getGender() %></td>

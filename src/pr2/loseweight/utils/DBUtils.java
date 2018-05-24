@@ -72,6 +72,24 @@ public abstract class DBUtils {
 		return sentMessages;
 	}
 	
+	public static List<PrivateMessage> getAllMessagesByUser(User user) {
+		SessionFactory sessionFactory = null;
+		StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
+		try {
+			sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+		} catch(Exception ex) {
+			StandardServiceRegistryBuilder.destroy(registry);
+		}
+		Session session = sessionFactory.openSession();
+		String selectSentMessages = "SELECT p From PrivateMessage p"
+				+ " where p.sender like :user or p.receiver like :user"
+				+ " order by p.dateSubmission DESC";
+		Query query = session.createQuery(selectSentMessages).setParameter("user", user);
+		List<PrivateMessage> sentMessages = query.getResultList();
+		session.close();
+		return sentMessages;
+	}
+	
 	public static void composeNewPrivateMessage(User sender, User receiver, String messageData) {
 		SessionFactory sessionFactory = null;
 		StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();

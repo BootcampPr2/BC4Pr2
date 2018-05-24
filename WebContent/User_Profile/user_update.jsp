@@ -90,7 +90,7 @@ if (request.getParameter("weight") == null
 
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
-			<li><a href="login-create-menu.jsp"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
+			<li><a href="../Login_Create/login-create-menu.jsp"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
 		</ul>
 	</div>
 	</nav>
