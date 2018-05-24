@@ -6,13 +6,15 @@
 <%@ page import="java.util.List, java.util.ArrayList"%>
 <%@ page import="pr2.loseweight.dbtables.*"%>
 <%@ page import="java.sql.Timestamp"%>
+<%@ page import="org.hibernate.SessionFactory"%>
 <% 
-	User loggedUser = DBUserUtils.getUserByUsername(session.getAttribute("loggedUserUsername").toString());
-	Bmi bmi = DBUserUtils.getUserBmiByUsername(session.getAttribute("loggedUserUsername").toString());
+	HttpSession httpSession = request.getSession();
+	User loggedUser = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getAttribute("sessionFactory"), httpSession.getAttribute("loggedUserUsername").toString());
+	Bmi bmi = DBUserUtils.getUserBmiByUsername((SessionFactory)httpSession.getAttribute("sessionFactory"), httpSession.getAttribute("loggedUserUsername").toString());
 	
 	if (request.getParameter("checked") != null) {
 		String[] checkedIds = request.getParameterValues("checked");
-		DeleteFromDB.deleteSelectedBmis(checkedIds);
+		DeleteFromDB.deleteSelectedBmis((SessionFactory)httpSession.getAttribute("sessionFactory"), checkedIds);
 	}
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -93,7 +95,7 @@
 				</thead>
 				<tbody style="background: white">
 				<%
-					List<Bmi> bmiList = (ArrayList) DBUserUtils.bmiHistory(loggedUser);
+					List<Bmi> bmiList = (ArrayList) DBUserUtils.bmiHistory((SessionFactory)httpSession.getAttribute("sessionFactory"), loggedUser);
 				if (bmiList.size() != 0) {
 					for (int i=0;i<bmiList.size();i++){
 						%> 

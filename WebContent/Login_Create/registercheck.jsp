@@ -5,6 +5,12 @@
 %>
 <%@ page import="pr2.loseweight.utils.*"%>
 <%@ page import="pr2.loseweight.dbtables.*"%>
+<%@ page import="org.hibernate.SessionFactory"%>
+<%
+	HttpSession httpSession = request.getSession();
+	SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+	httpSession.setAttribute("sessionFactory",sessionFactory);
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 T
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -29,7 +35,7 @@
 		int age = Integer.parseInt(request.getParameter("age"));
 		String gender = request.getParameter("RG");
 		int exercise = Integer.parseInt(request.getParameter("RE"));
-		User existingUser = DBUserUtils.getUserByUsername(username);
+		User existingUser = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getAttribute("sessionFactory"), username);
 		if (existingUser != null) {
 %>
 	<jsp:include page="login-create-menu.jsp" flush="true">
@@ -43,8 +49,8 @@
 	} else {
 			String pattern = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[~!@#$%^&*=.;'])(?=\\S+$).{8,}";
 			if (password.matches(pattern)) {
-				DBUserUtils.registerUser(username, password, weight, height, age, gender, exercise);
-				session.setAttribute("loggedUserUsername",request.getParameter("username0"));
+				DBUserUtils.registerUser((SessionFactory)httpSession.getAttribute("sessionFactory"), username, password, weight, height, age, gender, exercise);
+				httpSession.setAttribute("loggedUserUsername",request.getParameter("username0"));
 				response.sendRedirect("../User_Profile/user_main.jsp");
 			}else {
 				%>

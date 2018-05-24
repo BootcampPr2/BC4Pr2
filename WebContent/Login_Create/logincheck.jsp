@@ -1,9 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="pr2.loseweight.utils.DBUserUtils"%>
+<%@ page import="pr2.loseweight.utils.HibernateUtil"%>
 <%@ page import="pr2.loseweight.dbtables.User"%>
+<%@ page import="org.hibernate.SessionFactory"%>
 <%
-	boolean loginSuccessful = DBUserUtils.login(request.getParameter("username"),
-			request.getParameter("password"));
+	HttpSession httpSession = request.getSession();
+	SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+	httpSession.setAttribute("sessionFactory",sessionFactory);
+	boolean loginSuccessful = DBUserUtils.login((SessionFactory)httpSession.getAttribute("sessionFactory"), request.getParameter("username"), request.getParameter("password"));
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
@@ -16,9 +20,9 @@
 
 	<%
 		if (loginSuccessful) {
-			User user = DBUserUtils.getUserByUsername(request.getParameter("username").toString());
+			User user = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getAttribute("sessionFactory"), request.getParameter("username").toString());
 			if (user.getIsBanned() != 1) {
-				session.setAttribute("loggedUserUsername", request.getParameter("username"));
+				httpSession.setAttribute("loggedUserUsername", request.getParameter("username"));
 				response.sendRedirect("../User_Profile/user_main.jsp");
 			} else {
 	%>

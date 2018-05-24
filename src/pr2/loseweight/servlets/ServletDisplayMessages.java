@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.hibernate.SessionFactory;
 
 import pr2.loseweight.dbtables.PrivateMessage;
 import pr2.loseweight.dbtables.User;
@@ -46,9 +47,10 @@ public class ServletDisplayMessages extends HttpServlet {
 		//doGet(request, response);
 		response.setContentType("text/plain;charset=UTF-8");
 		String username = request.getParameter("username");
-		User myUser = DBUserUtils.getUserByUsername(username);
-		List<PrivateMessage> incoming = DBUtils.displayIncomingMessages(myUser);
-		List<PrivateMessage> sent = DBUtils.displaySentMessages(myUser);
+		SessionFactory sessionFactory = (SessionFactory)request.getSession().getAttribute("sessionFactory");
+		User myUser = DBUserUtils.getUserByUsername(sessionFactory, username);
+		List<PrivateMessage> incoming = DBUtils.displayIncomingMessages(sessionFactory, myUser);
+		List<PrivateMessage> sent = DBUtils.displaySentMessages(sessionFactory, myUser);
 		PrintWriter out = response.getWriter();
 		String allMessages = printAllMessages(incoming,sent);
 		out.println(allMessages);

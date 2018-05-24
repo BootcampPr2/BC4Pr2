@@ -6,8 +6,11 @@
 <%@ page import="java.util.List, java.util.ArrayList"%>
 <%@ page import="pr2.loseweight.dbtables.*"%>
 <%@ page import="java.sql.Timestamp"%>
+<%@ page import="org.hibernate.SessionFactory"%>
+
 <%
-	User loggedUser = DBUserUtils.getUserByUsername(session.getAttribute("loggedUserUsername").toString());
+	HttpSession httpSession = request.getSession();
+	User loggedUser = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getAttribute("sessionFactory"), session.getAttribute("loggedUserUsername").toString());
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -34,7 +37,7 @@
 <%
 	if (request.getParameter("CA") != null) {
 		String[] checkedIds = request.getParameterValues("CA");
-		DeleteFromDB.deleteSelectedMessages(checkedIds);
+		DeleteFromDB.deleteSelectedMessages((SessionFactory)httpSession.getAttribute("sessionFactory"), checkedIds);
 	}
 %>
 <title>All messages</title>
@@ -96,7 +99,7 @@
 				</thead>
 				<tbody style="background: white">
 					<%
-						List<PrivateMessage> allMessages = DBAdminUtils.displayAllPrivateMessages();
+						List<PrivateMessage> allMessages = DBAdminUtils.displayAllPrivateMessages((SessionFactory)httpSession.getAttribute("sessionFactory"));
 						PrivateMessage myMessage;
 						for (int i = 0; i < allMessages.size(); i++) {
 							myMessage = allMessages.get(i);

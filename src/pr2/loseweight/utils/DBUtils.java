@@ -19,14 +19,7 @@ import pr2.loseweight.dbtables.User;
 public abstract class DBUtils {
 	public static SessionFactory sessionFactory;
 	
-	public static void setRead(int privateMessageID) {
-		SessionFactory sessionFactory = null;
-		StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
-		try {
-			sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
-		} catch(Exception ex) {
-			StandardServiceRegistryBuilder.destroy(registry);
-		}
+	public static void setRead(SessionFactory sessionFactory, int privateMessageID) {
 		Session session = sessionFactory.openSession();
 		PrivateMessage myMessage = session.get(PrivateMessage.class, privateMessageID);
 		session.beginTransaction();
@@ -34,16 +27,9 @@ public abstract class DBUtils {
 		session.update(myMessage);
 		session.getTransaction().commit();
 		session.close();
-	}
+	} // end setRead()
 	
-	public static List<PrivateMessage> displayIncomingMessages(User receiver) {
-		SessionFactory sessionFactory = null;
-		StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
-		try {
-			sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
-		} catch(Exception ex) {
-			StandardServiceRegistryBuilder.destroy(registry);
-		}
+	public static List<PrivateMessage> displayIncomingMessages(SessionFactory sessionFactory, User receiver) {
 		Session session = sessionFactory.openSession();
 		String selectIncomingMessages = "SELECT p From PrivateMessage p"
 				+ " where p.receiver like :receiver"
@@ -52,16 +38,9 @@ public abstract class DBUtils {
 		List<PrivateMessage> incomingMessages = query.getResultList();
 		session.close();
 		return incomingMessages;
-	}
+	} // end displayIncomingMessages()
 	
-	public static List<PrivateMessage> displaySentMessages(User sender) {
-		SessionFactory sessionFactory = null;
-		StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
-		try {
-			sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
-		} catch(Exception ex) {
-			StandardServiceRegistryBuilder.destroy(registry);
-		}
+	public static List<PrivateMessage> displaySentMessages(SessionFactory sessionFactory, User sender) {
 		Session session = sessionFactory.openSession();
 		String selectSentMessages = "SELECT p From PrivateMessage p"
 				+ " where p.sender like :sender"
@@ -70,16 +49,9 @@ public abstract class DBUtils {
 		List<PrivateMessage> sentMessages = query.getResultList();
 		session.close();
 		return sentMessages;
-	}
+	} // end displaySentMessages
 	
-	public static List<PrivateMessage> getAllMessagesByUser(User user) {
-		SessionFactory sessionFactory = null;
-		StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
-		try {
-			sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
-		} catch(Exception ex) {
-			StandardServiceRegistryBuilder.destroy(registry);
-		}
+	public static List<PrivateMessage> getAllMessagesByUser(SessionFactory sessionFactory, User user) {
 		Session session = sessionFactory.openSession();
 		String selectSentMessages = "SELECT p From PrivateMessage p"
 				+ " where p.sender like :user or p.receiver like :user"
@@ -88,16 +60,9 @@ public abstract class DBUtils {
 		List<PrivateMessage> sentMessages = query.getResultList();
 		session.close();
 		return sentMessages;
-	}
+	} // end getAllMessagesByUser()
 	
-	public static void composeNewPrivateMessage(User sender, User receiver, String messageData) {
-		SessionFactory sessionFactory = null;
-		StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
-		try {
-			sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
-		} catch(Exception ex) {
-			StandardServiceRegistryBuilder.destroy(registry);
-		}
+	public static void composeNewPrivateMessage(SessionFactory sessionFactory, User sender, User receiver, String messageData) {
 		Session session = sessionFactory.openSession();
 		PrivateMessage newPrivateMessage = new PrivateMessage();
 		messageData = messageData.replaceAll("[\r\n]", "&nbsp;<br>");
@@ -114,67 +79,5 @@ public abstract class DBUtils {
 			e.printStackTrace();
 		}
 		session.close();		
-	}
-
-	public static void read() {
-		Session session = sessionFactory.openSession();
-		int userID = 1;
-		User myUser = session.get(User.class, userID);
-		System.out.println(myUser);
-		// System.out.format("Role: %s", myRole.getRoleName());
-	}
-
-	protected void update() {
-		Role myRole = new Role();
-		myRole.setRoleID(3);
-		myRole.setRoleName("STANDARD_USER");
-		Session session = sessionFactory.openSession();
-		session.beginTransaction();
-		session.update(myRole);
-		session.getTransaction().commit();
-		session.close();
-	}
-
-	protected void delete() {
-		Role myRole = new Role();
-		myRole.setRoleID(5);
-		Session session = sessionFactory.openSession();
-		session.beginTransaction();
-		session.delete(myRole);
-		session.getTransaction().commit();
-		session.close();
-	}
-
-	public static void main(String[] args) {
-
-		setRead(16);
-
-		//manager.update();
-		//update.delete();
-		
-		
-		/*StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
-		SessionFactory sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
-		Session session = sessionFactory.openSession();
-		Transaction transaction = null;
-		try {
-			transaction = session.beginTransaction();
-			Role myRole = session.get(Role.class,3);
-			//By using cascade=all option the address need not be saved explicitly when the student object is persisted the address will be automatically saved.
-            //session.save(address);
-			User newUser = new User("user1", "123", 0, myRole);
-			session.save(newUser);
-			newUser = new User("user2", "123", 0, myRole);
-			session.save(newUser);
-			transaction.commit();
-		} catch (HibernateException e) {
-			transaction.rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}*/
-
-		
-		
-	}
+	} // end composeNewPrivateMessage()
 }

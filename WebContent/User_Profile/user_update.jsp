@@ -6,10 +6,12 @@
 <%@ page import="java.util.List, java.util.ArrayList"%>
 <%@ page import="pr2.loseweight.dbtables.*"%>
 <%@ page import="java.sql.Timestamp"%>
+<%@ page import="org.hibernate.SessionFactory"%>
 
 <%
-	User loggedUser = DBUserUtils.getUserByUsername(session.getAttribute("loggedUserUsername").toString());
-	Bmi bmi = DBUserUtils.getUserBmiByUsername(session.getAttribute("loggedUserUsername").toString());
+	HttpSession httpSession = request.getSession();
+	User loggedUser = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getAttribute("sessionFactory"), httpSession.getAttribute("loggedUserUsername").toString());
+	Bmi bmi = DBUserUtils.getUserBmiByUsername((SessionFactory)httpSession.getAttribute("sessionFactory"), httpSession.getAttribute("loggedUserUsername").toString());
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -30,7 +32,7 @@
 		String password = request.getParameter("password0");
 		String pattern = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[~!@#$%^&*=.;'])(?=\\S+$).{8,}";
 		if (password.matches(pattern)) {
-			DBUserUtils.updatePassword(loggedUser, request.getParameter("password0"));
+			DBUserUtils.updatePassword((SessionFactory)httpSession.getAttribute("sessionFactory"), loggedUser, request.getParameter("password0"));
 		}else {
 			%>
 <script> alert ("Password is not fulfilling the requirements.") </script>
@@ -45,7 +47,7 @@ if (request.getParameter("weight") == null
 && request.getParameter("RG") == null 
 && request.getParameter("RE") == null) {
 }else {
-	bmi = DBUserUtils.getUserBmiByUsername(session.getAttribute("loggedUserUsername").toString());
+	bmi = DBUserUtils.getUserBmiByUsername((SessionFactory)httpSession.getAttribute("sessionFactory"), httpSession.getAttribute("loggedUserUsername").toString());
 	double weight = bmi.getWeight();
 	double height = bmi.getHeight();
 	int age = bmi.getAge();
@@ -66,7 +68,7 @@ if (request.getParameter("weight") == null
 	if (request.getParameter("RE") != null) {
 		exerciseID = Integer.parseInt(request.getParameter("RE"));
 	}
-	DBUserUtils.updateUser(loggedUser, weight, height, age, gender, exerciseID);
+	DBUserUtils.updateUser((SessionFactory)httpSession.getAttribute("sessionFactory"), loggedUser, weight, height, age, gender, exerciseID);
 }
 %>
 </head>

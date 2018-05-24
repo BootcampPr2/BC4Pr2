@@ -187,12 +187,4 @@ public class Bmi {
 				+ gender + ", bmi=" + bmi + ", classification=" + classification + ", bmr=" + bmr + ", emr=" + emr
 				+ ", dateTimePosted=" + dateTimePosted + ", metarate=" + metarate.toString() + ", user=" + user.toString() + "]";
 	}
-
-	public static void main(String[] args) {
-//		MetaRate myMetaRate = MetaRate.getMetaRateByDescription("Sedentary");
-//		Bmi newBMI = new Bmi(70,1.75,50,"F",myMetaRate);
-		
-		DBUserUtils.registerUser ("kriki", "1234", 72.8, 1.64, 29, "F", 3);
-		
-	}
 }

@@ -13,14 +13,7 @@ import pr2.loseweight.dbtables.*;
 
 public abstract class DBUserUtils {
 
-	public static void registerUser (String username, String password, double weight, double height, int age, String gender, int exerciseID) {
-		SessionFactory sessionFactory = null;
-		StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
-		try {
-			sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
-		} catch(Exception ex) {
-			StandardServiceRegistryBuilder.destroy(registry);
-		}
+	public static void registerUser (SessionFactory sessionFactory, String username, String password, double weight, double height, int age, String gender, int exerciseID) {
 		Session session = sessionFactory.openSession();
 		MetaRate myMetaRate = session.get(MetaRate.class, exerciseID);
 		User user = new User (username, password);
@@ -32,14 +25,7 @@ public abstract class DBUserUtils {
 		session.close();		
 	} //end registerUser()
 
-	public static void updatePassword (User user, String password) {
-		SessionFactory sessionFactory = null;
-		StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
-		try {
-			sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
-		} catch(Exception ex) {
-			StandardServiceRegistryBuilder.destroy(registry);
-		}
+	public static void updatePassword (SessionFactory sessionFactory, User user, String password) {
 		Session session = sessionFactory.openSession();
 		user.setPassword(password);
 		session.beginTransaction();
@@ -48,14 +34,7 @@ public abstract class DBUserUtils {
 		session.close();		
 	} //end updatePassword()
 	
-	public static void updateUser (User user, double weight, double height, int age, String gender, int exerciseID) {
-		SessionFactory sessionFactory = null;
-		StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
-		try {
-			sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
-		} catch(Exception ex) {
-			StandardServiceRegistryBuilder.destroy(registry);
-		}
+	public static void updateUser (SessionFactory sessionFactory, User user, double weight, double height, int age, String gender, int exerciseID) {
 		Session session = sessionFactory.openSession();
 		MetaRate metaRate = session.get(MetaRate.class, exerciseID);
 		Bmi bmi = new Bmi (weight, height, age, gender, metaRate, user);
@@ -66,17 +45,8 @@ public abstract class DBUserUtils {
 	} //end updateUser()
 	
 	// Validate login
-	public static boolean login(String username, String password) {
-		SessionFactory sessionFactory = null;
-		StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
-		try {
-			sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
-		} catch(Exception ex) {
-			StandardServiceRegistryBuilder.destroy(registry);
-		}
-		Session session = sessionFactory.openSession();
-
-		User myUser = getUserByUsername(username);
+	public static boolean login(SessionFactory sessionFactory, String username, String password) {
+		User myUser = getUserByUsername(sessionFactory, username);
 		if (myUser == null)
 			return false;
 		else {
@@ -84,16 +54,9 @@ public abstract class DBUserUtils {
 				return true;
 			else return false;
 		}
-	}
+	} // end login()
 
-	public static User getUserByUsername(String username) {
-		SessionFactory sessionFactory = null;
-		StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
-		try {
-			sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
-		} catch(Exception ex) {
-			StandardServiceRegistryBuilder.destroy(registry);
-		}
+	public static User getUserByUsername(SessionFactory sessionFactory, String username) {
 		Session session = sessionFactory.openSession();
 		String getUserById = "SELECT u FROM User u WHERE u.username like :username";
 		Query query = session.createQuery(getUserById).setParameter("username", username);
@@ -104,21 +67,13 @@ public abstract class DBUserUtils {
 		else
 			myUser = null;
 		session.close();
-		sessionFactory.close();
 		return myUser;
-	}
+	} // end getUserByUsername()
 	
 	
-	public static Bmi getUserBmiByUsername(String username) {
-		SessionFactory sessionFactory = null;
-		StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
-		try {
-			sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
-		} catch(Exception ex) {
-			StandardServiceRegistryBuilder.destroy(registry);
-		}
+	public static Bmi getUserBmiByUsername(SessionFactory sessionFactory, String username) {
 		Session session = sessionFactory.openSession();
-		User user = getUserByUsername(username);
+		User user = getUserByUsername(sessionFactory, username);
 		String getUserBmi = "SELECT b FROM Bmi b WHERE b.user like :user order by dateTimePosted DESC" ;
 		Query query = session.createQuery(getUserBmi).setParameter("user", user);
 		List<Bmi> bmiRetrieved = query.getResultList();
@@ -128,49 +83,28 @@ public abstract class DBUserUtils {
 		else
 			bmi = null;
 		session.close();
-		sessionFactory.close();
 		return bmi;
-	}
+	} // end getUserBmiByUsername()
 
-	public static List<Bmi> bmiHistory(User user) {
-		SessionFactory sessionFactory = null;
-		StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
-		try {
-			sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
-		} catch(Exception ex) {
-			StandardServiceRegistryBuilder.destroy(registry);
-		}
+	public static List<Bmi> bmiHistory(SessionFactory sessionFactory, User user) {
 		Session session = sessionFactory.openSession();
 		String getBmiByUserId = "SELECT b FROM Bmi b WHERE b.user like :user order by dateTimePosted DESC";
 		Query query = session.createQuery(getBmiByUserId).setParameter("user", user);
 		List<Bmi> bmiRetrieved = query.getResultList();
 		if (bmiRetrieved.size() != 0) {
 			session.close();
-			sessionFactory.close();
 			return bmiRetrieved;
 		}else {
 			session.close();
-			sessionFactory.close();
 			return null;
 		}
-	}
+	} // end bmiHistory()
 	
-	public static List<User> retrieveAllUsers(){
-		SessionFactory sessionFactory = null;
-		StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
-		try {
-			sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
-		} catch(Exception ex) {
-			StandardServiceRegistryBuilder.destroy(registry);
-		}
+	public static List<User> retrieveAllUsers(SessionFactory sessionFactory){
 		Session session = sessionFactory.openSession();
-		String retriveAllUsers = "from User";
-		Query query = session.createQuery(retriveAllUsers);
+		String retrieveAllUsers = "from User";
+		Query query = session.createQuery(retrieveAllUsers);
 		return query.getResultList();
-	}
-	
-	public static void main(String[] args) {
-		registerUser ("maria", "123", 72.8, 1.64, 29, "F", 1);
-	}
-	
+	} // end retrieveAllUsers()
+		
 } // end of class

@@ -79,9 +79,9 @@ function openSentMessage(myUser,myMessage,myDate,id) {
 	$('.inbox-body.inbox-incoming').hide();
 	$('.inbox-body.inbox-sent').hide();    
 	$('.inbox-body.inbox-compose').hide();
-	$('.inbox-body.inbox-readSentMessage').show();
 	$('.inbox-body.inbox-readInboxMessage').hide();
 	$('.inbox-body.filtered-messages').hide();
+	$('.inbox-body.inbox-readSentMessage').show();
 };
 
 function getSent(){
@@ -120,13 +120,8 @@ function getFiltered(){
 	);
 	
 	updateCounter();
+	showFiltered()
 	
-	$('.inbox-body.inbox-incoming').hide();
-	$('.inbox-body.inbox-compose').hide();
-	$('.inbox-body.inbox-readInboxMessage').hide();
-	$('.inbox-body.inbox-readSentMessage').hide();
-	$('.inbox-body.filtered-messages').show();
-	$('.inbox-body.inbox-sent').hide();   
 }
 
 
@@ -161,21 +156,18 @@ function deleteSelectedMessages(e){
 		type : 'POST',
 	});
 
-	if (e.name == "deleteReceived")
+	if (e.name == "deleteReceived"){
 		getIncoming();
+		showIncoming();
+	}
 	else if (e.name == "deleteSent"){
 		getSent();
-		$.ajax({
-			url: "ajax-getcounter.jsp",
-			success: 
-				function(result){
-				$("#counter").html(result);
-			}
-		}
-		);
+		showSent();
+		updateCounter()
 	}else{
 		updateCounter();
 		getFiltered();
+		showFiltered();
 	}
 
 }
@@ -191,13 +183,8 @@ function deleteOpenedMessage(e){
 			type : 'POST',
 		});
 
-		getIncoming();
-		$('.inbox-body.inbox-incoming').show();
-		$('.inbox-body.inbox-sent').hide();    
-		$('.inbox-body.inbox-compose').hide();
-		$('.inbox-body.inbox-readSentMessage').hide();
-		$('.inbox-body.inbox-readInboxMessage').hide();
-		$('.inbox-body.filtered-messages').hide();
+		getIncoming();		
+		showIncoming();
 	}else{
 		$.ajax({
 			url : 'ajax-deletemessages.jsp',
@@ -208,14 +195,8 @@ function deleteOpenedMessage(e){
 		});
 
 		getSent();
-		updateCounter();
-		
-		$('.inbox-body.inbox-incoming').hide();
-		$('.inbox-body.inbox-sent').show();    
-		$('.inbox-body.inbox-compose').hide();
-		$('.inbox-body.inbox-readSentMessage').hide();
-		$('.inbox-body.inbox-readInboxMessage').hide();
-		$('.inbox-body.filtered-messages').hide();
+		updateCounter();		
+		showSent();
 	}
 }
 
@@ -232,6 +213,33 @@ function updateCounter(){
 
 function visibility(roleName){
 	if (roleName == "STANDARD_USER"){
-		document.getElementById("godAdmin").style.display = "none";
+		$("#godAdmin").hide();
 	}
+}
+
+function showIncoming(){
+	$('.inbox-body.inbox-incoming').show();
+	$('.inbox-body.inbox-sent').hide();
+	$('.inbox-body.inbox-readInboxMessage').hide();
+	$('.inbox-body.inbox-readSentMessage').hide();
+	$('.inbox-body.filtered-messages').hide();
+	$('.inbox-body.inbox-compose').hide();   
+}
+
+function showSent(){
+	$('.inbox-body.inbox-incoming').hide();
+	$('.inbox-body.inbox-sent').show();
+	$('.inbox-body.inbox-readInboxMessage').hide();
+	$('.inbox-body.inbox-readSentMessage').hide();
+	$('.inbox-body.filtered-messages').hide();
+	$('.inbox-body.inbox-compose').hide();  
+}
+
+function showFiltered(){
+	$('.inbox-body.inbox-incoming').hide();
+	$('.inbox-body.inbox-sent').hide();
+	$('.inbox-body.inbox-readInboxMessage').hide();
+	$('.inbox-body.inbox-readSentMessage').hide();
+	$('.inbox-body.filtered-messages').show();
+	$('.inbox-body.inbox-compose').hide();
 }

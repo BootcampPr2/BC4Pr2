@@ -3,8 +3,11 @@
 <%@ page import="java.util.List, java.util.ArrayList"%>
 <%@ page import="pr2.loseweight.dbtables.*"%>
 <%@ page import="java.sql.Timestamp"%>
+<%@ page import="org.hibernate.SessionFactory"%>
+
 <%
-User loggedUser = DBUserUtils.getUserByUsername(session.getAttribute("loggedUserUsername").toString()); 
+HttpSession httpSession = request.getSession();
+User loggedUser = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getAttribute("sessionFactory"), session.getAttribute("loggedUserUsername").toString()); 
 %>
 <%!public static String trimMessage(String myMessage) {
 		final int limit = 60;
@@ -36,7 +39,7 @@ User loggedUser = DBUserUtils.getUserByUsername(session.getAttribute("loggedUser
 			<td class="view-message text-right">DATE & TIME</td>
 		</tr>
 		<%
-			List<PrivateMessage> receivedMessages = DBUtils.displayIncomingMessages(loggedUser);			
+			List<PrivateMessage> receivedMessages = DBUtils.displayIncomingMessages((SessionFactory)httpSession.getAttribute("sessionFactory"), loggedUser);			
 			PrivateMessage myMessage;
 			for (int i = 0; i < receivedMessages.size(); i++) {
 				myMessage = receivedMessages.get(i);

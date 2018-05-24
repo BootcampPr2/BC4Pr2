@@ -1,11 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 	request.setCharacterEncoding("UTF-8");
+	HttpSession httpSession = request.getSession();
 %>
 <%@ page import="pr2.loseweight.utils.*"%>
 <%@ page import="java.util.List, java.util.ArrayList"%>
 <%@ page import="pr2.loseweight.dbtables.*"%>
 <%@ page import="java.sql.Timestamp"%>
+<%@ page import="org.hibernate.SessionFactory"%>
 
 <%!public static String trimMessage(String myMessage) {
 		final int limit = 60;
@@ -30,14 +32,14 @@
 <jsp:useBean id="messageToBeSent" class="pr2.loseweight.dbtables.PrivateMessage" scope="request" />
 <jsp:useBean id="loggedUser" class="pr2.loseweight.dbtables.User" scope="request" />
 <%
-	loggedUser = DBUserUtils.getUserByUsername(session.getAttribute("loggedUserUsername").toString());
+	loggedUser = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getAttribute("sessionFactory"), httpSession.getAttribute("loggedUserUsername").toString());
 	if ((request.getParameter("inputTo") != null) && (request.getParameter("inputBody") != null)) {
 		try {
-			receiver = DBUserUtils.getUserByUsername(request.getParameter("inputTo").toString());
+			receiver = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getAttribute("sessionFactory"), request.getParameter("inputTo").toString());
 			messageToBeSent.setSender(loggedUser);
 			messageToBeSent.setReceiver(receiver);
 			messageToBeSent.setMessageData(request.getParameter("inputBody").toString());
-			DBUtils.composeNewPrivateMessage(messageToBeSent.getSender(), messageToBeSent.getReceiver(),
+			DBUtils.composeNewPrivateMessage((SessionFactory)httpSession.getAttribute("sessionFactory"), messageToBeSent.getSender(), messageToBeSent.getReceiver(),
 					messageToBeSent.getMessageData());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -103,7 +105,7 @@
 			</div>
 			<%
 				// get all received messages
-				List<PrivateMessage> receivedMessages = DBUtils.displayIncomingMessages(loggedUser);
+				List<PrivateMessage> receivedMessages = DBUtils.displayIncomingMessages((SessionFactory)httpSession.getAttribute("sessionFactory"), loggedUser);
 				int countUnread = 0;
 				for (PrivateMessage myMessage : receivedMessages) {
 					if (myMessage.getIsRead() == 0) {
@@ -117,7 +119,8 @@
 				<li style="text-align:center">
 					<form method="post" action="messages.txt">
 						<button type="submit" class="btn btn-link"><i class="glyphicon glyphicon-save"></i> Download all messages</button> 
-						<input type="hidden" name="username" value="<%=session.getAttribute("loggedUserUsername").toString()%>" />
+						<input type="hidden" name="username" value="<%=httpSession.getAttribute("loggedUserUsername").toString()%>" />
+						<input type="hidden" name="sessionFactory" value="<%=httpSession.getAttribute("sessionFactory")%>" />
 					</form>
 				</li>
 				
@@ -132,7 +135,7 @@
 			<div class="inbox-head">
 				<h3>Mailbox</h3>
 				<%
-					List<User> userList = (ArrayList) DBUserUtils.retrieveAllUsers();
+					List<User> userList = (ArrayList) DBUserUtils.retrieveAllUsers((SessionFactory)httpSession.getAttribute("sessionFactory"));
 				%>
 				<div id="divCheckbox" style="display: none;">
 					var users =
