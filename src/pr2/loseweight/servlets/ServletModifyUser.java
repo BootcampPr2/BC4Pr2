@@ -9,15 +9,18 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.hibernate.SessionFactory;
+
+import pr2.loseweight.dbtables.User;
 import pr2.loseweight.utils.DBAdminUtils;
+import pr2.loseweight.utils.DBUserUtils;
 
 
 
-@WebServlet("/ServletGodModifyUser")
-public class ServletGodModifyUser extends HttpServlet {
+@WebServlet("/ServletModifyUser")
+public class ServletModifyUser extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	public ServletGodModifyUser() {
+	public ServletModifyUser() {
 		super();
 	}
 
@@ -27,18 +30,23 @@ public class ServletGodModifyUser extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession httpSession = request.getSession();
-		DBAdminUtils function = new DBAdminUtils();
+		User loggedUser = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getAttribute("sessionFactory"), httpSession.getAttribute("loggedUserUsername").toString());
 		if (request.getParameter("SU") != null) {
 			String[] idList = request.getParameterValues("SU");
 
 			if (request.getParameter("assign") != null) {
-				function.assignUnassignUser((SessionFactory)httpSession.getAttribute("sessionFactory"),idList);
+				DBAdminUtils.assignUnassignUser((SessionFactory)httpSession.getAttribute("sessionFactory"),idList);
 			} else if (request.getParameter("ban") != null) {
-				function.banUnbanUser((SessionFactory)httpSession.getAttribute("sessionFactory"),idList);
+				DBAdminUtils.banUnbanUser((SessionFactory)httpSession.getAttribute("sessionFactory"),idList);
 			} else if (request.getParameter("delete") != null) {
-				function.deleteUser((SessionFactory)httpSession.getAttribute("sessionFactory"),idList);
+				DBAdminUtils.deleteUser((SessionFactory)httpSession.getAttribute("sessionFactory"),idList);
 			}
 		}
+		
+		if (loggedUser.getRole().getRoleID() == 1)
+		    response.sendRedirect("../GodMenu/control-panel_godMenu_users.jsp"); 
+		else
+			response.sendRedirect("../GodMenu/control-panel_adminMenu_users.jsp"); 
 	}
 
 }

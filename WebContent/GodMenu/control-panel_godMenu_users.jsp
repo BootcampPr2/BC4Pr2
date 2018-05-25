@@ -9,7 +9,7 @@
 <%@ page import="org.hibernate.SessionFactory"%>
 <%
 	HttpSession httpSession = request.getSession();
-	User loggedUser = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getAttribute("sessionFactory"), session.getAttribute("loggedUserUsername").toString());
+	User loggedUser = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getAttribute("sessionFactory"), httpSession.getAttribute("loggedUserUsername").toString());
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -29,7 +29,7 @@
 	<div id="background">
 		<img src="../Images/background.png" class="stretch" alt="" />
 	</div>
-	<form action="${pr2.loseweight.servlets.ServletGodModifyUser}/ServletGodModifyUser" method="post">
+	<form action="modifyuser" method="post">
 	<div class="container text-left">
 		<table>
 			<tr>
@@ -74,7 +74,7 @@
 					%>
 				<tr>
 					<% if (i !=0) { %>
-					<td scope="row"><input class="selectMessages" type="checkbox" name="SU" value="bar1"></td>
+					<td scope="row"><input class="selectMessages" type="checkbox" name="SU" value="<%=allUsers.get(i).getUserID()%>"></td>
 					<% }else { %>
 					<td></td>
 					<% } %>

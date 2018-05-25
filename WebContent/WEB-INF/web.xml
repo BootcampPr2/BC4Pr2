@@ -1,25 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
-	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
-	id="WebApp_ID" version="4.0">
-	<display-name>BC4Pr2</display-name>
-	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
-		<welcome-file>index.htm</welcome-file>
-		<welcome-file>index.jsp</welcome-file>
-		<welcome-file>default.html</welcome-file>
-		<welcome-file>default.htm</welcome-file>
-		<welcome-file>default.jsp</welcome-file>
-	</welcome-file-list>
-	<servlet>
-		<servlet-name>messages</servlet-name>
-		<servlet-class>pr2.loseweight.servlets.ServletDisplayMessages</servlet-class>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>messages</servlet-name>
-		<url-pattern>/Mailbox/messages.txt</url-pattern>
-	</servlet-mapping>
-
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+  <display-name>BC4Pr2</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  <servlet>
+    <servlet-name>messages</servlet-name>
+    <servlet-class>pr2.loseweight.servlets.ServletDisplayMessages</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>messages</servlet-name>
+    <url-pattern>/Mailbox/messages.txt</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>modifyuser</servlet-name>
+    <servlet-class>pr2.loseweight.servlets.ServletModifyUser</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>modifyuser</servlet-name>
+    <url-pattern>/GodMenu/modifyuser</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>UploadServlet</servlet-name>
+    <servlet-class>pr2.loseweight.servlets.UploadServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UploadServlet</servlet-name>
+    <url-pattern>/User_Profile/UploadServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

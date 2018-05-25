@@ -56,7 +56,7 @@ public class User {
 		this.isBanned = isBanned;
 	}
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="roleID", referencedColumnName="roleID")
 	public Role getRole() {
 		return role;

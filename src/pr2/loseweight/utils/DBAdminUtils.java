@@ -12,6 +12,7 @@ import org.hibernate.query.Query;
 
 import pr2.loseweight.dbtables.MetaRate;
 import pr2.loseweight.dbtables.PrivateMessage;
+import pr2.loseweight.dbtables.Role;
 import pr2.loseweight.dbtables.User;
 
 public class DBAdminUtils {
@@ -45,13 +46,15 @@ public class DBAdminUtils {
 	public static void assignUnassignUser(SessionFactory sessionFactory, String[] listOfIdsString) {
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
+		Role newRoleAdmin = session.get(Role.class, 2);
+		Role newRoleStandardUser = session.get(Role.class, 3);
 		for (int i=0;i<listOfIdsString.length;i++) {
 			int userID = Integer.parseInt(listOfIdsString [i]);
 			User user = session.get(User.class, userID);
 			if (user.getRole().getRoleID() == 3) {
-				user.getRole().setRoleID(1);
+				user.setRole(newRoleAdmin);
 			}else {
-				user.getRole().setRoleID(3);
+				user.setRole(newRoleStandardUser);
 			}
 			session.update(user);
 			session.getTransaction().commit();
