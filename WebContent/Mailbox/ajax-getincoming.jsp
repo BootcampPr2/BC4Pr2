@@ -73,6 +73,7 @@ User loggedUser = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getA
 	</tbody>
 </table>
 <%
+System.out.println("message count: " + receivedMessages.size());
 if (receivedMessages.size()==0){
 	
 %>

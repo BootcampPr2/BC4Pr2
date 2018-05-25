@@ -147,28 +147,9 @@ function deleteSelectedMessages(e){
 			}
 		})
 	}
-
-	$.ajax({
-		url : 'ajax-deletemessages.jsp',
-		data :{ 
-			checked: JSON.stringify(allChecked)
-		},
-		type : 'POST',
-	});
-
-	if (e.name == "deleteReceived"){
-		getIncoming();
-		showIncoming();
-	}
-	else if (e.name == "deleteSent"){
-		getSent();
-		showSent();
-		updateCounter()
-	}else{
-		updateCounter();
-		getFiltered();
-		showFiltered();
-	}
+	
+	ajaxDelete(allChecked);
+	setTimeout(refreshMailbox, 300);
 
 }
 
@@ -214,6 +195,32 @@ function updateCounter(){
 function visibility(roleName){
 	if (roleName == "STANDARD_USER"){
 		$("#godAdmin").hide();
+	}
+}
+
+function ajaxDelete(allChecked){
+	$.ajax({
+		url : 'ajax-deletemessages.jsp',
+		data :{ 
+			checked: JSON.stringify(allChecked)
+		},
+		type : 'POST',
+	});
+}
+
+function refreshMailbox(caller){
+	if (caller == "deleteReceived"){
+		getIncoming();
+		showIncoming();
+	}
+	else if (caller == "deleteSent"){
+		getSent();
+		showSent();
+		updateCounter()
+	}else{
+		updateCounter();
+		getFiltered();
+		showFiltered();
 	}
 }
 
