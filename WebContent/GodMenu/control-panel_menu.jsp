@@ -28,7 +28,7 @@
 	<nav class="navbar navbar-default navbar-static-top">
 	<div class="container-fluid">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="#"><%=loggedUser.getUsername()%></a>
+			<a class="navbar-brand" href="#"><span style="font-weight: bold"><%=loggedUser.getUsername()%></span></a>
 		</div>
 		<ul class="nav navbar-nav">
 			<li><a href="../User_Profile/user_main.jsp">MY PROFILE</a></li>
@@ -61,7 +61,11 @@
 		</div>
 		<div id="control-panel_menu">
 			<h4>Users</h4>
-			<a href="control-panel_menu_users.jsp" class="btn btn-info" role="button"><i class="fa fa-group"></i> View All</a>
+			<% if (loggedUser.getRole().getRoleID() == 1) {%>
+				<a href="control-panel_godMenu_users.jsp" class="btn btn-info" role="button"><i class="fa fa-group"></i> View All</a>
+			<%}else { %>
+				<a href="control-panel_adminMenu_users.jsp" class="btn btn-info" role="button"><i class="fa fa-group"></i> View All</a>
+			<%} %>
 			<h4>Messages</h4>
 			<a href="control-panel_menu_messages.jsp" class="btn btn-info" role="button"><i class="fa fa-comments"></i> View All</a>
 		</div>

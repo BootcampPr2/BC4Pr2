@@ -4,6 +4,7 @@
 <%@ page import="pr2.loseweight.dbtables.*"%>
 <%@ page import="java.sql.Timestamp"%>
 <%@ page import="org.hibernate.SessionFactory"%>
+<%@ page import="java.sql.Timestamp, java.text.SimpleDateFormat" %>
 <%
 HttpSession httpSession = request.getSession();
 User loggedUser = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getAttribute("sessionFactory"), session.getAttribute("loggedUserUsername").toString()); 
@@ -40,22 +41,24 @@ User loggedUser = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getA
 		<%
 			List<PrivateMessage> sentMessages = DBUtils.displaySentMessages((SessionFactory)httpSession.getAttribute("sessionFactory"), loggedUser);
 			PrivateMessage myMessage;
+			SimpleDateFormat myFormat = new SimpleDateFormat ("dd/MM/yyyy HH:mm");
 			for (int i = 0; i < sentMessages.size(); i++) {
 				myMessage = sentMessages.get(i);
 				String user = myMessage.getReceiver().getUsername();
 				String message = myMessage.getMessageData();
 				Timestamp date = myMessage.getDateSubmission();
+				String formattedDate = myFormat.format(date);
 				int id = myMessage.getPrivateMessageID();
 		%>
 				<tr class="readSent">
 					<td class="inbox-small-cells"><input type="checkbox"
 						class="mail-checkbox mail-sent" name="CS" value="<%=id%>"></td>
 					<td class="view-message 1 dont-show"
-						onclick="openSentMessage('<%=user%>','<%=message%>','<%=date%>', <%=id%>)"><%=user%></td>
+						onclick="openSentMessage('<%=user%>','<%=message%>','<%=formattedDate%>', <%=id%>)"><%=user%></td>
 					<td class="view-message 1 messageStyle"
-						onclick="openSentMessage('<%=user%>','<%=message%>','<%=date%>', <%=id%>)"><%=trimMessage(message)%></td>
+						onclick="openSentMessage('<%=user%>','<%=message%>','<%=formattedDate%>', <%=id%>)"><%=trimMessage(message)%></td>
 					<td class="view-message 1 text-right"
-						onclick="openSentMessage('<%=user%>','<%=message%>','<%=date%>', <%=id%>)"><%=date%></td>
+						onclick="openSentMessage('<%=user%>','<%=message%>','<%=formattedDate%>', <%=id%>)"><%=formattedDate%></td>
 				</tr>
 		<%
 			}

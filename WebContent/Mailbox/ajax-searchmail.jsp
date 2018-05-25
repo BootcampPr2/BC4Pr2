@@ -4,6 +4,7 @@
 <%@ page import="pr2.loseweight.dbtables.*"%>
 <%@ page import="java.sql.Timestamp"%>
 <%@ page import="org.hibernate.SessionFactory"%>
+<%@ page import="java.sql.Timestamp, java.text.SimpleDateFormat" %>
 <%
 HttpSession httpSession = request.getSession();
 User loggedUser = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getAttribute("sessionFactory"), session.getAttribute("loggedUserUsername").toString()); 
@@ -40,6 +41,7 @@ User loggedUser = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getA
 		</tr>
 		<%
 			List<PrivateMessage> sentMessages = DBUtils.getAllMessagesByUser((SessionFactory)httpSession.getAttribute("sessionFactory"), loggedUser);
+			SimpleDateFormat myFormat = new SimpleDateFormat ("dd/MM/yyyy HH:mm");
 			PrivateMessage myMessage;
 			String from;
 			String to;
@@ -53,6 +55,7 @@ User loggedUser = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getA
 				to = myMessage.getReceiver().getUsername();
 				message = myMessage.getMessageData();
 				date = myMessage.getDateSubmission();
+				String formattedDate = myFormat.format(date);
 				id = myMessage.getPrivateMessageID();
 				if ((myMessage.getReceiver().getUsername().contains(request.getParameter("filterTerm"))) || ((myMessage.getSender().getUsername().contains(request.getParameter("filterTerm"))))){
 					count++;
@@ -71,10 +74,10 @@ User loggedUser = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getA
 						<td class="view-message  dont-show"
 		<%					
 							if (to.equals(loggedUser.getUsername())){
-							%>onclick="openInboxMessage('<%=from%>','<%=message%>','<%=date%>', <%=id%>, <%=myMessage.getIsRead()%>)"<%
+							%>onclick="openInboxMessage('<%=from%>','<%=message%>','<%=formattedDate%>', <%=id%>, <%=myMessage.getIsRead()%>)"<%
 							}
 							else{
-							%>onclick="openSentMessage('<%=to%>','<%=message%>','<%=date%>', <%=id%>, 0)"<%
+							%>onclick="openSentMessage('<%=to%>','<%=message%>','<%=formattedDate%>', <%=id%>, 0)"<%
 							}
 		%>
 						>
@@ -83,33 +86,33 @@ User loggedUser = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getA
 						<td class="view-message  dont-show"
 		<%					
 							if (to.equals(loggedUser.getUsername())){
-							%>onclick="openInboxMessage('<%=from%>','<%=message%>','<%=date%>', <%=id%>, <%=myMessage.getIsRead()%>)"<%
+							%>onclick="openInboxMessage('<%=from%>','<%=message%>','<%=formattedDate%>', <%=id%>, <%=myMessage.getIsRead()%>)"<%
 							}
 							else{
-							%>onclick="openSentMessage('<%=to%>','<%=message%>','<%=date%>', <%=id%>, 0)"<%
+							%>onclick="openSentMessage('<%=to%>','<%=message%>','<%=formattedDate%>', <%=id%>, 0)"<%
 							}
 		%>
 						><%=to%></td>
 						<td class="view-message  dont-show"
 		<%					
 							if (to.equals(loggedUser.getUsername())){
-							%>onclick="openInboxMessage('<%=from%>','<%=message%>','<%=date%>', <%=id%>, <%=myMessage.getIsRead()%>)"<%
+							%>onclick="openInboxMessage('<%=from%>','<%=message%>','<%=formattedDate%>', <%=id%>, <%=myMessage.getIsRead()%>)"<%
 							}
 							else{
-							%>onclick="openSentMessage('<%=to%>','<%=message%>','<%=date%>', <%=id%>, 0)"<%
+							%>onclick="openSentMessage('<%=to%>','<%=message%>','<%=formattedDate%>', <%=id%>, 0)"<%
 							}
 		%>
 						><%=trimMessage(message)%></td>
 						<td class="view-message  dont-show text-right"
 		<%					
 							if (to.equals(loggedUser.getUsername())){
-							%>onclick="openInboxMessage('<%=from%>','<%=message%>','<%=date%>', <%=id%>, <%=myMessage.getIsRead()%>)"<%
+							%>onclick="openInboxMessage('<%=from%>','<%=message%>','<%=formattedDate%>', <%=id%>, <%=myMessage.getIsRead()%>)"<%
 							}
 							else{
-							%>onclick="openSentMessage('<%=to%>','<%=message%>','<%=date%>', <%=id%>, 0)"<%
+							%>onclick="openSentMessage('<%=to%>','<%=message%>','<%=formattedDate%>', <%=id%>, 0)"<%
 							}
 		%>
-						><%=date%></td>
+						><%=formattedDate%></td>
 					</tr>
 
 		<%

@@ -31,26 +31,31 @@
 <jsp:useBean id="receiver" class="pr2.loseweight.dbtables.User" scope="request" />
 <jsp:useBean id="messageToBeSent" class="pr2.loseweight.dbtables.PrivateMessage" scope="request" />
 <jsp:useBean id="loggedUser" class="pr2.loseweight.dbtables.User" scope="request" />
-<%
-	loggedUser = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getAttribute("sessionFactory"), httpSession.getAttribute("loggedUserUsername").toString());
-	if ((request.getParameter("inputTo") != null) && (request.getParameter("inputBody") != null)) {
-		try {
-			receiver = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getAttribute("sessionFactory"), request.getParameter("inputTo").toString());
-			messageToBeSent.setSender(loggedUser);
-			messageToBeSent.setReceiver(receiver);
-			messageToBeSent.setMessageData(request.getParameter("inputBody").toString());
-			DBUtils.composeNewPrivateMessage((SessionFactory)httpSession.getAttribute("sessionFactory"), messageToBeSent.getSender(), messageToBeSent.getReceiver(),
-					messageToBeSent.getMessageData());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-%>
+
 
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+
+<%
+	loggedUser = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getAttribute("sessionFactory"), httpSession.getAttribute("loggedUserUsername").toString());
+	if ((request.getParameter("inputTo") != null) && (request.getParameter("inputBody") != null)) {
+			receiver = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getAttribute("sessionFactory"), request.getParameter("inputTo").toString());
+			messageToBeSent.setSender(loggedUser);
+			messageToBeSent.setReceiver(receiver);
+			messageToBeSent.setMessageData(request.getParameter("inputBody").toString());
+			boolean sentSuccessful = DBUtils.composeNewPrivateMessage((SessionFactory)httpSession.getAttribute("sessionFactory"), messageToBeSent.getSender(), messageToBeSent.getReceiver(), messageToBeSent.getMessageData());
+			if (sentSuccessful){
+				%> <script> alert ("Message sent successfully") </script> <%
+			}else {
+				if (messageToBeSent.getMessageData().length()>1500)
+					%> <script> alert ("Message is more than 1500 words") </script> <%
+				else
+					%> <script> alert ("Username doesn't exist") </script> <%
+			}
+	}
+%>
 
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <link rel="stylesheet" type="text/css" href="Style.css">
@@ -61,7 +66,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Mailbox</title>
 </head>
-<body onload="visibility('<%=loggedUser.getRole().getRoleName() %>')">
+<body>
 	<div id="background">
 		<img src="../Images/background.png" class="stretch" alt="" />
 	</div>
@@ -70,14 +75,16 @@
 	<nav class="navbar navbar-default navbar-static-top">
 	<div class="container-fluid">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="#"><%=loggedUser.getUsername()%></a>
+			<a class="navbar-brand" href="#"><span style="font-weight: bold"><%=loggedUser.getUsername()%></span></a>
 		</div>
 		<ul class="nav navbar-nav">
 			<li><a href="../User_Profile/user_main.jsp">MY PROFILE</a></li>
 			<li><a href="../User_Profile/user_update.jsp">UPDATE PROFILE INFORMATION</a></li>
 			<li><a href="../User_Profile/bmi_history.jsp">VIEW HISTORY</a></li>
 			<li class="active"><a href="../Mailbox/mail.jsp">MAILBOX</a></li>
-			<li id="godAdmin" style="display: block;"><a href="../GodMenu/control-panel_menu.jsp">CONTROL PANEL</a></li>
+			<% if (loggedUser.getRole().getRoleID() ==  1 || loggedUser.getRole().getRoleID() == 2){ %>
+				<li><a href="../GodMenu/control-panel_menu.jsp">CONTROL PANEL</a></li> 
+			<% } %>
 
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
@@ -172,12 +179,6 @@
 								</div>
 							</div>
 
-							<script>
-						$("#checkAll").click(function() {
-						$(".mail-checkbox.mail-inbox").prop('checked',$(this).prop('checked'));
-						});
-						</script>
-
 							<div class="btn-group">
 								<a onclick="getIncoming()" data-original-title="Refresh" data-placement="top" data-toggle="dropdown" href="#" class="btn mini tooltips"> <i class=" fa fa-refresh"></i>
 								</a>
@@ -206,12 +207,6 @@
 								</div>
 							</div>
 
-							<script>
-						$("#checkAll_Sent").click(function() {
-						$(".mail-checkbox.mail-sent").prop('checked',$(this).prop('checked'));
-						});
-						</script>
-
 							<div class="btn-group hidden-phone">
 								<button name="deleteSent" type="button" class="btn btn-danger" onclick="deleteSelectedMessages(this)">
 									<i class="fa fa-trash-o"></i> Delete selected messages
@@ -233,12 +228,6 @@
 									<a href="#" class="btn mini all">All</a>
 								</div>
 							</div>
-
-							<script>
-						$("#checkAllFiltered").click(function() {
-						$(".mail-checkbox.mail-filtered").prop('checked',$(this).prop('checked'));
-						});
-						</script>
 
 							<div class="btn-group">
 								<a onclick="getIncoming()" data-original-title="Refresh" data-placement="top" data-toggle="dropdown" href="#" class="btn mini tooltips"> <i class=" fa fa-refresh"></i>

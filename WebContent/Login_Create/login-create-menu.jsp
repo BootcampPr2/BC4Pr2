@@ -18,8 +18,8 @@ if (httpSession.getAttribute("loggedUserUsername") != null) {
 <html>
 <head>
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="Style.css" rel="stylesheet" type="text/css">
 <title>Home</title>
@@ -87,11 +87,10 @@ if (request.getParameter("username0") == null){
 												<div id="pswd_info">
 													<h5>Password should contain:</h5>
 													<ul>
-														<li id="letter" class="invalid">At least <strong>one letter</strong></li>
+														<li id="letter" class="invalid">At least <strong>one lowercase letter</strong></li>
 														<li id="capital" class="invalid">At least <strong>one capital letter</strong></li>
 														<li id="number" class="invalid">At least <strong>one number</strong></li>
 														<li id="length" class="invalid">Be at least <strong>8 characters</strong></li>
-														<li id="space" class="invalid">At least one of <strong>[~!@#$%^&*=.;']</strong></li>
 													</ul>
 												</div>
 											</div>

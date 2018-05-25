@@ -41,7 +41,7 @@ $('document').ready(function(){
 function openInboxMessage(myUser,myMessage,myDate,id,isRead) {
 	$('#fromView').val(myUser);
 	myMessage = myMessage.replace(/<br\s*\/?>/mg,"\n");
-	$('#messageView').val(myMessage);
+	$('#messageView').val(myMessage);	
 	$('#dateView').val(myDate);
 	$('#inid').val(id);
 
@@ -192,12 +192,6 @@ function updateCounter(){
 	);
 }
 
-function visibility(roleName){
-	if (roleName == "STANDARD_USER"){
-		$("#godAdmin").hide();
-	}
-}
-
 function ajaxDelete(allChecked){
 	$.ajax({
 		url : 'ajax-deletemessages.jsp',
@@ -223,6 +217,19 @@ function refreshMailbox(caller){
 		showFiltered();
 	}
 }
+
+$("#checkAll").click(function() {
+	$(".mail-checkbox.mail-inbox").prop('checked',$(this).prop('checked'));
+});
+
+$("#checkAll_Sent").click(function() {
+	$(".mail-checkbox.mail-sent").prop('checked',$(this).prop('checked'));
+});
+
+$("#checkAllFiltered").click(function() {
+	$(".mail-checkbox.mail-filtered").prop('checked',$(this).prop('checked'));
+});
+
 
 function showIncoming(){
 	$('.inbox-body.inbox-incoming').show();

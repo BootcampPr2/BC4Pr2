@@ -25,23 +25,41 @@ public abstract class DBUserUtils {
 		session.close();		
 	} //end registerUser()
 
-	public static void updatePassword (SessionFactory sessionFactory, User user, String password) {
-		Session session = sessionFactory.openSession();
+	public static boolean updatePassword (SessionFactory sessionFactory, User user, String password) {	
 		user.setPassword(password);
+		Session session = sessionFactory.openSession();
+		boolean updateSuccessful;
+		try {
 		session.beginTransaction();
 		session.update(user);
 		session.getTransaction().commit();
-		session.close();		
+		updateSuccessful = true;
+		}catch(Exception e){
+			updateSuccessful = false;
+		}
+		finally{
+			session.close();		
+		}
+		return updateSuccessful;
 	} //end updatePassword()
 	
-	public static void updateUser (SessionFactory sessionFactory, User user, double weight, double height, int age, String gender, int exerciseID) {
+	public static boolean updateUser (SessionFactory sessionFactory, User user, double weight, double height, int age, String gender, int exerciseID) {
 		Session session = sessionFactory.openSession();
 		MetaRate metaRate = session.get(MetaRate.class, exerciseID);
 		Bmi bmi = new Bmi (weight, height, age, gender, metaRate, user);
+		boolean updateSuccessful;
+		try {
 		session.beginTransaction();
 		session.save(bmi);
 		session.getTransaction().commit();
-		session.close();		
+		updateSuccessful = true;
+		}catch(Exception e) {
+			updateSuccessful = false;
+		}
+		finally{
+			session.close();		
+		}
+		return updateSuccessful;
 	} //end updateUser()
 	
 	// Validate login

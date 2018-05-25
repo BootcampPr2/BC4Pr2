@@ -4,6 +4,7 @@
 <%@ page import="pr2.loseweight.dbtables.*"%>
 <%@ page import="java.sql.Timestamp"%>
 <%@ page import="org.hibernate.SessionFactory"%>
+<%@ page import="java.sql.Timestamp, java.text.SimpleDateFormat" %>
 
 <%
 HttpSession httpSession = request.getSession();
@@ -41,11 +42,13 @@ User loggedUser = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getA
 		<%
 			List<PrivateMessage> receivedMessages = DBUtils.displayIncomingMessages((SessionFactory)httpSession.getAttribute("sessionFactory"), loggedUser);			
 			PrivateMessage myMessage;
+			SimpleDateFormat myFormat = new SimpleDateFormat ("dd/MM/yyyy HH:mm");
 			for (int i = 0; i < receivedMessages.size(); i++) {
 				myMessage = receivedMessages.get(i);
 				String user = myMessage.getSender().getUsername();
 				String message = myMessage.getMessageData();
 				Timestamp date = myMessage.getDateSubmission();
+				String formattedDate = myFormat.format(date);
 				int id = myMessage.getPrivateMessageID();
 				if (myMessage.getIsRead() == 0) {
 		%>
@@ -60,11 +63,11 @@ User loggedUser = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getA
 						<td class="inbox-small-cells"><input type="checkbox"
 							class="mail-checkbox mail-inbox" name="CI" value="<%=id%>"></td>
 						<td class="view-message  dont-show"
-							onclick="openInboxMessage('<%=user%>','<%=message%>','<%=date%>', <%=id%>, <%=myMessage.getIsRead()%>)"><%=user%></td>
+							onclick="openInboxMessage('<%=user%>','<%=message%>','<%=formattedDate%>', <%=id%>, <%=myMessage.getIsRead()%>)"><%=user%></td>
 						<td class="view-message messageStyle"
-							onclick="openInboxMessage('<%=user%>','<%=message%>','<%=date%>', <%=id%>, <%=myMessage.getIsRead()%>)"><%=trimMessage(message)%></td>
+							onclick="openInboxMessage('<%=user%>','<%=message%>','<%=formattedDate%>', <%=id%>, <%=myMessage.getIsRead()%>)"><%=trimMessage(message)%></td>
 						<td class="view-message  text-right"
-							onclick="openInboxMessage('<%=user%>','<%=message%>','<%=date%>', <%=id%>, <%=myMessage.getIsRead()%>)"><%=date%></td>
+							onclick="openInboxMessage('<%=user%>','<%=message%>','<%=formattedDate%>', <%=id%>, <%=myMessage.getIsRead()%>)"><%=formattedDate%></td>
 					</tr>
 
 		<%

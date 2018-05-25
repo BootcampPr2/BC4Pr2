@@ -47,7 +47,7 @@
 	</jsp:include>
 	<%
 	} else {
-			String pattern = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[~!@#$%^&*=.;'])(?=\\S+$).{8,}";
+			String pattern = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}";
 			if (password.matches(pattern)) {
 				DBUserUtils.registerUser((SessionFactory)httpSession.getAttribute("sessionFactory"), username, password, weight, height, age, gender, exercise);
 				httpSession.setAttribute("loggedUserUsername",request.getParameter("username0"));

@@ -7,6 +7,7 @@
 <%@ page import="pr2.loseweight.dbtables.*"%>
 <%@ page import="java.sql.Timestamp"%>
 <%@ page import="org.hibernate.SessionFactory"%>
+<%@ page import="java.sql.Timestamp, java.text.SimpleDateFormat" %>
 <% 
 	HttpSession httpSession = request.getSession();
 	User loggedUser = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getAttribute("sessionFactory"), httpSession.getAttribute("loggedUserUsername").toString());
@@ -31,7 +32,7 @@
 
 <script src='user_profile.js'></script>
 </head>
-<body onload="visibility('<%=loggedUser.getRole().getRoleName() %>')">
+<body>
 	<link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'>
 	<br>
 
@@ -43,14 +44,16 @@
 	<nav class="navbar navbar-default navbar-static-top">
 	<div class="container-fluid">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="#"><%=loggedUser.getUsername()%></a>
+			<a class="navbar-brand" href="#"><span style="font-weight: bold"><%=loggedUser.getUsername()%></span></a>
 		</div>
 		<ul class="nav navbar-nav">
 			<li><a href="user_main.jsp">MY PROFILE</a></li>
 			<li><a href="user_update.jsp">UPDATE PROFILE INFORMATION</a></li>
 			<li class="active"><a href="bmi_history.jsp">VIEW HISTORY</a></li>
 			<li><a href="../Mailbox/mail.jsp">MAILBOX</a></li>
-			<li id="godAdmin" style="display: block;"><a href="../GodMenu/control-panel_menu.jsp">CONTROL PANEL</a></li>
+			<% if (loggedUser.getRole().getRoleID() ==  1 || loggedUser.getRole().getRoleID() == 2){ %>
+				<li><a href="../GodMenu/control-panel_menu.jsp">CONTROL PANEL</a></li> 
+			<% } %>
 
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
@@ -97,15 +100,28 @@
 				<%
 					List<Bmi> bmiList = (ArrayList) DBUserUtils.bmiHistory((SessionFactory)httpSession.getAttribute("sessionFactory"), loggedUser);
 				if (bmiList.size() != 0) {
+					SimpleDateFormat myFormat = new SimpleDateFormat ("dd/MM/yyyy HH:mm");
+					String date;
 					for (int i=0;i<bmiList.size();i++){
 						%> 
 					<tr>
+						<% if (i !=0){ %>
 						<td scope="row"><input type="checkbox" class="tickbox" name="checked" value="<%=bmiList.get(i).getBmiID() %>"></td>
-						<td><%=bmiList.get(i).getDateTimePosted() %></td>
+						<%} else { %>
+						<td scope="row"></td>
+						<%} %>
+						<%
+							date = myFormat.format(bmiList.get(i).getDateTimePosted());%>
+						<td><%=date %></td>
 						<td><%=bmiList.get(i).getWeight() %></td>
 						<td><%=bmiList.get(i).getHeight() %></td>
 						<td><%=bmiList.get(i).getAge() %></td>
-						<td><%=bmiList.get(i).getGender() %></td>
+						
+						<% if (bmiList.get(i).getGender().equals("F")){%>
+							<td><img src="../Images/female.jpg" height="25px"></td>
+						<% }else { %>
+							<td><img src="../Images/male.png" height="25px"></td>
+						<% } %>
 						<td><%=bmiList.get(i).getBmi() %></td>
 						<td><%=bmiList.get(i).getClassification() %></td>
 						<td><%=bmiList.get(i).getBmr() %></td>

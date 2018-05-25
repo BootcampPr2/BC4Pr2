@@ -62,22 +62,27 @@ public abstract class DBUtils {
 		return sentMessages;
 	} // end getAllMessagesByUser()
 	
-	public static void composeNewPrivateMessage(SessionFactory sessionFactory, User sender, User receiver, String messageData) {
+	public static boolean composeNewPrivateMessage(SessionFactory sessionFactory, User sender, User receiver, String messageData) {
 		Session session = sessionFactory.openSession();
 		PrivateMessage newPrivateMessage = new PrivateMessage();
 		messageData = messageData.replaceAll("[\r\n]", "&nbsp;<br>");
 		messageData = messageData.replaceAll(" ", "&nbsp;");
 		newPrivateMessage.setMessageData(messageData);
 		newPrivateMessage.setSender(sender);
-		newPrivateMessage.setReceiver(receiver);
-		System.out.println(newPrivateMessage);
-		session.beginTransaction();
+		newPrivateMessage.setReceiver(receiver);		
+		boolean successfullySent;
 		try {
+		session.beginTransaction();
 		session.save(newPrivateMessage);
 		session.getTransaction().commit();
+		successfullySent = true;
 		}catch(Exception e) {
 			e.printStackTrace();
+			successfullySent = false;
 		}
-		session.close();		
+		finally{
+			session.close();
+		}
+		return successfullySent;
 	} // end composeNewPrivateMessage()
 }

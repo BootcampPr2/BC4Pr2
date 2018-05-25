@@ -9,8 +9,8 @@ $(document).ready(function(){
 			$('#length').removeClass('invalid').addClass('valid');
 		}
 		
-		//validate letter
-		if ( pswd.match(/[A-z]/) ) {
+		//validate lowercase letter
+		if ( pswd.match(/[a-z]/) ) {
 			$('#letter').removeClass('invalid').addClass('valid');
 		} else {
 			$('#letter').removeClass('valid').addClass('invalid');
@@ -61,10 +61,4 @@ $(function() {
 		$('#profile-image-upload').click();
 	});
 });
-
-function visibility(roleName){
-	if (roleName == "STANDARD_USER"){
-		document.getElementById("godAdmin").style.display = "none";
-	}
-}
           

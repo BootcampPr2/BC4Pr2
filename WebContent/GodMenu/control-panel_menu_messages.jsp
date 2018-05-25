@@ -7,6 +7,7 @@
 <%@ page import="pr2.loseweight.dbtables.*"%>
 <%@ page import="java.sql.Timestamp"%>
 <%@ page import="org.hibernate.SessionFactory"%>
+<%@ page import="java.sql.Timestamp, java.text.SimpleDateFormat" %>
 
 <%
 	HttpSession httpSession = request.getSession();
@@ -101,12 +102,14 @@
 					<%
 						List<PrivateMessage> allMessages = DBAdminUtils.displayAllPrivateMessages((SessionFactory)httpSession.getAttribute("sessionFactory"));
 						PrivateMessage myMessage;
+						SimpleDateFormat myFormat = new SimpleDateFormat ("dd/MM/yyyy HH:mm");
 						for (int i = 0; i < allMessages.size(); i++) {
 							myMessage = allMessages.get(i);
 							String sender = myMessage.getSender().getUsername();
 							String receiver = myMessage.getReceiver().getUsername();
 							String message = myMessage.getMessageData();
 							Timestamp date = myMessage.getDateSubmission();
+							String formattedDate = myFormat.format(date);
 							int id = myMessage.getPrivateMessageID();
 					%>
 					<tr style="cursor: pointer">
@@ -114,7 +117,7 @@
 						<td><%=sender%></td>
 						<td><%=receiver%></td>
 						<td class="CellWithComment"><%=trimMessage(message)%> <span class="CellComment"><%=message%></span></td>
-						<td><%=date%></td>
+						<td><%=formattedDate%></td>
 					</tr>
 					<%
 						}

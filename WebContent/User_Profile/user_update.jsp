@@ -30,13 +30,18 @@
 <%
 	if (request.getParameter("password0") != null) {
 		String password = request.getParameter("password0");
-		String pattern = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[~!@#$%^&*=.;'])(?=\\S+$).{8,}";
+		String pattern = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}";
 		if (password.matches(pattern)) {
-			DBUserUtils.updatePassword((SessionFactory)httpSession.getAttribute("sessionFactory"), loggedUser, request.getParameter("password0"));
+			boolean updatedSuccessfully = DBUserUtils.updatePassword((SessionFactory)httpSession.getAttribute("sessionFactory"), loggedUser, request.getParameter("password0"));
+			if (updatedSuccessfully){%>
+				<script> alert ("Updated successfully") </script>
+			<%}else { %>
+				<script> alert ("Something went wrong. Try again!") </script>
+			<%}
 		}else {
 			%>
-<script> alert ("Password is not fulfilling the requirements.") </script>
-<%
+			<script> alert ("Password is not fulfilling the requirements.") </script>
+		<%
 		}
 	}
 %>
@@ -68,11 +73,16 @@ if (request.getParameter("weight") == null
 	if (request.getParameter("RE") != null) {
 		exerciseID = Integer.parseInt(request.getParameter("RE"));
 	}
-	DBUserUtils.updateUser((SessionFactory)httpSession.getAttribute("sessionFactory"), loggedUser, weight, height, age, gender, exerciseID);
+	boolean updateSuccessful = DBUserUtils.updateUser((SessionFactory)httpSession.getAttribute("sessionFactory"), loggedUser, weight, height, age, gender, exerciseID);
+	if (updateSuccessful) {%>
+		<script> alert ("Updated successfully") </script>
+	<%}else { %>
+		<script> alert ("Something went wrong. Try again!") </script>
+	<%}
 }
 %>
 </head>
-<body onload="visibility('<%=loggedUser.getRole().getRoleName()%>')">
+<body>
 	<div id="background">
 		<img src="..//Images/background.png" class="stretch" alt="" />
 	</div>
@@ -81,14 +91,16 @@ if (request.getParameter("weight") == null
 	<nav class="navbar navbar-default navbar-static-top">
 	<div class="container-fluid">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="#"><%=loggedUser.getUsername()%></a>
+			<a class="navbar-brand" href="#"><span style="font-weight: bold"><%=loggedUser.getUsername()%></span></a>
 		</div>
 		<ul class="nav navbar-nav">
 			<li><a href="user_main.jsp">MY PROFILE</a></li>
 			<li class="active"><a href="user_update.jsp">UPDATE PROFILE INFORMATION</a></li>
 			<li><a href="bmi_history.jsp">VIEW HISTORY</a></li>
 			<li><a href="../Mailbox/mail.jsp">MAILBOX</a></li>
-			<li id="godAdmin" style="visibility: visible"><a href="../GodMenu/control-panel_menu.jsp">CONTROL PANEL</a></li>
+			<% if (loggedUser.getRole().getRoleID() ==  1 || loggedUser.getRole().getRoleID() == 2){ %>
+				<li><a href="../GodMenu/control-panel_menu.jsp">CONTROL PANEL</a></li> 
+			<% } %>
 
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
@@ -162,11 +174,10 @@ if (request.getParameter("weight") == null
 											<div id="pswd_info">
 												<h5>Password should contain:</h5>
 												<ul>
-													<li id="letter" class="invalid">At least <strong>one letter</strong></li>
+													<li id="letter" class="invalid">At least <strong>one lowercase letter</strong></li>
 													<li id="capital" class="invalid">At least <strong>one capital letter</strong></li>
 													<li id="number" class="invalid">At least <strong>one number</strong></li>
 													<li id="length" class="invalid">Be at least <strong>8 characters</strong></li>
-													<li id="space" class="invalid">At least one of <strong>[~!@#$%^&*=.;']</strong></li>
 												</ul>
 											</div>
 										</div>
