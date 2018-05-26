@@ -117,6 +117,7 @@ if (request.getParameter("weight") == null
 					<ul class="nav nav-tabs">
 						<li class="active"><a href="#profile" data-toggle="tab">Profile</a></li>
 						<li><a href="#password" data-toggle="tab">Password</a></li>
+						<li><a href="#profilepic" data-toggle="tab">Picture</a></li>
 					</ul>
 					<div id="myTabContent" class="tab-content">
 						<div class="tab-pane fade in active" id="profile">
@@ -188,6 +189,18 @@ if (request.getParameter("weight") == null
 								</div>
 							</form>
 						</div>
+						
+						<div class="tab-pane fade" id="profilepic">
+							<div class="currentProfilePic">
+								<img src="<%=loggedUser.getProfilePicUrl()%>" width="200">
+							</div>
+							<form method="post" action="uploadpic" enctype="multipart/form-data">
+								Select file to upload:
+								<input type="file" name="dataFile" id="fileChooser" accept="image/*" /><br/><br/>
+								<input type="submit" value="Upload" />
+							</form>
+						</div>
+						
 					</div>
 				</div>
 				<!-- end of class well -->

@@ -26,11 +26,11 @@
     <url-pattern>/GodMenu/modifyuser</url-pattern>
   </servlet-mapping>
   <servlet>
-    <servlet-name>UploadServlet</servlet-name>
-    <servlet-class>pr2.loseweight.servlets.UploadServlet</servlet-class>
+    <servlet-name>uploadprofilepic</servlet-name>
+    <servlet-class>pr2.loseweight.servlets.ServletUploadProfilePic</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>UploadServlet</servlet-name>
-    <url-pattern>/User_Profile/UploadServlet</url-pattern>
+    <servlet-name>uploadprofilepic</servlet-name>
+    <url-pattern>/User_Profile/uploadpic</url-pattern>
   </servlet-mapping>
 </web-app>

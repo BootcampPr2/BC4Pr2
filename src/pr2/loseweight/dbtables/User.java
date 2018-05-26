@@ -9,6 +9,7 @@ public class User {
 	private String username;
 	private String password;
 	private int isBanned;
+	private String profilePicUrl;
 	private Role role;
 	
 	public User() {}
@@ -56,6 +57,15 @@ public class User {
 		this.isBanned = isBanned;
 	}
 	
+		
+	public String getProfilePicUrl() {
+		return profilePicUrl;
+	}
+
+	public void setProfilePicUrl(String profilePicUrl) {
+		this.profilePicUrl = profilePicUrl;
+	}
+
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="roleID", referencedColumnName="roleID")
 	public Role getRole() {

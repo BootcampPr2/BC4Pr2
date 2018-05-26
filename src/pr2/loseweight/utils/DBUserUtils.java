@@ -30,10 +30,10 @@ public abstract class DBUserUtils {
 		Session session = sessionFactory.openSession();
 		boolean updateSuccessful;
 		try {
-		session.beginTransaction();
-		session.update(user);
-		session.getTransaction().commit();
-		updateSuccessful = true;
+			session.beginTransaction();
+			session.update(user);
+			session.getTransaction().commit();
+			updateSuccessful = true;
 		}catch(Exception e){
 			updateSuccessful = false;
 		}
@@ -42,17 +42,35 @@ public abstract class DBUserUtils {
 		}
 		return updateSuccessful;
 	} //end updatePassword()
-	
+
+	public static boolean updateProfilePic (SessionFactory sessionFactory, User user, String profilePicUrl) {
+		user.setProfilePicUrl(profilePicUrl);
+		boolean updateSuccessful;
+		Session session = sessionFactory.openSession();
+		try {
+			session.beginTransaction();
+			session.update(user);
+			session.getTransaction().commit();
+			updateSuccessful = true;
+		}catch(Exception e){
+			updateSuccessful = false;
+		}
+		finally{
+			session.close();		
+		}
+		return updateSuccessful;
+	} // end updateProfilePic()
+
 	public static boolean updateUser (SessionFactory sessionFactory, User user, double weight, double height, int age, String gender, int exerciseID) {
 		Session session = sessionFactory.openSession();
 		MetaRate metaRate = session.get(MetaRate.class, exerciseID);
 		Bmi bmi = new Bmi (weight, height, age, gender, metaRate, user);
 		boolean updateSuccessful;
 		try {
-		session.beginTransaction();
-		session.save(bmi);
-		session.getTransaction().commit();
-		updateSuccessful = true;
+			session.beginTransaction();
+			session.save(bmi);
+			session.getTransaction().commit();
+			updateSuccessful = true;
 		}catch(Exception e) {
 			updateSuccessful = false;
 		}
@@ -61,7 +79,7 @@ public abstract class DBUserUtils {
 		}
 		return updateSuccessful;
 	} //end updateUser()
-	
+
 	// Validate login
 	public static boolean login(SessionFactory sessionFactory, String username, String password) {
 		User myUser = getUserByUsername(sessionFactory, username);
@@ -87,8 +105,8 @@ public abstract class DBUserUtils {
 		session.close();
 		return myUser;
 	} // end getUserByUsername()
-	
-	
+
+
 	public static Bmi getUserBmiByUsername(SessionFactory sessionFactory, String username) {
 		Session session = sessionFactory.openSession();
 		User user = getUserByUsername(sessionFactory, username);
@@ -117,12 +135,12 @@ public abstract class DBUserUtils {
 			return null;
 		}
 	} // end bmiHistory()
-	
+
 	public static List<User> retrieveAllUsers(SessionFactory sessionFactory){
 		Session session = sessionFactory.openSession();
 		String retrieveAllUsers = "from User";
 		Query query = session.createQuery(retrieveAllUsers);
 		return query.getResultList();
 	} // end retrieveAllUsers()
-		
+
 } // end of class
