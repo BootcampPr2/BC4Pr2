@@ -15,8 +15,10 @@ import pr2.loseweight.dbtables.PrivateMessage;
 import pr2.loseweight.dbtables.Role;
 import pr2.loseweight.dbtables.User;
 
-public class DBAdminUtils {
+// class that contains methods to be used by Admins and God
+public abstract class DBAdminUtils {
 
+	// method that returns ALL private messages in the database (from all users)
 	public static List<PrivateMessage> displayAllPrivateMessages(SessionFactory sessionFactory) {
 		Session session = sessionFactory.openSession();
 		String selectAllMessages = "From PrivateMessage order by dateSubmission DESC";
@@ -26,42 +28,51 @@ public class DBAdminUtils {
 		return allMessages;
 	} //end displayAllPrivateMessages()
 
-	public static void banUnbanUser(SessionFactory sessionFactory, String[] listOfIdsString) {
+	// Toggles ban status. If user is banned, they get unbanned, and vice versa
+	public static void toggleBanStatus(SessionFactory sessionFactory, String[] listOfIdsString) {
 		Session session = sessionFactory.openSession();
+		User user;
+		int userID;
+		// Notice that beginTransaction and commit can be outside the for loop
 		session.beginTransaction();
 		for (int i=0;i<listOfIdsString.length;i++) {
-			int userID = Integer.parseInt(listOfIdsString [i]);
-			User user = session.get(User.class, userID);
+			userID = Integer.parseInt(listOfIdsString [i]);
+			user = session.get(User.class, userID);
 			if (user.getIsBanned() == 0) {
 				user.setIsBanned(1);
 			}else {
 				user.setIsBanned(0);
 			}
 			session.update(user);
-			session.getTransaction().commit();
 		}
+		session.getTransaction().commit();
 		session.close();
-	} //end banUnbanUser()
+	} //end toggleBanStatus()
 
-	public static void assignUnassignUser(SessionFactory sessionFactory, String[] listOfIdsString) {
+	// Toggles Role status between Administrator and Standard User. Can only be used by god. Admins cannot promote/demote others
+	public static void toggleRole(SessionFactory sessionFactory, String[] listOfIdsString) {
 		Session session = sessionFactory.openSession();
-		session.beginTransaction();
+		int userID;
+		User user;
+		// Preparing objects with the two possible roles
 		Role newRoleAdmin = session.get(Role.class, 2);
 		Role newRoleStandardUser = session.get(Role.class, 3);
+		session.beginTransaction();
 		for (int i=0;i<listOfIdsString.length;i++) {
-			int userID = Integer.parseInt(listOfIdsString [i]);
-			User user = session.get(User.class, userID);
+			userID = Integer.parseInt(listOfIdsString [i]);
+			user = session.get(User.class, userID);
 			if (user.getRole().getRoleID() == 3) {
 				user.setRole(newRoleAdmin);
 			}else {
 				user.setRole(newRoleStandardUser);
 			}
 			session.update(user);
-			session.getTransaction().commit();
 		}
+		session.getTransaction().commit();
 		session.close();
-	} //end assignUnassignUser()
+	} //end toggleRole()
 
+	// Deletes all the selected users. Uses HQL statement
 	public static void deleteUser(SessionFactory sessionFactory, String[] listOfIdsString) {
 		List<Integer> listOfIdsInt = new ArrayList<Integer>();
 		for (int i=0;i<listOfIdsString.length;i++) {

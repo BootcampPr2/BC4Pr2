@@ -15,10 +15,10 @@ import org.hibernate.query.Query;
 import pr2.loseweight.dbtables.Role;
 import pr2.loseweight.dbtables.User;
 
-
+// Class with methods related to users' private messages
 public abstract class DBUtils {
-	public static SessionFactory sessionFactory;
 	
+	// once a message is opened by a user, it is set as read in the database
 	public static void setRead(SessionFactory sessionFactory, int privateMessageID) {
 		Session session = sessionFactory.openSession();
 		PrivateMessage myMessage = session.get(PrivateMessage.class, privateMessageID);

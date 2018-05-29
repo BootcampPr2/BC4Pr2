@@ -20,10 +20,7 @@
 <link rel="stylesheet" type="text/css" href="Style.css">
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-
-<!-- <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-<scrip src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> -->
+<script src='cp_menu_users.js'></script>
 </head>
 <body>
 	<link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'>
@@ -32,7 +29,7 @@
 	<div id="background">
 		<img src="../Images/background.png" class="stretch" alt="" />
 	</div>
-
+	<form action="modifyuser" method="post">
 	<div class="container text-left">
 		<table>
 			<tr>
@@ -78,7 +75,7 @@
 					<% 
 					int userRole = allUsers.get(i).getRole().getRoleID();
 					if (userRole == 3){ %>
-						<td scope="row"><input class="selectMessages" type="checkbox" name="SU" value="bar1"></td>
+						<td scope="row"><input class="selectMessages" type="checkbox" name="SU" value="<%=allUsers.get(i).getUserID()%>"></td>
 					<% }else { %>
 						<td></td>
 					<% } %>
@@ -87,7 +84,12 @@
 					<% }else {%>
 						<td><%=allUsers.get(i).getUsername() %></td>
 					<% } %>
-					<td><%=allUsers.get(i).getRole().getRoleName() %></td>
+					<td><%=allUsers.get(i).getRole().getRoleName() %>
+					<% if (allUsers.get(i).getRole().getRoleName().equals("GOD")){ 
+					%> <img src="../Images/god.png" width="20" />
+					<%
+					}
+					%></td>
 					<td><%=bmi.getGender() %></td>
 					<td><%=bmi.getAge() %></td>
 				</tr>
@@ -99,6 +101,6 @@
 		</table>
 
 	</div>
-	<script src='cp_menu_users.js'></script>
+	</form>
 </body>
 </html>

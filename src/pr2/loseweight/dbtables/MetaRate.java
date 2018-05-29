@@ -9,6 +9,8 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.query.Query;
 
+
+// Metabolic rate is defined by a modifier, which in turn is defined by the level of weekly exercise of the user
 @Entity
 @Table (name="metabolic_rate")
 public class MetaRate {

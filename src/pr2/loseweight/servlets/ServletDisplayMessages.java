@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-import javax.servlet.ServletException; 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,35 +16,17 @@ import pr2.loseweight.dbtables.User;
 import pr2.loseweight.utils.DBUserUtils;
 import pr2.loseweight.utils.DBUtils;
 
-/**
- * Servlet implementation class ServletDisplayMessages
- */
+// Servlet that generates a txt file with all the messages of the user.
+// Used when the "Download All Messages" button in mail.jsp is clicked.
+// Allows the user to download all their messages.
 @WebServlet("/ServletDisplayMessages")
 public class ServletDisplayMessages extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public ServletDisplayMessages() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	public ServletDisplayMessages() {}
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setHeader("Content-Disposition","attachment; filename=allmymessages.txt");
-		//doGet(request, response);
 		response.setContentType("text/plain;charset=UTF-8");
 		String username = request.getParameter("username");
 		SessionFactory sessionFactory = (SessionFactory)request.getSession().getAttribute("sessionFactory");
@@ -57,8 +39,9 @@ public class ServletDisplayMessages extends HttpServlet {
 		out.close();
 		response.getWriter().write(allMessages); 
 
-	}
+	} // end doPost()
 
+	// Generates a String with all the messages of the user (sent and received)
 	protected String printAllMessages(List<PrivateMessage> incoming, List<PrivateMessage> sent) {
 		String allMessages="";
 		allMessages += ("****** ALL INCOMING MESSAGES ******\r\n");
@@ -82,5 +65,5 @@ public class ServletDisplayMessages extends HttpServlet {
 		}
 		allMessages += "\r\n************************* END OF SENT MESSAGES *************************\r\n\r\n";
 		return allMessages;
-	}
-}
+	} // end printAllMessages()
+} // end of class

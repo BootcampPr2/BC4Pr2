@@ -197,7 +197,7 @@ if (request.getParameter("weight") == null
 							<form method="post" action="uploadpic" enctype="multipart/form-data">
 								Select file to upload:
 								<input type="file" name="dataFile" id="fileChooser" accept="image/*" /><br/><br/>
-								<input type="submit" value="Upload" />
+								<input type="submit" value="Upload" /> <span style="color:red">Max file size: 2mb</span>
 							</form>
 						</div>
 						

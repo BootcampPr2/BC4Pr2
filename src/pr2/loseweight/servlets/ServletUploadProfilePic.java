@@ -22,12 +22,12 @@ import org.hibernate.SessionFactory;
 import pr2.loseweight.dbtables.User;
 import pr2.loseweight.utils.DBUserUtils;
 
-/**
- * Servlet implementation class UploadServlet
- */
-
-
+// Servlet used to upload a profile picture
 public class ServletUploadProfilePic extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	
+	final long MAX_FILE_SIZE = 2 * 1024 * 1024;
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)	throws ServletException, IOException {
 		boolean isMultipart = ServletFileUpload.isMultipartContent(request);
 		HttpSession httpSession = request.getSession();
@@ -39,6 +39,9 @@ public class ServletUploadProfilePic extends HttpServlet {
 
 			// Create a new file upload handler
 			ServletFileUpload upload = new ServletFileUpload(factory);
+			
+			// if max size is exceeded, process fails
+			upload.setSizeMax(MAX_FILE_SIZE);
 
 			try {
 				// Parse the request
@@ -47,19 +50,19 @@ public class ServletUploadProfilePic extends HttpServlet {
 				while (iterator.hasNext()) {
 					FileItem item = (FileItem) iterator.next();
 					if (!item.isFormField()) {
-						String fileExtension = FilenameUtils.getExtension(item.getName());
-
-						String fileName = Integer.toString(loggedUser.getUsername().hashCode()) + "." + fileExtension;    
-						String root = getServletContext().getRealPath("/");
-						File path = new File(root + "/Images/profilepics");
-						if (!path.exists()) {
-							boolean status = path.mkdirs();
-						}
-
-						File uploadedFile = new File(path + "/" + fileName);
-						System.out.println(uploadedFile.getAbsolutePath());
-						item.write(uploadedFile);
-						DBUserUtils.updateProfilePic((SessionFactory)httpSession.getAttribute("sessionFactory"), loggedUser, "http://localhost:8080/BC4Pr2/" + "/Images/profilepics/" + fileName);
+							String fileExtension = FilenameUtils.getExtension(item.getName());
+							// Using hashCode() to make sure that the final filename will depend on the user's username (which is unique)
+							String fileName = Integer.toString(loggedUser.getUsername().hashCode()) + "." + fileExtension;    
+							String root = getServletContext().getRealPath("/");
+							File path = new File(root + "/Images/profilepics");
+							if (!path.exists()) {
+								boolean status = path.mkdirs();
+							}
+	
+							File uploadedFile = new File(path + "/" + fileName);
+							System.out.println(uploadedFile.getAbsolutePath());
+							item.write(uploadedFile);
+							DBUserUtils.updateProfilePic((SessionFactory)httpSession.getAttribute("sessionFactory"), loggedUser, "http://localhost:8080/BC4Pr2/" + "/Images/profilepics/" + fileName);						
 					}
 				}
 			} catch (FileUploadException e) {
@@ -69,7 +72,7 @@ public class ServletUploadProfilePic extends HttpServlet {
 			}
 		}
 		response.sendRedirect("../User_Profile/user_update.jsp");
-	}
+	} // end doPost()
 
-}
+} // end of class
 

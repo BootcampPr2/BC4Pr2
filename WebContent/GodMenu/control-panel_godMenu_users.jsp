@@ -21,9 +21,11 @@
 <link rel="stylesheet" type="text/css" href="Style.css">
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'>
+<script src='cp_menu_users.js'></script>
 </head>
 <body>
-	<link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'>
+	
 	<br>
 
 	<div id="background">
@@ -82,8 +84,14 @@
 					<td><%=allUsers.get(i).getUsername() %> <span style="color: red; font-weight: bold">(banned)</span></td>
 					<% }else {%>
 					<td><%=allUsers.get(i).getUsername() %></td>
-					<% } %>
-					<td><%=allUsers.get(i).getRole().getRoleName() %></td>
+					<% } 
+					%>
+					<td><%=allUsers.get(i).getRole().getRoleName() %>
+					<% if (allUsers.get(i).getRole().getRoleName().equals("GOD")){ 
+					%> <img src="../Images/god.png" width="20" />
+					<%
+					}
+					%></td>
 					<td><%=bmi.getGender() %></td>
 					<td><%=bmi.getAge() %></td>
 				</tr>
@@ -94,6 +102,5 @@
 
 	</div>
 	</form>
-	<script src='cp_menu_users.js'></script>
 </body>
 </html>

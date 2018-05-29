@@ -125,16 +125,16 @@ function getFiltered(){
 }
 
 
-function deleteSelectedMessages(e){
+function deleteSelectedMessages(caller){
 	var allChecked = [];
 
-	if (e.name == "deleteReceived"){
+	if (caller.name == "deleteReceived"){
 		$('input[name=CI]').each(function(){
 			if($(this).prop('checked')){
 				allChecked.push($(this).val())
 			}
 		})
-	}else if(e.name == "deleteFiltered"){
+	}else if(caller.name == "deleteFiltered"){
 		$('input[name=CF]').each(function(){
 			if($(this).prop('checked')){
 				allChecked.push($(this).val())
@@ -148,37 +148,34 @@ function deleteSelectedMessages(e){
 		})
 	}
 	
-	ajaxDelete(allChecked);
-	setTimeout(refreshMailbox, 300);
+	ajaxDeleteMessages(allChecked, caller.name);
 
 }
 
-function deleteOpenedMessage(e){
-	if (e.name == "deleteIncomingMessage"){
+function deleteOpenedMessage(caller){
+	var deletedMessage;
+	if (caller.name == "deleteIncomingMessage")
+		deletedMessage = $('#inid').val();
+	else
+		deletedMessage = $('#senid').val();
+	
+	ajaxDeleteMessages(deletedMessage,caller.name);
 
-		$.ajax({
-			url : 'ajax-deletemessages.jsp',
-			data :{ 
-				checked: JSON.stringify($('#inid').val())
-			},
-			type : 'POST',
-		});
+	
+}
 
-		getIncoming();		
-		showIncoming();
-	}else{
-		$.ajax({
-			url : 'ajax-deletemessages.jsp',
-			data :{ 
-				checked: JSON.stringify($('#senid').val())
-			},
-			type : 'POST',
-		});
-
-		getSent();
-		updateCounter();		
-		showSent();
-	}
+function ajaxDeleteMessages(allChecked, caller){
+	$.ajax({
+		url : 'ajax-deletemessages.jsp',
+		data :{ 
+			checked: JSON.stringify(allChecked)
+		},
+		type : 'POST',
+		success:
+			function(){
+			refreshMailbox(caller);
+		}
+	});
 }
 
 function updateCounter(){
@@ -192,22 +189,13 @@ function updateCounter(){
 	);
 }
 
-function ajaxDelete(allChecked){
-	$.ajax({
-		url : 'ajax-deletemessages.jsp',
-		data :{ 
-			checked: JSON.stringify(allChecked)
-		},
-		type : 'POST',
-	});
-}
-
 function refreshMailbox(caller){
-	if (caller == "deleteReceived"){
+	console.log(caller);
+	if ((caller == "deleteReceived") || (caller == "deleteIncomingMessage")){
 		getIncoming();
 		showIncoming();
 	}
-	else if (caller == "deleteSent"){
+	else if ((caller == "deleteSent") || (caller == "deleteSentMessage")) {
 		getSent();
 		showSent();
 		updateCounter()
@@ -232,21 +220,21 @@ $("#checkAllFiltered").click(function() {
 
 
 function showIncoming(){
-	$('.inbox-body.inbox-incoming').show();
 	$('.inbox-body.inbox-sent').hide();
 	$('.inbox-body.inbox-readInboxMessage').hide();
 	$('.inbox-body.inbox-readSentMessage').hide();
 	$('.inbox-body.filtered-messages').hide();
 	$('.inbox-body.inbox-compose').hide();   
+	$('.inbox-body.inbox-incoming').show();
 }
 
 function showSent(){
 	$('.inbox-body.inbox-incoming').hide();
-	$('.inbox-body.inbox-sent').show();
 	$('.inbox-body.inbox-readInboxMessage').hide();
 	$('.inbox-body.inbox-readSentMessage').hide();
 	$('.inbox-body.filtered-messages').hide();
 	$('.inbox-body.inbox-compose').hide();  
+	$('.inbox-body.inbox-sent').show();
 }
 
 function showFiltered(){
@@ -254,6 +242,6 @@ function showFiltered(){
 	$('.inbox-body.inbox-sent').hide();
 	$('.inbox-body.inbox-readInboxMessage').hide();
 	$('.inbox-body.inbox-readSentMessage').hide();
-	$('.inbox-body.filtered-messages').show();
 	$('.inbox-body.inbox-compose').hide();
+	$('.inbox-body.filtered-messages').show();
 }

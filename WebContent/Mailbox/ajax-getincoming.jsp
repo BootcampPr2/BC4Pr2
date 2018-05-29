@@ -52,7 +52,7 @@ User loggedUser = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getA
 				int id = myMessage.getPrivateMessageID();
 				if (myMessage.getIsRead() == 0) {
 		%>
-					<tr class="unread" id="<%=id%>">
+					<tr class="unread">
 		<%
 				}else{
 		%>

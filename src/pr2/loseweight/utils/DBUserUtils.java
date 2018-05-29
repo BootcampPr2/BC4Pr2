@@ -11,6 +11,7 @@ import org.hibernate.query.Query;
 
 import pr2.loseweight.dbtables.*;
 
+// Class that contains methods used by users
 public abstract class DBUserUtils {
 
 	public static void registerUser (SessionFactory sessionFactory, String username, String password, double weight, double height, int age, String gender, int exerciseID) {
@@ -43,6 +44,7 @@ public abstract class DBUserUtils {
 		return updateSuccessful;
 	} //end updatePassword()
 
+	// updates related column in database to point to the location of the user's picture
 	public static boolean updateProfilePic (SessionFactory sessionFactory, User user, String profilePicUrl) {
 		user.setProfilePicUrl(profilePicUrl);
 		boolean updateSuccessful;
@@ -61,6 +63,7 @@ public abstract class DBUserUtils {
 		return updateSuccessful;
 	} // end updateProfilePic()
 
+	// creates new BMI
 	public static boolean updateUser (SessionFactory sessionFactory, User user, double weight, double height, int age, String gender, int exerciseID) {
 		Session session = sessionFactory.openSession();
 		MetaRate metaRate = session.get(MetaRate.class, exerciseID);

@@ -5,6 +5,7 @@ import javax.persistence.*;
 
 import pr2.loseweight.utils.*;
 
+// Class that corresponds to the BMI (Body Mass Index) table of the database
 @Entity
 @Table(name = "bmi")
 public class Bmi {
@@ -15,10 +16,10 @@ public class Bmi {
 	private String gender;
 	private double bmi;
 	private String classification;
-	private double bmr;
-	private double emr;
+	private double bmr; // Basal Metabolic Rate
+	private double emr; // Exercise Metabolic Rate
 	private Timestamp dateTimePosted;
-	private MetaRate metarate;
+	private MetaRate metarate; // Modifer based on exercise/activity
 	private User user;
 	
 	public Bmi () {} // default constructor
@@ -146,6 +147,7 @@ public class Bmi {
 		this.user = user;
 	}
 	
+	// calculation of BMI based on weight and height of user
 	public double calculateBMI() {
 		double bmi = this.weight/(this.height * this.height);
 		return Math.round(bmi * 100.0) / 100.0;
@@ -165,9 +167,10 @@ public class Bmi {
 		return classification; 
 	}
 	
+	// calculation of BMR based on gender, weight, height and age of user
 	public double calculateBMR() {
 		double bmr;
-		if (this.gender == "F") {
+		if (this.gender.equals("F")) {
 			bmr = 655+(9.6*this.weight)+(1.8*100*this.height)-(4.7*this.age);
 		}else {
 			bmr = 66+(13.7*this.weight)+(5*100*this.height)-(6.8*this.age);
@@ -175,6 +178,8 @@ public class Bmi {
 		return Math.round(bmr * 100.0) / 100.0;
 	}
 	
+	
+	// calculation of EMR based on modifier and BMR
 	public double calculateEMR() {
 		double emr = this.bmr * metarate.getModifier();
 		return Math.round(emr * 100.0) / 100.0;

@@ -70,12 +70,7 @@ Bmi bmi = DBUserUtils.getUserBmiByUsername((SessionFactory)httpSession.getAttrib
 							<div class="box-body">
 								<div class="col-sm-6">
 									<div id="userImg" align="center">
-										<img alt="User Pic" src="https://i2.wp.com/beebom.com/wp-content/uploads/2016/01/Reverse-Image-Search-Engines-Apps-And-Its-Uses-2016.jpg?resize=640%2C426" class="img-rounded img-responsive">
-										<input id="profile-image-upload" class="hidden" type="file">
-										<div style="color: #999;"></div>
-										<!--Upload Image Js And Css-->
-
-
+										<img alt="User Pic" src="<%=loggedUser.getProfilePicUrl()%>" class="img-rounded img-responsive" width="200">
 									</div>
 									<br>
 									<!-- /input-group -->
@@ -90,7 +85,7 @@ Bmi bmi = DBUserUtils.getUserBmiByUsername((SessionFactory)httpSession.getAttrib
 									<%
 									SimpleDateFormat myFormat = new SimpleDateFormat ("dd/MM/yyyy HH:mm");
 									String date = myFormat.format(bmi.getDateTimePosted());%>
-									<span><p>Last bmi update since: <%=date %></p></span>
+									<span><p>Last BMI update: <%=date %></p></span>
 								</div>
 								<div class="clearfix"></div>
 								<hr style="margin: 5px 0 5px 0;">

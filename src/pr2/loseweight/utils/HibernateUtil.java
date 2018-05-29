@@ -14,6 +14,7 @@ public class HibernateUtil {
     	// do nothing
     }
 
+    // Generate Session Factory if one is not created yet
     public static synchronized SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
       		StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();

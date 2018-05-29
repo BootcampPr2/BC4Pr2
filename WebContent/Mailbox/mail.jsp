@@ -99,7 +99,7 @@
 		<div class="mail-box">
 			<aside class="sm-side">
 			<div class="user-head">
-				<a class="inbox-avatar" href="javascript:;"> <img width="64" height="60" src="http://bootsnipp.com/img/avatars/ebeb306fd7ec11ab68cbcaa34282158bd80361a7.jpg">
+				<a class="inbox-avatar" href="../User_Profile/user_update.jsp"> <img width="64" src="<%=loggedUser.getProfilePicUrl()%>">
 				</a>
 				<div class="user-name">
 					<h5><%=loggedUser.getUsername()%></h5>
