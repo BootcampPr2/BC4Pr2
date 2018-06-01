@@ -7,9 +7,9 @@
     <!-- Database connection settings -->
     <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
     <property name="connection.url">jdbc:mysql://localhost:3306/lose_weight_pr2_db?useUnicode=true&amp;characterEncoding=UTF-8</property>
-    <property name="connection.username">kriki1989</property>
-    <property name="connection.password">1234</property>
-    <property name="show_sql">false</property>
+    <property name="connection.username">bla1r84</property>
+    <property name="connection.password">12345</property>
+    <property name="show_sql">true</property>
         
     <mapping class="pr2.loseweight.dbtables.Role" />
     <mapping class="pr2.loseweight.dbtables.User" />
