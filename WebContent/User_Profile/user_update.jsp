@@ -43,7 +43,10 @@
 			<script> alert ("Password is not fulfilling the requirements.") </script>
 		<%
 		}
-	}
+	} %>
+	<%-- <% if (request.getParameter("dataFile")!=null) {%>
+		<script> alert ("Picture was uploaded successfully.") </script>
+	<% } %> --%>
 %>
 <%
 if (request.getParameter("weight") == null 

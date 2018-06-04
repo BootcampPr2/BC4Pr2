@@ -39,7 +39,7 @@ if (httpSession.getAttribute("loggedUserUsername") != null) {
 								<a href="#login" class="active" id="login-form-link">Login</a>
 							</div>
 							<div class="col-xs-6">
-								<a href="#register" id="register-form-link">Register</a>
+								<a href="#register" id="register-form-link">Sign up</a>
 							</div>
 						</div>
 						<hr>

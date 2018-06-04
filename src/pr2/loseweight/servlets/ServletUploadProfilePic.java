@@ -54,7 +54,7 @@ public class ServletUploadProfilePic extends HttpServlet {
 							// Using hashCode() to make sure that the final filename will depend on the user's username (which is unique)
 							String fileName = Integer.toString(loggedUser.getUsername().hashCode()) + "." + fileExtension;    
 							String root = getServletContext().getRealPath("/");
-							File path = new File("/..Images/profilepics");
+							File path = new File(root + "/Images/profilepics");
 							if (!path.exists()) {
 								boolean status = path.mkdirs();
 							}
@@ -73,6 +73,6 @@ public class ServletUploadProfilePic extends HttpServlet {
 		}
 		response.sendRedirect("../User_Profile/user_update.jsp");
 	} // end doPost()
-
+	
 } // end of class
 

@@ -78,7 +78,7 @@
 					<% if (i !=0) { %>
 					<td scope="row"><input class="selectMessages" type="checkbox" name="SU" value="<%=allUsers.get(i).getUserID()%>"></td>
 					<% }else { %>
-					<td></td>
+					<td><img src="../Images/god.png" width="20" /></td>
 					<% } %>
 					<% if (allUsers.get(i).getIsBanned() == 1){ %>
 					<td><%=allUsers.get(i).getUsername() %> <span style="color: red; font-weight: bold">(banned)</span></td>
@@ -86,12 +86,7 @@
 					<td><%=allUsers.get(i).getUsername() %></td>
 					<% } 
 					%>
-					<td><%=allUsers.get(i).getRole().getRoleName() %>
-					<% if (allUsers.get(i).getRole().getRoleName().equals("GOD")){ 
-					%> <img src="../Images/god.png" width="20" />
-					<%
-					}
-					%></td>
+					<td><%=allUsers.get(i).getRole().getRoleName() %></td>
 					<td><%=bmi.getGender() %></td>
 					<td><%=bmi.getAge() %></td>
 				</tr>
