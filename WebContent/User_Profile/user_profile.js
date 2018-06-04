@@ -50,10 +50,9 @@ $(document).ready(function(){
 		$('#obese').addClass('category');
 	}
 	
-});
-
-$("#checkAll").click(function() {
-	$(".tickbox").prop('checked',$(this).prop('checked'));
+	$("#checkAll").click(function() {
+		$(".tickbox").prop('checked',$(this).prop('checked'));
+	});
 });
 
 $(function() {

@@ -44,16 +44,30 @@
 		<%
 		}
 	} %>
-	<%-- <% if (request.getParameter("dataFile")!=null) {%>
+	<% if ((Boolean)request.getAttribute("picUploaded") != null ) {
+		if ((Boolean)request.getAttribute("picUploaded") == true) {
+		%>
 		<script> alert ("Picture was uploaded successfully.") </script>
-	<% } %> --%>
-%>
+	<% 
+		}else{
+	%>
+		<script> alert ("Picture wasn't uploaded.") </script>
+	<% 	
+		}
+		} 
+	%>
 <%
 if (request.getParameter("weight") == null 
 && request.getParameter("height") == null 
 && request.getParameter("age") == null 
 && request.getParameter("RG") == null 
 && request.getParameter("RE") == null) {
+}else if (request.getParameter("weight") == "" 
+		&& request.getParameter("height") == "" 
+		&& request.getParameter("age") == "" 
+		&& request.getParameter("RG") == null 
+		&& request.getParameter("RE") == null) {
+	%> <script> alert ("No change occured. At least one field should be updated.") </script> <%
 }else {
 	bmi = DBUserUtils.getUserBmiByUsername((SessionFactory)httpSession.getAttribute("sessionFactory"), httpSession.getAttribute("loggedUserUsername").toString());
 	double weight = bmi.getWeight();
@@ -91,7 +105,7 @@ if (request.getParameter("weight") == null
 	</div>
 
 	<!-- ............................NAVBAR MENU............................  -->
-	<nav class="navbar navbar-default navbar-static-top">
+	<nav class="navbar navbar-default navbar-fixed-top">
 	<div class="container-fluid">
 		<div class="navbar-header">
 			<a class="navbar-brand" href="#"><span style="font-weight: bold"><%=loggedUser.getUsername()%></span></a>

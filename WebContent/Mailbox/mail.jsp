@@ -50,7 +50,7 @@
 				%> <script> alert ("Message sent successfully") </script> <%
 			}else {
 				if (messageToBeSent.getMessageData().length()>1500)
-					%> <script> alert ("Message is more than 1500 words") </script> <%
+					%> <script> alert ("Message is more than 1500 characters") </script> <%
 				else
 					%> <script> alert ("Username doesn't exist") </script> <%
 			}
@@ -61,7 +61,7 @@
 <link rel="stylesheet" type="text/css" href="Style.css">
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-<script  type="text/javascript" src='coding.js'></script>
+<script type="text/javascript" src='coding.js'></script>
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Mailbox</title>
@@ -72,7 +72,7 @@
 	</div>
 	
 		<!-- ............................NAVBAR MENU............................  -->
-	<nav class="navbar navbar-default navbar-static-top">
+	<nav class="navbar navbar-default navbar-fixed-top">
 	<div class="container-fluid">
 		<div class="navbar-header">
 			<a class="navbar-brand" href="#"><span style="font-weight: bold"><%=loggedUser.getUsername()%></span></a>
@@ -122,7 +122,7 @@
 			%>
 			<ul class="inbox-nav inbox-divider">
 				<li><a href="#inbox" id="IM" onclick="getIncoming()"><i class="fa fa-inbox"></i>Incoming Messages <span id="counter" class="label label-danger pull-right"><%=countUnread%></span></a></li>
-				<li><a href="#sent" id="SM" onclick="getSent()"><i class="fa fa-external-link"></i>Sent Message</a></li>
+				<li><a href="#sent" id="SM" onclick="getSent()"><i class="fa fa-external-link"></i>Sent Messages</a></li>
 				<li style="text-align:center">
 					<form method="post" action="messages.txt">
 						<button type="submit" class="btn btn-link"><i class="glyphicon glyphicon-save"></i> Download all messages</button> 

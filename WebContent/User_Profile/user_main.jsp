@@ -36,7 +36,7 @@ Bmi bmi = DBUserUtils.getUserBmiByUsername((SessionFactory)httpSession.getAttrib
 	</div>
 
 <!-- ............................NAVBAR MENU............................  -->
-	<nav class="navbar navbar-default navbar-static-top">
+	<nav class="navbar navbar-default navbar-fixed-top">
 	<div class="container-fluid">
 		<div class="navbar-header">
 			<a class="navbar-brand" href="#"><span style="font-weight: bold"><%=loggedUser.getUsername()%></span></a>
@@ -63,7 +63,7 @@ Bmi bmi = DBUserUtils.getUserBmiByUsername((SessionFactory)httpSession.getAttrib
 			<div class="col-md-7 ">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h4>USER PROFILE</h4>
+						<h4>MY PROFILE</h4>
 					</div>
 					<div class="panel-body">
 						<div class="box box-info">

@@ -66,7 +66,7 @@ public class User {
 		this.profilePicUrl = profilePicUrl;
 	}
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name="roleID", referencedColumnName="roleID")
 	public Role getRole() {
 		return role;

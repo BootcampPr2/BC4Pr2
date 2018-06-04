@@ -372,6 +372,7 @@ ul {
 }
 #background1 {
     z-index: 1;
+    margin-top: 100px;
 }
 #background {
     width: 100%; 

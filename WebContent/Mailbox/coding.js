@@ -35,6 +35,18 @@ $('document').ready(function(){
 	});
 	
 	$('[data-toggle="tooltip"]').tooltip(); 
+	
+	$("#checkAll").click(function() {
+		$(".mail-checkbox.mail-inbox").prop('checked',$(this).prop('checked'));
+	});
+
+	$("#checkAll_Sent").click(function() {
+		$(".mail-checkbox.mail-sent").prop('checked',$(this).prop('checked'));
+	});
+
+	$("#checkAllFiltered").click(function() {
+		$(".mail-checkbox.mail-filtered").prop('checked',$(this).prop('checked'));
+	});
 
 });
 
@@ -205,19 +217,6 @@ function refreshMailbox(caller){
 		showFiltered();
 	}
 }
-
-$("#checkAll").click(function() {
-	$(".mail-checkbox.mail-inbox").prop('checked',$(this).prop('checked'));
-});
-
-$("#checkAll_Sent").click(function() {
-	$(".mail-checkbox.mail-sent").prop('checked',$(this).prop('checked'));
-});
-
-$("#checkAllFiltered").click(function() {
-	$(".mail-checkbox.mail-filtered").prop('checked',$(this).prop('checked'));
-});
-
 
 function showIncoming(){
 	$('.inbox-body.inbox-sent').hide();

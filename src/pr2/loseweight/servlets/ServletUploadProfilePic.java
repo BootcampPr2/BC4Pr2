@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -32,7 +33,7 @@ public class ServletUploadProfilePic extends HttpServlet {
 		boolean isMultipart = ServletFileUpload.isMultipartContent(request);
 		HttpSession httpSession = request.getSession();
 		User loggedUser = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getAttribute("sessionFactory"), httpSession.getAttribute("loggedUserUsername").toString());
-
+		Boolean uploaded = false;
 		if (isMultipart) {
 			// Create a factory for disk-based file items
 			FileItemFactory factory = new DiskFileItemFactory();
@@ -42,7 +43,6 @@ public class ServletUploadProfilePic extends HttpServlet {
 			
 			// if max size is exceeded, process fails
 			upload.setSizeMax(MAX_FILE_SIZE);
-
 			try {
 				// Parse the request
 				List items = upload.parseRequest(request);
@@ -63,6 +63,7 @@ public class ServletUploadProfilePic extends HttpServlet {
 							System.out.println(uploadedFile.getAbsolutePath());
 							item.write(uploadedFile);
 							DBUserUtils.updateProfilePic((SessionFactory)httpSession.getAttribute("sessionFactory"), loggedUser, "http://localhost:8080/BC4Pr2/" + "/Images/profilepics/" + fileName);						
+							uploaded = true;
 					}
 				}
 			} catch (FileUploadException e) {
@@ -71,7 +72,10 @@ public class ServletUploadProfilePic extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
-		response.sendRedirect("../User_Profile/user_update.jsp");
+		request.setAttribute("picUploaded", uploaded);
+		RequestDispatcher rd;
+		rd = getServletContext().getRequestDispatcher("/User_Profile/user_update.jsp");
+		rd.forward(request, response);
 	} // end doPost()
 	
 } // end of class
