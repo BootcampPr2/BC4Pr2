@@ -1,6 +1,11 @@
 package pr2.loseweight.utils;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
+
+import javax.xml.bind.DatatypeConverter;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -17,7 +22,18 @@ public abstract class DBUserUtils {
 	public static void registerUser (SessionFactory sessionFactory, String username, String password, double weight, double height, int age, String gender, int exerciseID) {
 		Session session = sessionFactory.openSession();
 		MetaRate myMetaRate = session.get(MetaRate.class, exerciseID);
-		User user = new User (username, password);
+		MessageDigest digest = null;
+		try {
+			digest = MessageDigest.getInstance("SHA-256");
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+	    String hex = DatatypeConverter.printHexBinary(hash);
+	    
+		User user = new User (username, hex);
+		
 		Bmi bmi = new Bmi (weight, height, age, gender, myMetaRate, user);
 		session.beginTransaction();
 		session.save(user);
@@ -27,7 +43,17 @@ public abstract class DBUserUtils {
 	} //end registerUser()
 
 	public static boolean updatePassword (SessionFactory sessionFactory, User user, String password) {	
-		user.setPassword(password);
+		MessageDigest digest = null;
+		try {
+			digest = MessageDigest.getInstance("SHA-256");
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+	    String hex = DatatypeConverter.printHexBinary(hash);
+	    
+		user.setPassword(hex);
 		Session session = sessionFactory.openSession();
 		boolean updateSuccessful;
 		try {
@@ -85,11 +111,22 @@ public abstract class DBUserUtils {
 
 	// Validate login
 	public static boolean login(SessionFactory sessionFactory, String username, String password) {
+		MessageDigest digest = null;
+		try {
+			digest = MessageDigest.getInstance("SHA-256");
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+	    String hex = DatatypeConverter.printHexBinary(hash);
+		
+		
 		User myUser = getUserByUsername(sessionFactory, username);
 		if (myUser == null)
 			return false;
 		else {
-			if (myUser.getPassword().equals(password))
+			if (myUser.getPassword().equals(hex))
 				return true;
 			else return false;
 		}

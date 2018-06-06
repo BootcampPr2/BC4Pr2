@@ -387,3 +387,11 @@ ul {
     height:100%;
 }
 
+.messageBody{
+	border-style:solid;
+	border-width:1px;
+	border-color:#CCC;
+	height:118px;
+	overflow:auto;
+	text-align:left;
+}

@@ -46,6 +46,7 @@ User loggedUser = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getA
 				myMessage = sentMessages.get(i);
 				String user = myMessage.getReceiver().getUsername();
 				String message = myMessage.getMessageData();
+				String messageReplaceQuotes = message.replace("&#39;","\\'");
 				Timestamp date = myMessage.getDateSubmission();
 				String formattedDate = myFormat.format(date);
 				int id = myMessage.getPrivateMessageID();
@@ -54,11 +55,11 @@ User loggedUser = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getA
 					<td class="inbox-small-cells"><input type="checkbox"
 						class="mail-checkbox mail-sent" name="CS" value="<%=id%>"></td>
 					<td class="view-message 1 dont-show"
-						onclick="openSentMessage('<%=user%>','<%=message%>','<%=formattedDate%>', <%=id%>)"><%=user%></td>
+						onclick="openSentMessage('<%=user%>','<%=messageReplaceQuotes%>','<%=formattedDate%>', <%=id%>)"><%=user%></td>
 					<td class="view-message 1 messageStyle"
-						onclick="openSentMessage('<%=user%>','<%=message%>','<%=formattedDate%>', <%=id%>)"><%=trimMessage(message)%></td>
+						onclick="openSentMessage('<%=user%>','<%=messageReplaceQuotes%>','<%=formattedDate%>', <%=id%>)"><%=trimMessage(message)%></td>
 					<td class="view-message 1 text-right"
-						onclick="openSentMessage('<%=user%>','<%=message%>','<%=formattedDate%>', <%=id%>)"><%=formattedDate%></td>
+						onclick="openSentMessage('<%=user%>','<%=messageReplaceQuotes%>','<%=formattedDate%>', <%=id%>)"><%=formattedDate%></td>
 				</tr>
 		<%
 			}

@@ -54,6 +54,7 @@ User loggedUser = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getA
 				from = myMessage.getSender().getUsername();
 				to = myMessage.getReceiver().getUsername();
 				message = myMessage.getMessageData();
+				String messageReplaceQuotes = message.replace("&#39;","\\'");
 				date = myMessage.getDateSubmission();
 				String formattedDate = myFormat.format(date);
 				id = myMessage.getPrivateMessageID();
@@ -74,10 +75,10 @@ User loggedUser = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getA
 						<td class="view-message  dont-show"
 		<%					
 							if (to.equals(loggedUser.getUsername())){
-							%>onclick="openInboxMessage('<%=from%>','<%=message%>','<%=formattedDate%>', <%=id%>, <%=myMessage.getIsRead()%>)"<%
+							%>onclick="openInboxMessage('<%=from%>','<%=messageReplaceQuotes%>','<%=formattedDate%>', <%=id%>, <%=myMessage.getIsRead()%>)"<%
 							}
 							else{
-							%>onclick="openSentMessage('<%=to%>','<%=message%>','<%=formattedDate%>', <%=id%>, 0)"<%
+							%>onclick="openSentMessage('<%=to%>','<%=messageReplaceQuotes%>','<%=formattedDate%>', <%=id%>, 0)"<%
 							}
 		%>
 						>
@@ -86,30 +87,30 @@ User loggedUser = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getA
 						<td class="view-message  dont-show"
 		<%					
 							if (to.equals(loggedUser.getUsername())){
-							%>onclick="openInboxMessage('<%=from%>','<%=message%>','<%=formattedDate%>', <%=id%>, <%=myMessage.getIsRead()%>)"<%
+							%>onclick="openInboxMessage('<%=from%>','<%=messageReplaceQuotes%>','<%=formattedDate%>', <%=id%>, <%=myMessage.getIsRead()%>)"<%
 							}
 							else{
-							%>onclick="openSentMessage('<%=to%>','<%=message%>','<%=formattedDate%>', <%=id%>, 0)"<%
+							%>onclick="openSentMessage('<%=to%>','<%=messageReplaceQuotes%>','<%=formattedDate%>', <%=id%>, 0)"<%
 							}
 		%>
 						><%=to%></td>
 						<td class="view-message  dont-show"
 		<%					
 							if (to.equals(loggedUser.getUsername())){
-							%>onclick="openInboxMessage('<%=from%>','<%=message%>','<%=formattedDate%>', <%=id%>, <%=myMessage.getIsRead()%>)"<%
+							%>onclick="openInboxMessage('<%=from%>','<%=messageReplaceQuotes%>','<%=formattedDate%>', <%=id%>, <%=myMessage.getIsRead()%>)"<%
 							}
 							else{
-							%>onclick="openSentMessage('<%=to%>','<%=message%>','<%=formattedDate%>', <%=id%>, 0)"<%
+							%>onclick="openSentMessage('<%=to%>','<%=messageReplaceQuotes%>','<%=formattedDate%>', <%=id%>, 0)"<%
 							}
 		%>
 						><%=trimMessage(message)%></td>
 						<td class="view-message  dont-show text-right"
 		<%					
 							if (to.equals(loggedUser.getUsername())){
-							%>onclick="openInboxMessage('<%=from%>','<%=message%>','<%=formattedDate%>', <%=id%>, <%=myMessage.getIsRead()%>)"<%
+							%>onclick="openInboxMessage('<%=from%>','<%=messageReplaceQuotes%>','<%=formattedDate%>', <%=id%>, <%=myMessage.getIsRead()%>)"<%
 							}
 							else{
-							%>onclick="openSentMessage('<%=to%>','<%=message%>','<%=formattedDate%>', <%=id%>, 0)"<%
+							%>onclick="openSentMessage('<%=to%>','<%=messageReplaceQuotes%>','<%=formattedDate%>', <%=id%>, 0)"<%
 							}
 		%>
 						><%=formattedDate%></td>

@@ -47,6 +47,7 @@ User loggedUser = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getA
 				myMessage = receivedMessages.get(i);
 				String user = myMessage.getSender().getUsername();
 				String message = myMessage.getMessageData();
+				String messageReplaceQuotes = message.replace("&#39;","\\'");
 				Timestamp date = myMessage.getDateSubmission();
 				String formattedDate = myFormat.format(date);
 				int id = myMessage.getPrivateMessageID();
@@ -63,11 +64,11 @@ User loggedUser = DBUserUtils.getUserByUsername((SessionFactory)httpSession.getA
 						<td class="inbox-small-cells"><input type="checkbox"
 							class="mail-checkbox mail-inbox" name="CI" value="<%=id%>"></td>
 						<td class="view-message  dont-show"
-							onclick="openInboxMessage('<%=user%>','<%=message%>','<%=formattedDate%>', <%=id%>, <%=myMessage.getIsRead()%>)"><%=user%></td>
+							onclick="openInboxMessage('<%=user%>','<%=messageReplaceQuotes%>','<%=formattedDate%>', <%=id%>, <%=myMessage.getIsRead()%>)"><%=user%></td>
 						<td class="view-message messageStyle"
-							onclick="openInboxMessage('<%=user%>','<%=message%>','<%=formattedDate%>', <%=id%>, <%=myMessage.getIsRead()%>)"><%=trimMessage(message)%></td>
+							onclick="openInboxMessage('<%=user%>','<%=messageReplaceQuotes%>','<%=formattedDate%>', <%=id%>, <%=myMessage.getIsRead()%>)"><%=trimMessage(message)%></td>
 						<td class="view-message  text-right"
-							onclick="openInboxMessage('<%=user%>','<%=message%>','<%=formattedDate%>', <%=id%>, <%=myMessage.getIsRead()%>)"><%=formattedDate%></td>
+							onclick="openInboxMessage('<%=user%>','<%=messageReplaceQuotes%>','<%=formattedDate%>', <%=id%>, <%=myMessage.getIsRead()%>)"><%=formattedDate%></td>
 					</tr>
 
 		<%

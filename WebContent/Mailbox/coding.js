@@ -34,6 +34,40 @@ $('document').ready(function(){
 		$('.inbox-body.inbox-sent').show();                      		
 	});
 	
+	$('#sendMessage').submit(function(){
+		$("img.dollar").replaceWith("$-)");
+		$("img.kiss").replaceWith(":-*");
+		$("img.love").replaceWith(":love");
+		$("img.smile").replaceWith(":-D");
+		$("img.tongue").replaceWith(":-P");
+		var message = $('#messageBody').html();
+		message = $.trim(message);
+		//message = message.split('<br>').join('\n');
+		message = message.split('<div>').join('<br>');
+		message = message.split('</div>').join('');
+		$("#inputBody").val(message);
+	});
+	
+	$('#dollars').click(function(){
+		$('#messageBody').append('<img class="dollar" src="../Images/emoticons/dollars.png" title="$-)" />');
+	});
+	
+	$('#kiss').click(function(){
+		$('#messageBody').append('<img class="kiss" src="../Images/emoticons/kiss.png" title=":-*" />');
+	});
+	
+	$('#love').click(function(){
+		$('#messageBody').append('<img class="love" src="../Images/emoticons/love.png" title=":love" />');
+	});
+	
+	$('#smile').click(function(){
+		$('#messageBody').append('<img class="smile" src="../Images/emoticons/smile.png" title=":-D" />');
+	});
+	
+	$('#tongue').click(function(){
+		$('#messageBody').append('<img class="tongue" src="../Images/emoticons/tongue.png" title=":-P" />');
+	});
+	
 	$('[data-toggle="tooltip"]').tooltip(); 
 	
 	$("#checkAll").click(function() {
@@ -52,8 +86,9 @@ $('document').ready(function(){
 
 function openInboxMessage(myUser,myMessage,myDate,id,isRead) {
 	$('#fromView').val(myUser);
-	myMessage = myMessage.replace(/<br\s*\/?>/mg,"\n");
-	$('#messageView').val(myMessage);	
+	//myMessage = myMessage.replace(/<br\s*\/?>/mg,"\n");
+	myMessage = replaceEmoji(myMessage);
+	$('#messageViewIncoming').html(myMessage);	
 	$('#dateView').val(myDate);
 	$('#inid').val(id);
 
@@ -83,8 +118,9 @@ function openInboxMessage(myUser,myMessage,myDate,id,isRead) {
 
 function openSentMessage(myUser,myMessage,myDate,id) {
 	$('#toView').val(myUser);
-	myMessage = myMessage.replace(/<br\s*\/?>/mg,"\n");
-	$('#messageView1').val(myMessage);
+	//myMessage = myMessage.replace(/<br\s*\/?>/mg,"\n");
+	myMessage = replaceEmoji(myMessage);
+	$('#messageViewSent').html(myMessage);
 	$('#dateView1').val(myDate);
 	$('#senid').val(id);
 	
@@ -243,4 +279,13 @@ function showFiltered(){
 	$('.inbox-body.inbox-readSentMessage').hide();
 	$('.inbox-body.inbox-compose').hide();
 	$('.inbox-body.filtered-messages').show();
+}
+
+function replaceEmoji(myMessage){
+	myMessage = myMessage.replace(/\$\-\)/g,"<img class='dollar' src='../Images/emoticons/dollars.png' title='$-)' />");
+	myMessage = myMessage.replace(/\:\-\*/g,"<img class='kiss' src='../Images/emoticons/kiss.png' title=':-*' />");
+	myMessage = myMessage.replace(/:love/g,"<img class='love' src='../Images/emoticons/love.png' title=':love' />");
+	myMessage = myMessage.replace(/:-D/g,"<img class='smile' src='../Images/emoticons/smile.png' title=':-D' />");
+	myMessage = myMessage.replace(/:-P/g,"<img class='tongue' src='../Images/emoticons/tongue.png' title=':-P' />");
+	return myMessage;
 }

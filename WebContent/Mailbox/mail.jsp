@@ -247,7 +247,7 @@
 			<!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
 			<div class="inbox-body inbox-compose">
 				<div class="mail-option">
-					<form role="form" class="form-horizontal" action="mail.jsp" method="post">
+					<form id="sendMessage" role="form" class="form-horizontal" action="mail.jsp" method="post">
 						<div>
 							<button type="submit" class="btn btn-primary">
 								Send message&nbsp;<i class="fa fa-arrow-circle-right fa-lg"></i>
@@ -261,10 +261,22 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-12" for="inputBody">Message</label>
-							<div class="col-sm-12">
-								<textarea class="form-control" name="inputBody" id="inputBody" rows="12"></textarea>
+							<label class="col-sm-12" for="inputBody">Message</label><br>
+							<div class="messageBody" contentEditable="true" name="messageBody" id="messageBody">
 							</div>
+							<textarea name="inputBody" id="inputBody" style="display:none;"></textarea>
+						</div>
+						<div class="form-group">
+							<table>
+								<tr>
+									<td><img id="dollars" src="../Images/emoticons/dollars.png" title="$-)" /></td>
+									<td><img id="kiss" src="../Images/emoticons/kiss.png" title=":-*" /></td>
+									<td><img id="love" src="../Images/emoticons/love.png" title=":love" /></td>
+									<td><img id="smile" src="../Images/emoticons/smile.png" title=":-D" /></td>
+									<td><img id="tongue" src="../Images/emoticons/tongue.png" title=":-P" /></td>
+								</tr>
+								
+							</table>
 						</div>
 					</form>
 				</div>
@@ -297,7 +309,7 @@
 						<div class="form-group">
 							<label class="col-sm-12" for="messageView">Message</label>
 							<div class="col-sm-12">
-								<textarea id="messageView" value="" class="form-control" style="background: white; cursor: pointer; white-space: pre-line" rows="12" readonly></textarea>
+								<div class="messageBody" id="messageViewIncoming"></div>
 							</div>
 						</div>
 					</form>
@@ -332,7 +344,7 @@
 						<div class="form-group">
 							<label class="col-sm-12" for="inputBody">Message</label>
 							<div class="col-sm-12">
-								<textarea id="messageView1" class="form-control" value="" style="background: white; cursor: pointer; white-space: pre-line" rows="12" readonly></textarea>
+								<div class="messageBody" id="messageViewSent"></div>
 							</div>
 						</div>
 					</form>

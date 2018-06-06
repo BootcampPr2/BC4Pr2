@@ -67,6 +67,8 @@ public abstract class DBUtils {
 		PrivateMessage newPrivateMessage = new PrivateMessage();
 		messageData = messageData.replaceAll("[\r\n]", "&nbsp;<br>");
 		messageData = messageData.replaceAll(" ", "&nbsp;");
+		messageData = messageData.replaceAll("'", "&#39;");
+		messageData = messageData.replaceAll("\"", "&#34;");
 		newPrivateMessage.setMessageData(messageData);
 		newPrivateMessage.setSender(sender);
 		newPrivateMessage.setReceiver(receiver);		
