@@ -19,7 +19,7 @@ import pr2.loseweight.utils.DBUtils;
 // Servlet that generates a txt file with all the messages of the user.
 // Used when the "Download All Messages" button in mail.jsp is clicked.
 // Allows the user to download all their messages.
-//***********************************************************************
+
 @WebServlet("/ServletDisplayMessages")
 public class ServletDisplayMessages extends HttpServlet {
 	private static final long serialVersionUID = 1L;
