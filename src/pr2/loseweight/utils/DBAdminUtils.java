@@ -15,7 +15,7 @@ import pr2.loseweight.dbtables.PrivateMessage;
 import pr2.loseweight.dbtables.Role;
 import pr2.loseweight.dbtables.User;
 
-// class that contains methods to be used by Admins and God
+// class that contains methods to be used by user types Admin and God
 public abstract class DBAdminUtils {
 
 	// method that returns ALL private messages in the database (from all users)
